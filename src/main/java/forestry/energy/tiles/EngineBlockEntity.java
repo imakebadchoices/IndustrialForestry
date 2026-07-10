@@ -56,7 +56,7 @@ public abstract class EngineBlockEntity extends TileBase implements IActivatable
 		super(type, pos, state);
 		this.hintKey = hintKey;
 		this.maxHeat = maxHeat;
-		this.energyStorage = new ForestryEnergyStorage(2000, maxEnergy, EnergyTransferMode.EXTRACT);
+		this.energyStorage = new ForestryEnergyStorage(20000, maxEnergy, EnergyTransferMode.EXTRACT);
 	}
 
 	public String getHintKey() {

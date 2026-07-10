@@ -79,6 +79,28 @@ public class ForestryConfig {
 		public final ModConfigSpec.BooleanValue spawnTinOre;
 		public final ModConfigSpec.BooleanValue spawnApatiteOre;
 		public final ModConfigSpec.DoubleValue escritoireBountyMultiplier;
+		// Energy - consumption
+		public final ModConfigSpec.DoubleValue energyDemandModifier;
+		// Energy - generation (biogas engine fuels: RF/tick + burn duration in work cycles per bucket)
+		public final ModConfigSpec.IntValue biogasPowerBiomass;
+		public final ModConfigSpec.IntValue biogasDurationBiomass;
+		public final ModConfigSpec.IntValue biogasPowerEthanol;
+		public final ModConfigSpec.IntValue biogasDurationEthanol;
+		public final ModConfigSpec.IntValue biogasPowerSeedOil;
+		public final ModConfigSpec.IntValue biogasDurationSeedOil;
+		public final ModConfigSpec.IntValue biogasPowerHoney;
+		public final ModConfigSpec.IntValue biogasDurationHoney;
+		public final ModConfigSpec.IntValue biogasPowerJuice;
+		public final ModConfigSpec.IntValue biogasDurationJuice;
+		public final ModConfigSpec.IntValue biogasPowerMilk;
+		public final ModConfigSpec.IntValue biogasDurationMilk;
+		public final ModConfigSpec.IntValue biogasPowerWater;
+		public final ModConfigSpec.IntValue biogasDurationWater;
+		// Energy - generation (peat engine fuels: RF/tick + burn duration in work cycles per item)
+		public final ModConfigSpec.IntValue peatPowerPeat;
+		public final ModConfigSpec.IntValue peatDurationPeat;
+		public final ModConfigSpec.IntValue peatPowerBituminous;
+		public final ModConfigSpec.IntValue peatDurationBituminous;
 
 		public Server(ModConfigSpec.Builder builder) {
 			// Genetics
@@ -159,7 +181,53 @@ public class ForestryConfig {
 			this.escritoireBountyMultiplier = builder
 				.comment("Multiplies the chance of a reward from winning escritoire game(does not affect mutation notes)")
 				.defineInRange("escritoire_bounty_multiplier", 1f, 0.0f, 1000f);
+
+			// Energy
+			builder.push("energy");
+			this.energyDemandModifier = builder
+				.comment("Global multiplier applied to the energy (RF) every Forestry machine consumes to do work. 1.0 is the default modern-FE balance; lower is cheaper, higher is more demanding.")
+				.defineInRange("energy_demand_modifier", 1.0, 0.0, 1000.0);
+
+			builder
+				.comment("Per-fuel generation settings for Forestry engines. 'power' is the RF/tick produced while a fuel burns; 'duration' is how many work cycles a single bucket (biogas) or item (peat) lasts. Total RF per unit = power * duration.")
+				.push("generation");
+
+			builder.push("biogas_engine");
+			this.biogasPowerBiomass = builder.comment("Biomass RF/tick.").defineInRange("biomass_power", Constants.ENGINE_FUEL_VALUE_BIOMASS, 0, 1_000_000);
+			this.biogasDurationBiomass = builder.comment("Biomass burn duration (work cycles per bucket).").defineInRange("biomass_duration", Constants.ENGINE_CYCLE_DURATION_BIOMASS, 1, 1_000_000);
+			this.biogasPowerEthanol = builder.comment("Bio-ethanol RF/tick.").defineInRange("bio_ethanol_power", Constants.ENGINE_FUEL_VALUE_ETHANOL, 0, 1_000_000);
+			this.biogasDurationEthanol = builder.comment("Bio-ethanol burn duration (work cycles per bucket).").defineInRange("bio_ethanol_duration", Constants.ENGINE_CYCLE_DURATION_ETHANOL, 1, 1_000_000);
+			this.biogasPowerSeedOil = builder.comment("Seed oil RF/tick.").defineInRange("seed_oil_power", Constants.ENGINE_FUEL_VALUE_SEED_OIL, 0, 1_000_000);
+			this.biogasDurationSeedOil = builder.comment("Seed oil burn duration (work cycles per bucket).").defineInRange("seed_oil_duration", Constants.ENGINE_CYCLE_DURATION_SEED_OIL, 1, 1_000_000);
+			this.biogasPowerHoney = builder.comment("Honey RF/tick.").defineInRange("honey_power", Constants.ENGINE_FUEL_VALUE_HONEY, 0, 1_000_000);
+			this.biogasDurationHoney = builder.comment("Honey burn duration (work cycles per bucket).").defineInRange("honey_duration", Constants.ENGINE_CYCLE_DURATION_HONEY, 1, 1_000_000);
+			this.biogasPowerJuice = builder.comment("Juice RF/tick.").defineInRange("juice_power", Constants.ENGINE_FUEL_VALUE_JUICE, 0, 1_000_000);
+			this.biogasDurationJuice = builder.comment("Juice burn duration (work cycles per bucket).").defineInRange("juice_duration", Constants.ENGINE_CYCLE_DURATION_JUICE, 1, 1_000_000);
+			this.biogasPowerMilk = builder.comment("Milk RF/tick.").defineInRange("milk_power", Constants.ENGINE_FUEL_VALUE_MILK, 0, 1_000_000);
+			this.biogasDurationMilk = builder.comment("Milk burn duration (work cycles per bucket).").defineInRange("milk_duration", Constants.ENGINE_CYCLE_DURATION_MILK, 1, 1_000_000);
+			this.biogasPowerWater = builder.comment("Water RF/tick (used as engine coolant/low-grade fuel).").defineInRange("water_power", Constants.ENGINE_FUEL_VALUE_WATER, 0, 1_000_000);
+			this.biogasDurationWater = builder.comment("Water burn duration (work cycles per bucket).").defineInRange("water_duration", Constants.ENGINE_CYCLE_DURATION_WATER, 1, 1_000_000);
+			builder.pop();
+
+			builder.push("peat_engine");
+			this.peatPowerPeat = builder.comment("Peat RF/tick.").defineInRange("peat_power", Constants.ENGINE_COPPER_FUEL_VALUE_PEAT, 0, 1_000_000);
+			this.peatDurationPeat = builder.comment("Peat burn duration (work cycles per item).").defineInRange("peat_duration", Constants.ENGINE_COPPER_CYCLE_DURATION_PEAT, 1, 1_000_000);
+			this.peatPowerBituminous = builder.comment("Bituminous peat RF/tick.").defineInRange("bituminous_peat_power", Constants.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT, 0, 1_000_000);
+			this.peatDurationBituminous = builder.comment("Bituminous peat burn duration (work cycles per item).").defineInRange("bituminous_peat_duration", Constants.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT, 1, 1_000_000);
+			builder.pop();
+
+			builder.pop(); // generation
+			builder.pop(); // energy
 		}
+	}
+
+	/**
+	 * Global multiplier applied to machine energy consumption. Returns the default (1.0) when the
+	 * SERVER config has not been loaded yet, since energy-storing tiles can be constructed during
+	 * client setup (e.g. the item BEWLR renderer) before configs are available.
+	 */
+	public static double energyDemandModifier() {
+		return SERVER_SPEC.isLoaded() ? SERVER.energyDemandModifier.get() : 1.0;
 	}
 
 	public static void register(@UnknownNullability ModContainer ctx) {

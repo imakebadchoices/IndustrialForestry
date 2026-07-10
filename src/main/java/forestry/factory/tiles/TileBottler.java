@@ -42,7 +42,7 @@ import java.util.Optional;
 
 public class TileBottler extends TilePowered implements WorldlyContainer, ILiquidTankTile, ISlotPickupWatcher {
 	private static final int TICKS_PER_RECIPE_TIME = 5;
-	private static final int ENERGY_PER_RECIPE_TIME = 1000;
+	private static final int ENERGY_PER_RECIPE_TIME = 10000;
 
 	private final StandardTank resourceTank;
 	private final TankManager tankManager;
@@ -55,7 +55,7 @@ public class TileBottler extends TilePowered implements WorldlyContainer, ILiqui
 	public boolean isFillRecipe;
 
 	public TileBottler(BlockPos pos, BlockState state) {
-		super(FactoryTiles.BOTTLER.tileType(), pos, state, 1100, 40000);
+		super(FactoryTiles.BOTTLER.tileType(), pos, state, 11000, 400000);
 
 		setInternalInventory(new InventoryBottler(this));
 

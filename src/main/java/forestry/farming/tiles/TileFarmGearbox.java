@@ -25,7 +25,7 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 	public TileFarmGearbox(BlockPos pos, BlockState state) {
 		super(FarmingTiles.GEARBOX.tileType(), pos, state);
 
-		this.energyStorage = new ForestryEnergyStorage(200, 10000);
+		this.energyStorage = new ForestryEnergyStorage(2000, 100000);
 	}
 
 	/* SAVING & LOADING */

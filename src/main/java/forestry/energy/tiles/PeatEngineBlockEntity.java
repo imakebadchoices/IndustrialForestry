@@ -31,7 +31,7 @@ public class PeatEngineBlockEntity extends EngineBlockEntity implements WorldlyC
 	private final int ashForItem;
 
 	public PeatEngineBlockEntity(BlockPos pos, BlockState state) {
-		super(EnergyTiles.PEAT_ENGINE.tileType(), pos, state, "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
+		super(EnergyTiles.PEAT_ENGINE.tileType(), pos, state, "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 2000000);
 
         this.ashForItem = Constants.ENGINE_COPPER_ASH_FOR_ITEM;
 		setInternalInventory(new InventoryEnginePeat(this));

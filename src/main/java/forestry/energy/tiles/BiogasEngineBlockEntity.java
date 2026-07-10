@@ -43,7 +43,7 @@ public class BiogasEngineBlockEntity extends EngineBlockEntity implements Worldl
 	private boolean shutdown; // true if the engine is too cold and needs to warm itself up.
 
 	public BiogasEngineBlockEntity(BlockPos pos, BlockState state) {
-		super(EnergyTiles.BIOGAS_ENGINE.tileType(), pos, state, "engine.bronze", ENGINE_BRONZE_HEAT_MAX, 300000);
+		super(EnergyTiles.BIOGAS_ENGINE.tileType(), pos, state, "engine.bronze", ENGINE_BRONZE_HEAT_MAX, 3000000);
 
 		setInternalInventory(new InventoryEngineBiogas(this));
 

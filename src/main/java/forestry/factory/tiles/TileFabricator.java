@@ -54,8 +54,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	private int meltingPoint = 0;
 
 	public TileFabricator(BlockPos pos, BlockState state) {
-		super(FactoryTiles.FABRICATOR.tileType(), pos, state, 1100, 3300);
-		setEnergyPerWorkCycle(200);
+		super(FactoryTiles.FABRICATOR.tileType(), pos, state, 11000, 33000);
+		setEnergyPerWorkCycle(2000);
         this.craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));
 
