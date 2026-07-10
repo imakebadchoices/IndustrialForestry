@@ -130,6 +130,7 @@ public class ForestryCreativeTabs {
 		items.accept(CoreItems.WRENCH);
 		items.accept(CoreItems.PIPETTE);
 		items.accept(CoreItems.SOLDERING_IRON);
+		items.accept(CoreItems.TIN_DRILL);
 		items.accept(WorktableBlocks.WORKTABLE);
 		// Engines
 		EnergyBlocks.ENGINES.getItems().forEach(items::accept);

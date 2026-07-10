@@ -36,6 +36,9 @@ public class CoreItems {
 	public static final FeatureItem<ItemForestry> RAW_TIN = REGISTRY.item(ItemForestry::new, "raw_tin");
 	public static final FeatureItem<ItemForestry> AMBER = REGISTRY.item(ItemForestry::new, "amber");
 
+	/* Modern Industrialization quarry drill (earthy/wetland basket) */
+	public static final FeatureItem<ItemForestry> TIN_DRILL = REGISTRY.item(ItemForestry::new, "tin_drill");
+
 	/* Research */
 	public static final FeatureItem<ItemResearchNote> RESEARCH_NOTE = REGISTRY.item(ItemResearchNote::new, "research_note");
 
