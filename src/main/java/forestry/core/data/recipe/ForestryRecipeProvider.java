@@ -1286,6 +1286,26 @@ public class ForestryRecipeProvider {
 				.define('X', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP)))
 			.build(consumer, id("carpenter", "woven_silk"));
 		new CarpenterRecipeBuilder()
+			.setPackagingTime(20)
+			.setLiquid(new FluidStack(Fluids.WATER, 500))
+			.setBox(Ingredient.EMPTY)
+			.recipe(ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.WOVEN_ENDER_SILK))
+				.pattern("WW")
+				.pattern("WE")
+				.define('W', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.WOVEN_SILK))
+				.define('E', Items.ENDER_EYE))
+			.build(consumer, id("carpenter", "woven_ender_silk"));
+		new CarpenterRecipeBuilder()
+			.setPackagingTime(20)
+			.setLiquid(new FluidStack(Fluids.WATER, 500))
+			.setBox(Ingredient.EMPTY)
+			.recipe(ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.WOVEN_CHORUS_SILK))
+				.pattern("EE")
+				.pattern("EC")
+				.define('E', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.WOVEN_ENDER_SILK))
+				.define('C', Items.CHORUS_FRUIT))
+			.build(consumer, id("carpenter", "woven_chorus_silk"));
+		new CarpenterRecipeBuilder()
 			.setBox(Ingredient.EMPTY)
 			.recipe(ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CoreItems.INGOT_BRONZE, 2)
 				.requires(CoreItems.BROKEN_BRONZE_PICKAXE))
@@ -1605,6 +1625,20 @@ public class ForestryRecipeProvider {
 		wovenBackpack(consumer, "hunter", BackpackItems.HUNTER_BACKPACK, BackpackItems.HUNTER_BACKPACK_T_2);
 		wovenBackpack(consumer, "adventurer", BackpackItems.ADVENTURER_BACKPACK, BackpackItems.ADVENTURER_BACKPACK_T_2);
 		wovenBackpack(consumer, "builder", BackpackItems.BUILDER_BACKPACK, BackpackItems.BUILDER_BACKPACK_T_2);
+
+		enderBackpack(consumer, "miner", BackpackItems.MINER_BACKPACK_T_2, BackpackItems.MINER_BACKPACK_T_3);
+		enderBackpack(consumer, "digger", BackpackItems.DIGGER_BACKPACK_T_2, BackpackItems.DIGGER_BACKPACK_T_3);
+		enderBackpack(consumer, "forester", BackpackItems.FORESTER_BACKPACK_T_2, BackpackItems.FORESTER_BACKPACK_T_3);
+		enderBackpack(consumer, "hunter", BackpackItems.HUNTER_BACKPACK_T_2, BackpackItems.HUNTER_BACKPACK_T_3);
+		enderBackpack(consumer, "adventurer", BackpackItems.ADVENTURER_BACKPACK_T_2, BackpackItems.ADVENTURER_BACKPACK_T_3);
+		enderBackpack(consumer, "builder", BackpackItems.BUILDER_BACKPACK_T_2, BackpackItems.BUILDER_BACKPACK_T_3);
+
+		chorusBackpack(consumer, "miner", BackpackItems.MINER_BACKPACK_T_3, BackpackItems.MINER_BACKPACK_T_4);
+		chorusBackpack(consumer, "digger", BackpackItems.DIGGER_BACKPACK_T_3, BackpackItems.DIGGER_BACKPACK_T_4);
+		chorusBackpack(consumer, "forester", BackpackItems.FORESTER_BACKPACK_T_3, BackpackItems.FORESTER_BACKPACK_T_4);
+		chorusBackpack(consumer, "hunter", BackpackItems.HUNTER_BACKPACK_T_3, BackpackItems.HUNTER_BACKPACK_T_4);
+		chorusBackpack(consumer, "adventurer", BackpackItems.ADVENTURER_BACKPACK_T_3, BackpackItems.ADVENTURER_BACKPACK_T_4);
+		chorusBackpack(consumer, "builder", BackpackItems.BUILDER_BACKPACK_T_3, BackpackItems.BUILDER_BACKPACK_T_4);
 	}
 
 	private static void wovenBackpack(RecipeOutput consumer, String id, FeatureItem<?> tier1, FeatureItem<?> tier2) {
@@ -1620,6 +1654,36 @@ public class ForestryRecipeProvider {
 				.define('X', Items.DIAMOND)
 				.define('T', tier1))
 			.build(consumer, id("woven_backpack", id));
+	}
+
+	private static void enderBackpack(RecipeOutput consumer, String id, FeatureItem<?> tier2, FeatureItem<?> tier3) {
+		new CarpenterRecipeBuilder()
+			.setPackagingTime(200)
+			.setLiquid(new FluidStack(Fluids.WATER, 1000))
+			.setBox(Ingredient.EMPTY)
+			.recipe(ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, tier3)
+				.pattern("WXW")
+				.pattern("WTW")
+				.pattern("WWW")
+				.define('W', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_ENDER_SILK).getItem())
+				.define('X', Items.ENDER_EYE)
+				.define('T', tier2))
+			.build(consumer, id("ender_backpack", id));
+	}
+
+	private static void chorusBackpack(RecipeOutput consumer, String id, FeatureItem<?> tier3, FeatureItem<?> tier4) {
+		new CarpenterRecipeBuilder()
+			.setPackagingTime(200)
+			.setLiquid(new FluidStack(Fluids.WATER, 1000))
+			.setBox(Ingredient.EMPTY)
+			.recipe(ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, tier4)
+				.pattern("WXW")
+				.pattern("WTW")
+				.pattern("WWW")
+				.define('W', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_CHORUS_SILK).getItem())
+				.define('X', Items.CHORUS_FRUIT)
+				.define('T', tier3))
+			.build(consumer, id("chorus_backpack", id));
 	}
 
 	private static void crate(RecipeOutput consumer, ItemCrated crated, Ingredient ingredient) {

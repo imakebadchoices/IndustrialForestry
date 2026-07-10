@@ -1,0 +1,33 @@
+{
+  "type": "forestry:carpenter",
+  "box": [],
+  "id": "forestry:ender_backpack/hunter",
+  "liquid": {
+    "amount": 1000,
+    "id": "minecraft:water"
+  },
+  "recipe": {
+    "category": "equipment",
+    "key": {
+      "T": {
+        "item": "forestry:hunter_bag_woven"
+      },
+      "W": {
+        "item": "forestry:woven_ender_silk"
+      },
+      "X": {
+        "item": "minecraft:ender_eye"
+      }
+    },
+    "pattern": [
+      "WXW",
+      "WTW",
+      "WWW"
+    ],
+    "result": {
+      "count": 1,
+      "id": "forestry:hunter_bag_ender"
+    }
+  },
+  "time": 200
+}

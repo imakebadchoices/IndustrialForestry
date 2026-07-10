@@ -5,7 +5,7 @@ import net.minecraft.util.StringRepresentable;
 import java.util.Locale;
 
 public enum EnumBackpackType implements StringRepresentable {
-	NORMAL, WOVEN, NATURALIST;
+	NORMAL, WOVEN, ENDER, CHORUS, NATURALIST;
 
 	@Override
 	public String getSerializedName() {

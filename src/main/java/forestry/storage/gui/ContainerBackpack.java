@@ -12,7 +12,9 @@ import net.minecraft.world.item.ItemStack;
 public class ContainerBackpack extends ContainerItemInventory<BackpackInventory> {
 	public enum Size {
 		DEFAULT(3, 5, 44, 19),
-		T2(5, 9, 8, 8);
+		T2(5, 9, 8, 8),
+		T3(6, 9, 8, 8),
+		T4(9, 9, 8, 8);
 
 		final int rows;
 		final int columns;

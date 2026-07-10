@@ -101,7 +101,8 @@ public class ForestryItemModelProvider extends ItemModelProvider {
 		for (DeferredHolder<Item, ? extends Item> object : ModFeatureRegistry.get(ForestryModuleIds.STORAGE).getRegistry(Registries.ITEM).getEntries()) {
 			if (object.get() instanceof BackpackItem) {
 				String path = object.getId().getPath();
-				boolean woven = path.endsWith("woven");
+				// Ender and chorus tiers reuse the woven backpack visuals.
+				boolean woven = path.endsWith("woven") || path.endsWith("ender") || path.endsWith("chorus");
 
 				withExistingParent(path, woven ? modLoc("item/backpack/woven_neutral") : modLoc("item/backpack/normal_neutral"))
 					.override().predicate(mcLoc("mode"), 1).model(file(woven ? modLoc("item/backpack/woven_locked") : modLoc("item/backpack/normal_locked"))).end()
