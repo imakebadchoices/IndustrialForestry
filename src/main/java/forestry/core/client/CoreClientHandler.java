@@ -284,16 +284,28 @@ public class CoreClientHandler implements IClientModuleHandler {
 			BackpackItems.LEPIDOPTERIST_BACKPACK.item(),
 			BackpackItems.MINER_BACKPACK.item(),
 			BackpackItems.MINER_BACKPACK_T_2.item(),
+			BackpackItems.MINER_BACKPACK_T_3.item(),
+			BackpackItems.MINER_BACKPACK_T_4.item(),
 			BackpackItems.DIGGER_BACKPACK.item(),
 			BackpackItems.DIGGER_BACKPACK_T_2.item(),
+			BackpackItems.DIGGER_BACKPACK_T_3.item(),
+			BackpackItems.DIGGER_BACKPACK_T_4.item(),
 			BackpackItems.FORESTER_BACKPACK.item(),
 			BackpackItems.FORESTER_BACKPACK_T_2.item(),
+			BackpackItems.FORESTER_BACKPACK_T_3.item(),
+			BackpackItems.FORESTER_BACKPACK_T_4.item(),
 			BackpackItems.HUNTER_BACKPACK.item(),
 			BackpackItems.HUNTER_BACKPACK_T_2.item(),
+			BackpackItems.HUNTER_BACKPACK_T_3.item(),
+			BackpackItems.HUNTER_BACKPACK_T_4.item(),
 			BackpackItems.ADVENTURER_BACKPACK.item(),
 			BackpackItems.ADVENTURER_BACKPACK_T_2.item(),
+			BackpackItems.ADVENTURER_BACKPACK_T_3.item(),
+			BackpackItems.ADVENTURER_BACKPACK_T_4.item(),
 			BackpackItems.BUILDER_BACKPACK.item(),
-			BackpackItems.BUILDER_BACKPACK_T_2.item()
+			BackpackItems.BUILDER_BACKPACK_T_2.item(),
+			BackpackItems.BUILDER_BACKPACK_T_3.item(),
+			BackpackItems.BUILDER_BACKPACK_T_4.item()
 		);
 
 		// Crates
