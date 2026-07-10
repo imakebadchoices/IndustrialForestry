@@ -44,7 +44,7 @@ import javax.annotation.Nullable;
 
 public class TileCarpenter extends TilePowered implements WorldlyContainer, ILiquidTankTile, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
-	private static final int ENERGY_PER_WORK_CYCLE = 2040;
+	private static final int ENERGY_PER_WORK_CYCLE = 20400;
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
 
 	private final FilteredTank resourceTank;
@@ -60,7 +60,7 @@ public class TileCarpenter extends TilePowered implements WorldlyContainer, ILiq
 	}
 
 	public TileCarpenter(BlockPos pos, BlockState state) {
-		super(FactoryTiles.CARPENTER.tileType(), pos, state, 1100, Constants.MACHINE_MAX_ENERGY);
+		super(FactoryTiles.CARPENTER.tileType(), pos, state, 11000, Constants.MACHINE_MAX_ENERGY);
 		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
         this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilter(FluidRecipeFilter.CARPENTER_INPUT);
 

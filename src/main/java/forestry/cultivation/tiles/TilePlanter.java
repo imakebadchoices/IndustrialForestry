@@ -65,14 +65,14 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	private Vec3i area;
 
 	protected TilePlanter(BlockEntityType type, BlockPos pos, BlockState state, ResourceLocation farmTypeId) {
-		super(type, pos, state, 150, 1500);
+		super(type, pos, state, 1500, 15000);
 
 		this.properties = Preconditions.checkNotNull(IForestryApi.INSTANCE.getFarmingManager().getFarmType(farmTypeId));
 		this.manual = false;
 		this.inventory = new InventoryPlanter(this);
 		setInternalInventory(this.inventory);
 		this.manager = new FarmManager(this);
-		setEnergyPerWorkCycle(10);
+		setEnergyPerWorkCycle(100);
 		setTicksPerWorkCycle(2);
 	}
 

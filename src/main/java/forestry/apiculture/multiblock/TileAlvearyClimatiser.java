@@ -30,7 +30,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 		super(alvearyType, pos, state);
 		this.temperatureSteps = temperatureSteps;
 
-		this.energyStorage = new ForestryEnergyStorage(1000, 2000, EnergyTransferMode.RECEIVE);
+		this.energyStorage = new ForestryEnergyStorage(10000, 20000, EnergyTransferMode.RECEIVE);
 	}
 
 	/* UPDATING */

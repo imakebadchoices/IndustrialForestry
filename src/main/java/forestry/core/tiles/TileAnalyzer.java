@@ -42,7 +42,7 @@ public class TileAnalyzer extends TilePowered implements WorldlyContainer, ILiqu
 	private static final int TIME_TO_ANALYZE = 125;
 	private static final int HONEY_REQUIRED = 100;
 	// Genetics
-	public static int analyzerEnergyPerWork = 20320;
+	public static int analyzerEnergyPerWork = 203200;
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
@@ -55,7 +55,7 @@ public class TileAnalyzer extends TilePowered implements WorldlyContainer, ILiqu
 
 	/* CONSTRUCTOR */
 	public TileAnalyzer(BlockPos pos, BlockState state) {
-		super(CoreTiles.ANALYZER.tileType(), pos, state, 800, Constants.MACHINE_MAX_ENERGY);
+		super(CoreTiles.ANALYZER.tileType(), pos, state, 8000, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryAnalyzer(this));
         this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilter(FluidTagFilter.HONEY);
         this.tankManager = new TankManager(this, this.resourceTank);

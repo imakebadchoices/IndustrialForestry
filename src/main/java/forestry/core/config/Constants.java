@@ -29,28 +29,32 @@ public class Constants {
 	public static final int ENGINE_CYCLE_DURATION_MILK = 10000;
 	public static final int ENGINE_CYCLE_DURATION_SEED_OIL = 2500;
 	public static final int ENGINE_CYCLE_DURATION_BIOMASS = 2500;
-	public static final int ENGINE_CYCLE_DURATION_ETHANOL = 15000;
-	public static final int ENGINE_FUEL_VALUE_WATER = 10;
-	public static final int ENGINE_FUEL_VALUE_JUICE = 10;
-	public static final int ENGINE_FUEL_VALUE_HONEY = 20;
-	public static final int ENGINE_FUEL_VALUE_MILK = 10;
-	public static final int ENGINE_FUEL_VALUE_SEED_OIL = 30;
-	public static final int ENGINE_FUEL_VALUE_BIOMASS = 50;
+	public static final int ENGINE_CYCLE_DURATION_ETHANOL = 10000;
+	// Fuel values are RF/tick generated while a work cycle burns. These are the
+	// modern-FE baseline (~10x the historical MJ-era values) and double as the
+	// default values for the per-fuel generation config in ForestryConfig.
+	public static final int ENGINE_FUEL_VALUE_WATER = 100;
+	public static final int ENGINE_FUEL_VALUE_JUICE = 100;
+	public static final int ENGINE_FUEL_VALUE_HONEY = 200;
+	public static final int ENGINE_FUEL_VALUE_MILK = 100;
+	public static final int ENGINE_FUEL_VALUE_SEED_OIL = 300;
+	public static final int ENGINE_FUEL_VALUE_BIOMASS = 500;
+	public static final int ENGINE_FUEL_VALUE_ETHANOL = 400;
 	public static final int ENGINE_HEAT_VALUE_LAVA = 20;
 
 	public static final float ENGINE_PISTON_SPEED_MAX = 0.08f;
 
 	public static final int ENGINE_COPPER_CYCLE_DURATION_PEAT = 2500;
-	public static final int ENGINE_COPPER_FUEL_VALUE_PEAT = 20;
+	public static final int ENGINE_COPPER_FUEL_VALUE_PEAT = 200;
 	public static final int ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT = 3000;
-	public static final int ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT = 40;
+	public static final int ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT = 400;
 	public static final int ENGINE_COPPER_HEAT_MAX = 10000;
 	public static final int ENGINE_COPPER_ASH_FOR_ITEM = 7500;
 
 	// Factory
 	public static final int PROCESSOR_TANK_CAPACITY = 10 * FluidType.BUCKET_VOLUME;
 
-	public static final int MACHINE_MAX_ENERGY = 40000;
+	public static final int MACHINE_MAX_ENERGY = 400000;
 
 	// Storage
 	public static final int RAINTANK_TANK_CAPACITY = 30 * FluidType.BUCKET_VOLUME;

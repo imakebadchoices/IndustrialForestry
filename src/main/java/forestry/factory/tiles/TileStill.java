@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class TileStill extends TilePowered implements WorldlyContainer, ILiquidTankTile {
-	private static final int ENERGY_PER_RECIPE_TIME = 200;
+	private static final int ENERGY_PER_RECIPE_TIME = 2000;
 
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;
@@ -45,7 +45,7 @@ public class TileStill extends TilePowered implements WorldlyContainer, ILiquidT
 	private FluidStack bufferedLiquid = FluidStack.EMPTY;
 
 	public TileStill(BlockPos pos, BlockState state) {
-		super(FactoryTiles.STILL.tileType(), pos, state, 1100, 80000);
+		super(FactoryTiles.STILL.tileType(), pos, state, 11000, 800000);
 		setInternalInventory(new InventoryStill(this));
 
 		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, true).setFilter(FluidRecipeFilter.STILL_INPUT);

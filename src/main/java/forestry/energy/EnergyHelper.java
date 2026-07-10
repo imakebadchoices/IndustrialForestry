@@ -1,6 +1,6 @@
 package forestry.energy;
 
-import forestry.core.config.Preference;
+import forestry.core.config.ForestryConfig;
 import forestry.energy.tiles.EngineBlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 public class EnergyHelper {
 	public static int scaleForDifficulty(int energyValue) {
-		return Math.round(energyValue * Preference.ENERGY_DEMAND_MODIFIER);
+		return Math.round(energyValue * (float) ForestryConfig.energyDemandModifier());
 	}
 
 	/**

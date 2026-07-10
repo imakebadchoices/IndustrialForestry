@@ -54,8 +54,8 @@ public class TileFermenter extends TilePowered implements WorldlyContainer, ILiq
 	private int fuelCurrentFerment = 0;
 
 	public TileFermenter(BlockPos pos, BlockState state) {
-		super(FactoryTiles.FERMENTER.tileType(), pos, state, 2000, 80000);
-		setEnergyPerWorkCycle(4200);
+		super(FactoryTiles.FERMENTER.tileType(), pos, state, 20000, 800000);
+		setEnergyPerWorkCycle(42000);
 		setInternalInventory(new InventoryFermenter(this));
 
 		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, true).setFilter(FluidRecipeFilter.FERMENTER_INPUT);

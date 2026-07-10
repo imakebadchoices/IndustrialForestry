@@ -23,14 +23,14 @@ public class ClockworkEngineBlockEntity extends EngineBlockEntity {
 	private final static int WIND_DELAY = 10;
 
 	private static final int ENGINE_CLOCKWORK_HEAT_MAX = 300000;
-	private static final int ENGINE_CLOCKWORK_ENERGY_PER_CYCLE = 2;
+	private static final int ENGINE_CLOCKWORK_ENERGY_PER_CYCLE = 20;
 	private static final float ENGINE_CLOCKWORK_WIND_MAX = 8f;
 
 	private float tension = 0.0f;
 	private short delay = 0;
 
 	public ClockworkEngineBlockEntity(BlockPos pos, BlockState state) {
-		super(EnergyTiles.CLOCKWORK_ENGINE.tileType(), pos, state, "", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
+		super(EnergyTiles.CLOCKWORK_ENGINE.tileType(), pos, state, "", ENGINE_CLOCKWORK_HEAT_MAX, 100000);
 	}
 
 	@Override
