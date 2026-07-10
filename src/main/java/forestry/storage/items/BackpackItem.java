@@ -44,6 +44,8 @@ import java.util.List;
 public class BackpackItem extends WithScreenItem implements IColoredItem {
 	public static final int SLOTS_BACKPACK_DEFAULT = 15;
 	public static final int SLOTS_BACKPACK_WOVEN = 45;
+	public static final int SLOTS_BACKPACK_ENDER = 54;
+	public static final int SLOTS_BACKPACK_CHORUS = 81;
 	public static final int SLOTS_BACKPACK_APIARIST = 125;
 	private final IBackpackDefinition definition;
 	private final EnumBackpackType type;
@@ -61,7 +63,12 @@ public class BackpackItem extends WithScreenItem implements IColoredItem {
 
 	@Override
 	protected void writeContainerData(ServerPlayer player, ItemStack stack, RegistryFriendlyByteBuf buffer) {
-		NetworkUtil.writeEnum(buffer, this.type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT);
+		NetworkUtil.writeEnum(buffer, switch (this.type) {
+			case CHORUS -> ContainerBackpack.Size.T4;
+			case ENDER -> ContainerBackpack.Size.T3;
+			case WOVEN -> ContainerBackpack.Size.T2;
+			default -> ContainerBackpack.Size.DEFAULT;
+		});
 		ItemStack.STREAM_CODEC.encode(buffer, stack);
 	}
 
@@ -213,6 +220,8 @@ public class BackpackItem extends WithScreenItem implements IColoredItem {
 	private static int getSlotsForType(EnumBackpackType type) {
 		return switch (type) {
 			case NATURALIST -> SLOTS_BACKPACK_APIARIST;
+			case CHORUS -> SLOTS_BACKPACK_CHORUS;
+			case ENDER -> SLOTS_BACKPACK_ENDER;
 			case WOVEN -> SLOTS_BACKPACK_WOVEN;
 			case NORMAL -> SLOTS_BACKPACK_DEFAULT;
 		};
@@ -250,6 +259,8 @@ public class BackpackItem extends WithScreenItem implements IColoredItem {
 		return switch (backpack.type) {
 			case NORMAL -> new ContainerBackpack(containerId, player, ContainerBackpack.Size.DEFAULT, heldItem);
 			case WOVEN -> new ContainerBackpack(containerId, player, ContainerBackpack.Size.T2, heldItem);
+			case ENDER -> new ContainerBackpack(containerId, player, ContainerBackpack.Size.T3, heldItem);
+			case CHORUS -> new ContainerBackpack(containerId, player, ContainerBackpack.Size.T4, heldItem);
 			default -> null;
 		};
 	}

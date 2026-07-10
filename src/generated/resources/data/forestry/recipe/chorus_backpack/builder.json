@@ -1,0 +1,33 @@
+{
+  "type": "forestry:carpenter",
+  "box": [],
+  "id": "forestry:chorus_backpack/builder",
+  "liquid": {
+    "amount": 1000,
+    "id": "minecraft:water"
+  },
+  "recipe": {
+    "category": "equipment",
+    "key": {
+      "T": {
+        "item": "forestry:builder_bag_ender"
+      },
+      "W": {
+        "item": "forestry:woven_chorus_silk"
+      },
+      "X": {
+        "item": "minecraft:chorus_fruit"
+      }
+    },
+    "pattern": [
+      "WXW",
+      "WTW",
+      "WWW"
+    ],
+    "result": {
+      "count": 1,
+      "id": "forestry:builder_bag_chorus"
+    }
+  },
+  "time": 200
+}

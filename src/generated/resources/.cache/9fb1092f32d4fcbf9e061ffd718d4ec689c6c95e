@@ -1,4 +1,4 @@
-// 1.21.1	2026-06-16T16:08:37.776836	Recipes
+// 1.21.1	2026-07-10T15:04:33.539214856	Recipes
 32b0e571261870ac09186d9ba67ab28bcd788d51 data/forestry/advancement/recipes/building_blocks/acacia_desert_fence.json
 9233915fb2e2ed18602eaa661caa52305ef7b957 data/forestry/advancement/recipes/building_blocks/acacia_desert_fence_gate.json
 db67704b9d88cf16bd63e7b6bd1faa77b55a723c data/forestry/advancement/recipes/building_blocks/acacia_desert_fireproof_fence.json
@@ -1599,6 +1599,8 @@ d250bc70083ee7ca15dcb32f3466b55387f4f7e5 data/forestry/recipe/carpenter/stamp_20
 bd6567550eae74ae73c1b2877c6ac43826374b79 data/forestry/recipe/carpenter/stamp_50n.json
 e6e900506e7465907abc3fb6cbd1bad6408bd113 data/forestry/recipe/carpenter/stamp_5n.json
 c27529a6a2f7a34c7ae16b19f2c1775dc610b156 data/forestry/recipe/carpenter/wood_pulp.json
+fde62f2af848c63bd77258e829adc88c5e19cc9a data/forestry/recipe/carpenter/woven_chorus_silk.json
+b215adfbc4354ba58146ec354e05cbbc89e49524 data/forestry/recipe/carpenter/woven_ender_silk.json
 8860b366c31b325ee684ca4e33c4d557fd8d8a3f data/forestry/recipe/carpenter/woven_silk.json
 04ab8fd9ba6997c355ad44b8f2c3830b6c249529 data/forestry/recipe/catalogue.json
 96f37878615526364221299f6571a22cfc00a1d1 data/forestry/recipe/centrifuge.json
@@ -1654,6 +1656,12 @@ c82592078ddb480cd4476ad45e49581cc75e132f data/forestry/recipe/chestnut_slab.json
 8d7f76adeda5069b95c24deae96a700cea6f05ab data/forestry/recipe/chestnut_stripped_wood.json
 fdf3c7bcf56e09cda20337d47e25750916829186 data/forestry/recipe/chestnut_trapdoor.json
 681aef3f795d32bb42c92bf6b83d570a8cfe5f01 data/forestry/recipe/chestnut_wood.json
+14de8a238875ff08adbc4270fe3d6ef300329a79 data/forestry/recipe/chorus_backpack/adventurer.json
+995b3403b86a827f8f4629c401c5e645f1f405bb data/forestry/recipe/chorus_backpack/builder.json
+3cd7f7055499d03cfdb9de067848a3a078b0866b data/forestry/recipe/chorus_backpack/digger.json
+90049eb5eeb78f305b21f9ff37625d6779d888ce data/forestry/recipe/chorus_backpack/forester.json
+906a7e1d6030b4f2ccfc90cb26990b40fd356aa4 data/forestry/recipe/chorus_backpack/hunter.json
+8061915d638c176c09f7f152588714dcb3b89cc7 data/forestry/recipe/chorus_backpack/miner.json
 732ec8aea295863933bc70f772aeeaf3ffb7662c data/forestry/recipe/citrus_boat.json
 7cf683a89745bd5b74f3351a7d5d8d29d626aa19 data/forestry/recipe/citrus_button.json
 d90314c6e6431aa7a75c8af05f7fb2c95221d793 data/forestry/recipe/citrus_chest_boat.json
@@ -1800,6 +1808,12 @@ fd968363b35335d17ebe988561b6feb65f1b7504 data/forestry/recipe/elm_stairs.json
 c4cf79e088681af25a1a3f076e1df2997e8d1a6b data/forestry/recipe/elm_stripped_wood.json
 f7b367829564fc88d8b2ab3ab6f6dced018ec439 data/forestry/recipe/elm_trapdoor.json
 b634a4b8843b5b041355ad04e9c85a4fe1b2b970 data/forestry/recipe/elm_wood.json
+9c8b52eae3d5a226cd31238710f8d2a716c33f04 data/forestry/recipe/ender_backpack/adventurer.json
+a210610783672149e4e33a1e1ffb1b30b2e05483 data/forestry/recipe/ender_backpack/builder.json
+60709091d1d6082e8a22ef2d22280bc0c664035d data/forestry/recipe/ender_backpack/digger.json
+03c865a6449b2026fe42111f1fe5b7e52a893538 data/forestry/recipe/ender_backpack/forester.json
+0456a441716d6a5d008a085192d82ad0886d0fdd data/forestry/recipe/ender_backpack/hunter.json
+9db5a634ba69d0edd94e25c71cfbd1cc4198dcf7 data/forestry/recipe/ender_backpack/miner.json
 9a0ab73596a0a45e8872c05680a445b620274e77 data/forestry/recipe/engine_biogas.json
 a64db712c962a5445f080e535315d030dd0de4fa data/forestry/recipe/engine_clockwork.json
 96dde7497ed2ddf77a820cd6edb444c61a71030a data/forestry/recipe/engine_peat.json

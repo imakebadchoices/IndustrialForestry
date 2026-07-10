@@ -10,6 +10,8 @@ public enum EnumCraftingMaterial implements IItemSubtype {
 	WOOD_PULP,
 	SILK_WISP,
 	WOVEN_SILK,
+	WOVEN_ENDER_SILK,
+	WOVEN_CHORUS_SILK,
 	ICE_SHARD,
 	PHOSPHOR,
 	IMPREGNATED_STICK,

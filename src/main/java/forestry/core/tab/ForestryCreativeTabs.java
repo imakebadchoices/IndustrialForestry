@@ -381,6 +381,22 @@ public class ForestryCreativeTabs {
 		items.accept(BackpackItems.ADVENTURER_BACKPACK_T_2);
 		items.accept(BackpackItems.BUILDER_BACKPACK_T_2);
 
+		// T3 (Ender)
+		items.accept(BackpackItems.MINER_BACKPACK_T_3);
+		items.accept(BackpackItems.DIGGER_BACKPACK_T_3);
+		items.accept(BackpackItems.FORESTER_BACKPACK_T_3);
+		items.accept(BackpackItems.HUNTER_BACKPACK_T_3);
+		items.accept(BackpackItems.ADVENTURER_BACKPACK_T_3);
+		items.accept(BackpackItems.BUILDER_BACKPACK_T_3);
+
+		// T4 (Chorus)
+		items.accept(BackpackItems.MINER_BACKPACK_T_4);
+		items.accept(BackpackItems.DIGGER_BACKPACK_T_4);
+		items.accept(BackpackItems.FORESTER_BACKPACK_T_4);
+		items.accept(BackpackItems.HUNTER_BACKPACK_T_4);
+		items.accept(BackpackItems.ADVENTURER_BACKPACK_T_4);
+		items.accept(BackpackItems.BUILDER_BACKPACK_T_4);
+
 		// Packing machines
 		items.accept(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.BOTTLER));
 		items.accept(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER));

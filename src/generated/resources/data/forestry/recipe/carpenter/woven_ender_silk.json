@@ -1,0 +1,29 @@
+{
+  "type": "forestry:carpenter",
+  "box": [],
+  "id": "forestry:carpenter/woven_ender_silk",
+  "liquid": {
+    "amount": 500,
+    "id": "minecraft:water"
+  },
+  "recipe": {
+    "category": "misc",
+    "key": {
+      "E": {
+        "item": "minecraft:ender_eye"
+      },
+      "W": {
+        "item": "forestry:woven_silk"
+      }
+    },
+    "pattern": [
+      "WW",
+      "WE"
+    ],
+    "result": {
+      "count": 1,
+      "id": "forestry:woven_ender_silk"
+    }
+  },
+  "time": 20
+}

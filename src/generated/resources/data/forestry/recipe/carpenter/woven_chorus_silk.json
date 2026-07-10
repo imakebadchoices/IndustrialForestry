@@ -1,0 +1,29 @@
+{
+  "type": "forestry:carpenter",
+  "box": [],
+  "id": "forestry:carpenter/woven_chorus_silk",
+  "liquid": {
+    "amount": 500,
+    "id": "minecraft:water"
+  },
+  "recipe": {
+    "category": "misc",
+    "key": {
+      "C": {
+        "item": "minecraft:chorus_fruit"
+      },
+      "E": {
+        "item": "forestry:woven_ender_silk"
+      }
+    },
+    "pattern": [
+      "EE",
+      "EC"
+    ],
+    "result": {
+      "count": 1,
+      "id": "forestry:woven_chorus_silk"
+    }
+  },
+  "time": 20
+}
