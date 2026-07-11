@@ -46,6 +46,7 @@ import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.CircuitManager;
 import forestry.core.errors.ErrorManager;
 import forestry.core.genetics.PollenManager;
+import forestry.core.genetics.TaxonDefinition;
 import forestry.core.genetics.alleles.RegistryChromosome;
 import forestry.core.utils.SpeciesUtil;
 import forestry.farming.FarmingManager;
@@ -285,15 +286,17 @@ public class PluginManager {
 		Optional<Registry<BeeMutationDefinition>> mutationRegistryOpt = registryAccess.registry(BeeMutationDefinition.REGISTRY_KEY);
 		Optional<Registry<IBeeEffect>> effectRegistryOpt = registryAccess.registry(IBeeEffect.REGISTRY_KEY);
 		Optional<Registry<FlowerTypeDefinition>> flowerRegistryOpt = registryAccess.registry(FlowerTypeDefinition.REGISTRY_KEY);
-		if (registryOpt.isEmpty() || mutationRegistryOpt.isEmpty() || effectRegistryOpt.isEmpty() || flowerRegistryOpt.isEmpty()) {
+		Optional<Registry<TaxonDefinition>> taxonRegistryOpt = registryAccess.registry(TaxonDefinition.REGISTRY_KEY);
+		if (registryOpt.isEmpty() || mutationRegistryOpt.isEmpty() || effectRegistryOpt.isEmpty() || flowerRegistryOpt.isEmpty() || taxonRegistryOpt.isEmpty()) {
 			return;
 		}
 		Registry<BeeSpeciesDefinition> registry = registryOpt.get();
 		Registry<BeeMutationDefinition> mutationRegistry = mutationRegistryOpt.get();
 		Registry<IBeeEffect> effectRegistry = effectRegistryOpt.get();
 		Registry<FlowerTypeDefinition> flowerRegistry = flowerRegistryOpt.get();
+		Registry<TaxonDefinition> taxonRegistry = taxonRegistryOpt.get();
 
-		boolean anyDatapackContent = registry.size() > 0 || mutationRegistry.size() > 0 || effectRegistry.size() > 0 || flowerRegistry.size() > 0;
+		boolean anyDatapackContent = registry.size() > 0 || mutationRegistry.size() > 0 || effectRegistry.size() > 0 || flowerRegistry.size() > 0 || taxonRegistry.size() > 0;
 		if (!anyDatapackContent && !appliedDatapackSpecies) {
 			// Nothing datapack-defined now and nothing applied last time: leave the code-registered content untouched.
 			return;
@@ -314,6 +317,9 @@ public class PluginManager {
 		if (beeType.getKaryotype().getSpeciesChromosome() instanceof RegistryChromosome<?> speciesChromosome) {
 			speciesChromosome.reset();
 		}
+		// Merge datapack taxa before building species: a datapack bee's genus must resolve to a registered
+		// taxon, and a genus may itself be datapack-defined. An empty registry reverts to the code taxa.
+		((GeneticManager) api.getGeneticManager()).applyDatapackTaxa(taxonRegistry.stream().toList());
 		Pair<? extends ImmutableMap<ResourceLocation, ?>, ? extends IMutationManager<?>> pair = beeType.handleSpeciesRegistration(plugins);
 		alleleManager.setRegistrationState(AlleleManager.REGISTRATION_ALLELES_COMPLETE);
 

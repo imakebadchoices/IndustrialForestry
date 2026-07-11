@@ -19,6 +19,14 @@ public interface IGeneticManager {
 	ITaxon getTaxon(String name);
 
 	/**
+	 * @return The taxon instance with the given (lowercase) name, or {@code null} if none was registered with
+	 * that name. Unlike {@link #getTaxon}, this never throws, so callers that can tolerate a missing taxon
+	 * (e.g. a species referencing a genus that failed to load from a datapack) can fall back instead of crashing.
+	 */
+	@Nullable
+	ITaxon getTaxonSafe(String name);
+
+	/**
 	 * Returns a list containing this taxon and its parents in order of taxonomic rank. See {@link TaxonomicRank}.
 	 *
 	 * @param name The name of the taxon whose parent taxa to retrieve.

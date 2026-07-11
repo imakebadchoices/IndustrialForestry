@@ -9,6 +9,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,15 @@ public abstract class Species<T extends ISpeciesType<? extends ISpecies<I>, I>, 
 		this.dominant = builder.isDominant();
 		this.authority = builder.getAuthority();
 		this.species = builder.getSpecies();
-		this.genus = IForestryApi.INSTANCE.getGeneticManager().getTaxon(builder.getGenus());
+		ITaxon genus = IForestryApi.INSTANCE.getGeneticManager().getTaxonSafe(builder.getGenus());
+		if (genus == null) {
+			// The genus was never registered (e.g. a datapack taxon that failed to load). Rather than crash the
+			// whole reload over cosmetic classification, fall back to a display-only genus with no ancestry so the
+			// species still registers. SpeciesRegistration.buildAll logs the warning and skips taxon defaults; the
+			// null parent is safe (the analyzer's taxonomy walk stops at null).
+			genus = new Taxon(builder.getGenus(), TaxonomicRank.GENUS, null, new IdentityHashMap<>());
+		}
+		this.genus = genus;
 		this.binomial = createBinomial(this.genus.name(), this.species);
 		this.translationKey = GeneticsUtil.createTranslationKey("allele", speciesType.id(), id);
 	}

@@ -58,7 +58,17 @@ public abstract class SpeciesRegistration<I extends ISpeciesBuilder<? extends IS
 		ImmutableMap<ResourceLocation, S> allSpecies = this.species.build((id, builder) -> {
 			// create default genome builder
 			IGenomeBuilder defaultGenomeBuilder = karyotype.createGenomeBuilder();
-			ITaxon[] ancestry = IForestryApi.INSTANCE.getGeneticManager().getParentTaxa(builder.getGenus());
+			IGeneticManager geneticManager = IForestryApi.INSTANCE.getGeneticManager();
+			// A datapack species may reference a genus that was never registered (e.g. its taxon failed to load).
+			// Fall back to no ancestry rather than crashing the whole reload; the species still registers, just
+			// without any taxon default alleles (Species also gives it a display-only genus).
+			ITaxon[] ancestry;
+			if (geneticManager.getTaxonSafe(builder.getGenus()) != null) {
+				ancestry = geneticManager.getParentTaxa(builder.getGenus());
+			} else {
+				Forestry.LOGGER.warn("Species {} references unknown genus '{}'; registering it without taxon default alleles", id, builder.getGenus());
+				ancestry = new ITaxon[0];
+			}
 
 			// apply default genomes from parent taxa
 			for (ITaxon taxon : ancestry) {

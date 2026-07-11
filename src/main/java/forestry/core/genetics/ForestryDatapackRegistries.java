@@ -32,5 +32,8 @@ public class ForestryDatapackRegistries {
 		// Flower type alleles are synced for the same reason as effects (flower_type chromosome is populated
 		// during the client-side rebuild).
 		event.dataPackRegistry(FlowerTypeDefinition.REGISTRY_KEY, FlowerTypeDefinition.CODEC, FlowerTypeDefinition.CODEC);
+		// Taxa are synced because a species' genus is resolved during the client-side rebuild too, so datapack
+		// genera must exist on the client.
+		event.dataPackRegistry(TaxonDefinition.REGISTRY_KEY, TaxonDefinition.CODEC, TaxonDefinition.CODEC);
 	}
 }
