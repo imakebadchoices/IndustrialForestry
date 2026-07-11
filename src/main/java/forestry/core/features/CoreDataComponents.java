@@ -9,6 +9,7 @@ import forestry.modules.features.ModFeatureRegistry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -82,6 +83,22 @@ public class CoreDataComponents {
 			() -> DataComponentType.<Letter>builder()
 				.persistent(Letter.CODEC)
 				.networkSynchronized(ByteBufCodecs.fromCodec(Letter.CODEC))
+				.build());
+
+	/**
+	 * Identifies which comb variant a stack of the generic {@link forestry.apiculture.items.ItemBeeComb} is.
+	 * The value is the ID of an entry in the {@code forestry:comb_type} datapack registry
+	 * ({@link forestry.apiculture.CombTypeDefinition}); the comb item resolves its tint colors from that
+	 * registry. A plain {@link ResourceLocation} (not a {@code Holder}) is used deliberately so a dangling
+	 * reference degrades to a default-tinted comb instead of throwing, matching the project's crash-safety
+	 * approach for datapack-driven genetics.
+	 */
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> COMB_TYPE =
+		DATA_COMPONENT_TYPES.register(
+			"comb_type",
+			() -> DataComponentType.<ResourceLocation>builder()
+				.persistent(ResourceLocation.CODEC)
+				.networkSynchronized(ResourceLocation.STREAM_CODEC)
 				.build());
 
 	private static DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> booleanComponent(String id) {

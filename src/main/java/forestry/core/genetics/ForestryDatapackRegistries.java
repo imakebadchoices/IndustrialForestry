@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 
 import forestry.api.ForestryConstants;
 import forestry.api.apiculture.genetics.IBeeEffect;
+import forestry.apiculture.CombTypeDefinition;
 import forestry.apiculture.FlowerTypeDefinition;
 import forestry.apiculture.genetics.BeeMutationDefinition;
 import forestry.apiculture.genetics.BeeSpeciesDefinition;
@@ -35,5 +36,8 @@ public class ForestryDatapackRegistries {
 		// Taxa are synced because a species' genus is resolved during the client-side rebuild too, so datapack
 		// genera must exist on the client.
 		event.dataPackRegistry(TaxonDefinition.REGISTRY_KEY, TaxonDefinition.CODEC, TaxonDefinition.CODEC);
+		// Comb types are synced because the generic comb item resolves its tint colors from this registry at
+		// render time on the client.
+		event.dataPackRegistry(CombTypeDefinition.REGISTRY_KEY, CombTypeDefinition.CODEC, CombTypeDefinition.CODEC);
 	}
 }

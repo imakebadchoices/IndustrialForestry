@@ -35,6 +35,9 @@ public class ApicultureItems {
 
 	public static final FeatureItemGroup<ItemPollenCluster, EnumPollenCluster> POLLEN_CLUSTER = REGISTRY.itemGroup(ItemPollenCluster::new, "pollen_cluster", EnumPollenCluster.values());
 	public static final FeatureItemGroup<ItemHoneyComb, EnumHoneyComb> BEE_COMBS = REGISTRY.itemGroup(ItemHoneyComb::new, "bee_comb", EnumHoneyComb.VALUES);
+	// One generic comb whose variant lives in a data component + the forestry:comb_type datapack registry,
+	// exactly how ItemBeeGE drives 70+ species. Datapack combs (e.g. Extra Bees) are pure data on top of this.
+	public static final FeatureItem<ItemBeeComb> COMB = REGISTRY.item(ItemBeeComb::new, "comb");
 
 	// / BEE FOOD PRODUCTS
 	public static final FeatureItem<ItemForestryFood> HONEYED_SLICE = REGISTRY.item(() -> new ItemForestryFood(8, 0.6f), "honeyed_slice");
