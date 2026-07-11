@@ -14,7 +14,7 @@ import vazkii.patchouli.api.PatchouliAPI;
 
 public class ForestersManualItem extends Item {
 	public ForestersManualItem() {
-		super(new ItemProperties());
+		super(new Item.Properties());
 	}
 
 	@Override
