@@ -1,5 +1,9 @@
 package forestry.apiculture.genetics;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import forestry.api.core.IProduct;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.component.DataComponents;
@@ -17,6 +21,15 @@ import java.util.List;
 public record FireworkProduct(float chance) implements IProduct {
 	private static final DyeColor[] COLORS = {DyeColor.RED, DyeColor.WHITE, DyeColor.BLUE};
 	private static final FireworkExplosion.Shape[] SHAPES = FireworkExplosion.Shape.values();
+
+	public static final MapCodec<FireworkProduct> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+		Codec.floatRange(0f, 1f).fieldOf("chance").forGetter(FireworkProduct::chance)
+	).apply(instance, FireworkProduct::new));
+
+	@Override
+	public MapCodec<FireworkProduct> codec() {
+		return MAP_CODEC;
+	}
 
 	@Override
 	public Item item() {

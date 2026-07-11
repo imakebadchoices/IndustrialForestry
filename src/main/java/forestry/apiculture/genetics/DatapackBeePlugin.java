@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 import forestry.api.ForestryConstants;
-import forestry.api.core.Product;
+import forestry.api.core.IProduct;
 import forestry.api.genetics.alleles.AllelePair;
 import forestry.api.genetics.alleles.IAllele;
 import forestry.api.genetics.alleles.IChromosome;
@@ -46,32 +46,33 @@ public class DatapackBeePlugin implements IForestryPlugin {
 		for (Map.Entry<ResourceKey<BeeSpeciesDefinition>, BeeSpeciesDefinition> entry : this.definitions.entrySet()) {
 			ResourceLocation id = entry.getKey().location();
 			BeeSpeciesDefinition definition = entry.getValue();
-			registration.registerOrModify(id, definition.genus(), definition.species(), definition.dominant(), definition.outline(), builder -> apply(builder, definition));
+			registration.registerOrModify(id, definition.genus(), definition.species(), definition.dominant(), definition.coloration().outline(), builder -> apply(builder, definition));
 		}
 	}
 
 	private static void apply(IBeeSpeciesBuilder builder, BeeSpeciesDefinition definition) {
 		builder.setDominant(definition.dominant())
-			.setOutline(definition.outline())
-			.setBody(definition.body())
-			.setStripes(definition.stripes())
+			.setOutline(definition.coloration().outline())
+			.setBody(definition.coloration().body())
+			.setStripes(definition.coloration().stripes())
 			.setTemperature(definition.temperature())
 			.setHumidity(definition.humidity())
 			.setComplexity(definition.complexity())
 			.setGlint(definition.glint())
 			.setSecret(definition.secret())
-			.setAuthority(definition.authority());
+			.setAuthority(definition.authority())
+			.setJubilance(definition.jubilance());
 
 		if (definition.escritoireColor() != -1) {
 			builder.setEscritoireColor(TextColor.fromRgb(definition.escritoireColor()));
 		}
 
 		builder.clearProducts();
-		for (Product product : definition.products()) {
+		for (IProduct product : definition.products()) {
 			builder.addProduct(product);
 		}
 		builder.clearSpecialties();
-		for (Product specialty : definition.specialties()) {
+		for (IProduct specialty : definition.specialties()) {
 			builder.addSpecialty(specialty);
 		}
 

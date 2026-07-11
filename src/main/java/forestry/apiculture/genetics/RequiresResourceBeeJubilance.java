@@ -1,5 +1,8 @@
 package forestry.apiculture.genetics;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeJubilance;
 import forestry.api.apiculture.genetics.IBeeSpecies;
@@ -12,12 +15,22 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 public class RequiresResourceBeeJubilance implements IBeeJubilance {
+	public static final MapCodec<RequiresResourceBeeJubilance> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+		BlockState.CODEC.listOf().fieldOf("blocks").forGetter(jubilance -> List.copyOf(jubilance.acceptedBlockStates))
+	).apply(instance, blocks -> new RequiresResourceBeeJubilance(blocks.toArray(new BlockState[0]))));
+
 	private final HashSet<BlockState> acceptedBlockStates = new HashSet<>();
 
 	public RequiresResourceBeeJubilance(BlockState... acceptedBlockStates) {
 		Collections.addAll(this.acceptedBlockStates, acceptedBlockStates);
+	}
+
+	@Override
+	public MapCodec<RequiresResourceBeeJubilance> codec() {
+		return MAP_CODEC;
 	}
 
 	@Override
