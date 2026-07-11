@@ -10,11 +10,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.modules.ForestryModuleIds;
 import forestry.api.modules.IForestryModule;
 import forestry.api.modules.IPacketRegistry;
-import forestry.apiculture.features.ApicultureItems;
-import forestry.apiculture.items.ItemPollenCluster;
 import forestry.apiimpl.plugin.PluginManager;
-import forestry.arboriculture.features.ArboricultureBlocks;
-import forestry.arboriculture.features.ArboricultureItems;
 import forestry.arboriculture.loot.GrafterLootModifier;
 import forestry.core.blocks.TileStreamUpdateTracker;
 import forestry.core.client.CoreClientHandler;
@@ -25,7 +21,6 @@ import forestry.core.features.CoreItems;
 import forestry.core.features.CoreTiles;
 import forestry.core.items.ItemPipette;
 import forestry.core.items.ItemSpectacles;
-import forestry.core.items.definitions.EnumCraftingMaterial;
 import forestry.core.loot.ConditionLootModifier;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.PacketIdServer;
@@ -33,21 +28,15 @@ import forestry.core.network.packets.*;
 import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.recipes.RecipeManagers;
 import forestry.core.utils.NetworkUtil;
-import forestry.lepidopterology.features.LepidopterologyItems;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleManager;
 import forestry.modules.ModuleUtil;
-import forestry.modules.features.FeatureItem;
-import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.ComposterBlock;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
@@ -129,7 +118,6 @@ public class ModuleCore extends BlankForestryModule {
 		PluginManager.registerCircuits();
 		postItemRegistry();
 		((ForestryModuleManager) IForestryApi.INSTANCE.getModuleManager()).setupApi();
-		registerComposts();
 		apiInitialized = true;
 	}
 
@@ -143,32 +131,6 @@ public class ModuleCore extends BlankForestryModule {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CoreTiles.LEPIDOPTERIST_CHEST.tileType(), (tile, side) -> tile.getItemHandler(side));
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CoreTiles.ANALYZER.tileType(), (tile, side) -> tile.getEnergyHandler(side));
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, CoreTiles.ANALYZER.tileType(), (tile, side) -> tile.getTankManager());
-	}
-
-	private static void registerComposts() {
-		// cast avoids stupid typos (IItemLike can be different than Item, then composter will not work)
-		@SuppressWarnings({"unchecked", "rawtypes"})
-		Object2FloatMap<Item> composts = ((Object2FloatMap) ComposterBlock.COMPOSTABLES);
-
-		for (FeatureItem<?> fruit : CoreItems.FRUITS.getFeatures()) {
-			composts.put(fruit.item(), 0.65f);
-		}
-		composts.put(CoreItems.MOULDY_WHEAT.item(), 0.65f);
-		composts.put(CoreItems.DECAYING_WHEAT.item(), 0.65f);
-		composts.put(CoreItems.MULCH.item(), 0.65f);
-		composts.put(CoreItems.ASH.item(), 0.65f);
-		composts.put(CoreItems.CRAFTING_MATERIALS.item(EnumCraftingMaterial.WOOD_PULP), 0.65f);
-		composts.put(CoreItems.PEAT.item(), 0.75f);
-		composts.put(CoreItems.COMPOST.item(), 1f);
-		for (ItemPollenCluster pollen : ApicultureItems.POLLEN_CLUSTER.getItems()) {
-			composts.put(pollen, 0.3f);
-		}
-		composts.put(ArboricultureItems.SAPLING.item(), 0.3f);
-		composts.put(ArboricultureItems.POLLEN_FERTILE.item(), 0.3f);
-		for (BlockItem leaves : ArboricultureBlocks.LEAVES_DECORATIVE.getItems()) {
-			composts.put(leaves, 0.3f);
-		}
-		composts.put(LepidopterologyItems.COCOON_GE.item(), 0.3f);
 	}
 
 	private static void registerGlobalLootModifiers(RegisterEvent event) {

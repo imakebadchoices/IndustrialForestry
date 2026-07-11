@@ -58,6 +58,7 @@ public class Data {
 		generator.addProvider(event.includeClient(), new ForestryItemModelProvider(output, existingFileHelper));
 		generator.addProvider(event.includeClient(), new ForestryAtlasProvider(output, lookup, existingFileHelper));
 		generator.addProvider(event.includeServer(), new ForestryFeaturesProvider(output, lookup));
+		generator.addProvider(event.includeServer(), new ForestryDataMapProvider(output, lookup));
 		generator.addProvider(event.includeClient(), new ForestryCuriosProvider(output, existingFileHelper, lookup));
 	}
 

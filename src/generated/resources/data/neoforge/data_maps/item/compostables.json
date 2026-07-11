@@ -1,0 +1,226 @@
+{
+  "values": {
+    "forestry:ash": {
+      "chance": 0.65
+    },
+    "forestry:cocoon_ge": {
+      "chance": 0.3
+    },
+    "forestry:decaying_wheat": {
+      "chance": 0.65
+    },
+    "forestry:fertilizer_bio": {
+      "chance": 1.0
+    },
+    "forestry:fruit_cherry": {
+      "chance": 0.65
+    },
+    "forestry:fruit_chestnut": {
+      "chance": 0.65
+    },
+    "forestry:fruit_coconut": {
+      "chance": 0.65
+    },
+    "forestry:fruit_dates": {
+      "chance": 0.65
+    },
+    "forestry:fruit_feijoa": {
+      "chance": 0.65
+    },
+    "forestry:fruit_lemon": {
+      "chance": 0.65
+    },
+    "forestry:fruit_olive": {
+      "chance": 0.65
+    },
+    "forestry:fruit_orange": {
+      "chance": 0.65
+    },
+    "forestry:fruit_papaya": {
+      "chance": 0.65
+    },
+    "forestry:fruit_pear": {
+      "chance": 0.65
+    },
+    "forestry:fruit_plum": {
+      "chance": 0.65
+    },
+    "forestry:fruit_walnut": {
+      "chance": 0.65
+    },
+    "forestry:mouldy_wheat": {
+      "chance": 0.65
+    },
+    "forestry:mulch": {
+      "chance": 0.65
+    },
+    "forestry:peat": {
+      "chance": 0.75
+    },
+    "forestry:pollen_cluster_crystalline": {
+      "chance": 0.3
+    },
+    "forestry:pollen_cluster_normal": {
+      "chance": 0.3
+    },
+    "forestry:pollen_fertile": {
+      "chance": 0.3
+    },
+    "forestry:sapling": {
+      "chance": 0.3
+    },
+    "forestry:tree_acacia_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_balsa_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_baobab_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_beech_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_birch_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_cherry_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_chestnut_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_cocobolo_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_coconut_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_dark_oak_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_date_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_desert_acacia_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_dogwood_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_ebony_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_elm_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_feijoa_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_fir_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_giant_sequoia_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_ginkgo_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_hill_cherry_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_ipe_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_jacaranda_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_jungle_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_kapok_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_kauri_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_larch_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_lemon_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_lime_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_macrocarpa_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_mahoe_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_mahogany_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_maple_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_oak_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_olive_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_orange_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_padauk_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_papaya_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_pear_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_pewen_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_pine_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_plum_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_poplar_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_sequoia_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_sipiri_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_spruce_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_teak_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_walnut_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_wenge_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_willow_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:tree_zebrawood_decorative_leaves": {
+      "chance": 0.3
+    },
+    "forestry:wood_pulp": {
+      "chance": 0.65
+    }
+  }
+}
