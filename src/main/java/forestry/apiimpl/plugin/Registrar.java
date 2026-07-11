@@ -38,6 +38,10 @@ public class Registrar<K, I, V extends I> {
 		return this.values;
 	}
 
+	public boolean containsKey(K key) {
+		return this.values.containsKey(key);
+	}
+
 	public ImmutableMap<K, V> build() {
 		return ImmutableMap.copyOf(this.values);
 	}

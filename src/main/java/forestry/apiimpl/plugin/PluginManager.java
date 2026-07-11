@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import forestry.Forestry;
 import forestry.api.IForestryApi;
 import forestry.api.apiculture.genetics.IBeeSpecies;
+import forestry.api.apiculture.genetics.IBeeSpeciesType;
 import forestry.api.arboriculture.ITreeSpecies;
 import forestry.api.circuits.CircuitHolder;
 import forestry.api.circuits.ICircuit;
@@ -25,6 +26,12 @@ import forestry.api.plugin.IForestryPlugin;
 import forestry.api.plugin.IPollenRegistration;
 import forestry.apiimpl.ForestryApiImpl;
 import forestry.apiimpl.GeneticManager;
+import forestry.apiculture.genetics.BeeSpeciesDefinition;
+import forestry.apiculture.genetics.DatapackBeePlugin;
+import forestry.core.genetics.alleles.AlleleManager;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.neoforged.fml.loading.FMLEnvironment;
 import forestry.apiimpl.client.BeeClientManager;
 import forestry.apiimpl.client.ButterflyClientManager;
 import forestry.apiimpl.client.ForestryClientApiImpl;
@@ -36,7 +43,7 @@ import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.CircuitManager;
 import forestry.core.errors.ErrorManager;
 import forestry.core.genetics.PollenManager;
-import forestry.core.genetics.alleles.AlleleManager;
+import forestry.core.genetics.alleles.RegistryChromosome;
 import forestry.core.utils.SpeciesUtil;
 import forestry.farming.FarmingManager;
 import forestry.plugin.DefaultForestryPlugin;
@@ -255,6 +262,63 @@ public class PluginManager {
 		});
 	}
 
+	/**
+	 * Rebuilds bee species from the {@code forestry:bee_species} datapack registry, on top of the
+	 * code-registered breeds. Runs on server datapack (re)load and again on the client once the registry
+	 * is synced. JSON entries override existing breeds by ID and add new ones. Reuses the normal
+	 * {@link ISpeciesType#handleSpeciesRegistration} build by appending a synthetic {@link DatapackBeePlugin}.
+	 * <p>
+	 * The common-setup build remains the early bootstrap; this is a second pass, so allele registration is
+	 * reopened for the rebuild and relocked afterwards, and registry chromosomes are re-populated.
+	 */
+	// Whether the previous reload applied any datapack breeds. Used so that a vanilla install (empty
+	// registry) does no rebuild work at all, while removing an override datapack still triggers one
+	// code-only rebuild to revert the affected species back to their built-in definitions.
+	private static boolean appliedDatapackSpecies = false;
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public static void reloadDatapackSpecies(RegistryAccess registryAccess) {
+		Optional<Registry<BeeSpeciesDefinition>> registryOpt = registryAccess.registry(BeeSpeciesDefinition.REGISTRY_KEY);
+		if (registryOpt.isEmpty()) {
+			return;
+		}
+		Registry<BeeSpeciesDefinition> registry = registryOpt.get();
+
+		if (registry.size() == 0 && !appliedDatapackSpecies) {
+			// No datapack breeds now and none applied last time: leave the code-registered species untouched.
+			return;
+		}
+		appliedDatapackSpecies = registry.size() > 0;
+
+		ForestryApiImpl api = (ForestryApiImpl) IForestryApi.INSTANCE;
+		AlleleManager alleleManager = (AlleleManager) api.getAlleleManager();
+		IBeeSpeciesType beeType = SpeciesUtil.BEE_TYPE.get();
+
+		// Code plugins first, then the datapack breeds so JSON entries add/override last.
+		List<IForestryPlugin> plugins = new ArrayList<>(LOADED_PLUGINS);
+		plugins.add(new DatapackBeePlugin(registry));
+
+		alleleManager.reopenForReload();
+		// Reset the species chromosome to unpopulated so buildAll can validate/construct genomes for newly
+		// added species (Karyotype.isAlleleValid is permissive while the registry chromosome is unpopulated).
+		if (beeType.getKaryotype().getSpeciesChromosome() instanceof RegistryChromosome<?> speciesChromosome) {
+			speciesChromosome.reset();
+		}
+		Pair<? extends ImmutableMap<ResourceLocation, ?>, ? extends IMutationManager<?>> pair = beeType.handleSpeciesRegistration(plugins);
+		alleleManager.setRegistrationState(AlleleManager.REGISTRATION_ALLELES_COMPLETE);
+
+		beeType.onSpeciesRegistered((ImmutableMap) pair.getFirst(), (IMutationManager) pair.getSecond());
+		((GeneticManager) api.getGeneticManager()).setMutationsForType(beeType, pair.getSecond());
+
+		Forestry.LOGGER.info("Applied {} datapack bee definitions; {} bee species now registered", registry.size(), beeType.getAllSpecies().size());
+
+		if (FMLEnvironment.dist.isClient()) {
+			// Client render maps (models/sprites/tints) are keyed by species instance, so they must be
+			// rebuilt to match the freshly built species objects.
+			registerClient();
+		}
+	}
+
 	public static void registerClient() {
 		ClientRegistration registration = new ClientRegistration();
 
@@ -265,25 +329,23 @@ public class PluginManager {
 		// Bees
 		List<IBeeSpecies> beeSpecies = SpeciesUtil.getAllBeeSpecies();
 		IdentityHashMap<ILifeStage, Map<IBeeSpecies, ResourceLocation>> beeModels = new IdentityHashMap<>();
+		IdentityHashMap<ILifeStage, ResourceLocation> defaultBeeModels = new IdentityHashMap<>();
 
 		for (ILifeStage stage : SpeciesUtil.BEE_TYPE.get().getLifeStages()) {
 			Map<ResourceLocation, ResourceLocation> locationsByStage = registration.getBeeModels().getOrDefault(stage, Map.of());
 			Map<IBeeSpecies, ResourceLocation> modelsByStage = new IdentityHashMap<>(locationsByStage.size());
+			ResourceLocation defaultModel = Objects.requireNonNull(registration.getDefaultBeeModel(stage), "IClientRegistration.setDefaultBeeModel has not been called for life stage " + stage.getSerializedName() + ", unable to resolve bee default model");
+			defaultBeeModels.put(stage, defaultModel);
 
 			for (IBeeSpecies species : beeSpecies) {
-				ResourceLocation modelLocation = locationsByStage.get(species.id());
-
-				if (modelLocation == null) {
-					// use default model location
-					modelLocation = Objects.requireNonNull(registration.getDefaultBeeModel(stage), "IClientRegistration.setDefaultBeeModel has not been called for life stage " + stage.getSerializedName() + ", unable to resolve bee default model");
-				}
+				ResourceLocation modelLocation = locationsByStage.getOrDefault(species.id(), defaultModel);
 
 				modelsByStage.put(species, modelLocation);
 			}
 
 			beeModels.put(stage, modelsByStage);
 		}
-		((ForestryClientApiImpl) IForestryClientApi.INSTANCE).setBeeManager(new BeeClientManager(beeModels));
+		((ForestryClientApiImpl) IForestryClientApi.INSTANCE).setBeeManager(new BeeClientManager(beeModels, defaultBeeModels));
 
 		// Trees
 		HashMap<ResourceLocation, ILeafSprite> spritesById = registration.getLeafSprites();

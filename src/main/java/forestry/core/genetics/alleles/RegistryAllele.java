@@ -39,6 +39,12 @@ public class RegistryAllele<V extends IRegistryAlleleValue> implements IRegistry
 		return this.value;
 	}
 
+	// Called by RegistryChromosome when the chromosome is re-populated (datapack reload), so an
+	// overridden ID re-resolves to the rebuilt value instead of returning the stale cached one.
+	void resetCachedValue() {
+		this.value = null;
+	}
+
 	@Override
 	public IRegistryChromosome<V> chromosome() {
 		return this.chromosome;

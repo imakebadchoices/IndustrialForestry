@@ -28,7 +28,7 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 
 import javax.annotation.Nullable;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -48,18 +48,25 @@ public class ModelBee implements IUnbakedGeometry<ModelBee> {
 	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
 		IBeeClientManager manager = IForestryClientApi.INSTANCE.getBeeManager();
 		Map<IBeeSpecies, ResourceLocation> models = manager.getBeeModels(this.stage);
-		IdentityHashMap<IBeeSpecies, BakedModel> itemModels = new IdentityHashMap<>();
+		// Keyed by species ID, not instance: a datapack-driven species rebuild swaps species instances, and
+		// keying by identity would leave every baked model unresolvable (blank bee items) after a reload.
+		Map<ResourceLocation, BakedModel> itemModels = new HashMap<>();
 
 		for (IBeeSpecies species : SpeciesUtil.getAllBeeSpecies()) {
 			ResourceLocation location = models.get(species);
 			BakedModel model = baker.bake(location, BlockModelRotation.X0_Y0, spriteGetter);
 
 			if (model != null) {
-				itemModels.put(species, model);
+				itemModels.put(species.id(), model);
 			}
 		}
 
-		return new ModelBee.Baked(itemModels);
+		// Fallback for species added by a datapack after models were baked (their per-species model was
+		// never baked). They render with the default bee model; colors come from the item color handler.
+		ResourceLocation defaultLocation = manager.getDefaultBeeModel(this.stage);
+		BakedModel defaultModel = defaultLocation == null ? null : baker.bake(defaultLocation, BlockModelRotation.X0_Y0, spriteGetter);
+
+		return new ModelBee.Baked(itemModels, defaultModel);
 	}
 
 	public static class Loader implements IGeometryLoader<ModelBee> {
@@ -80,10 +87,13 @@ public class ModelBee implements IUnbakedGeometry<ModelBee> {
 	}
 
 	private static class Baked implements BakedModel {
-		private final IdentityHashMap<IBeeSpecies, BakedModel> itemModels;
+		private final Map<ResourceLocation, BakedModel> itemModels;
+		@Nullable
+		private final BakedModel defaultModel;
 
-		public Baked(IdentityHashMap<IBeeSpecies, BakedModel> itemModels) {
+		public Baked(Map<ResourceLocation, BakedModel> itemModels, @Nullable BakedModel defaultModel) {
 			this.itemModels = itemModels;
+			this.defaultModel = defaultModel;
 		}
 
 		@Override
@@ -127,9 +137,12 @@ public class ModelBee implements IUnbakedGeometry<ModelBee> {
 				IIndividual individual = IIndividualHandlerItem.getIndividual(stack);
 				if (individual == null) {
 					return model;
-				} else {
-					return Baked.this.itemModels.getOrDefault(individual.getSpecies(), model);
 				}
+				BakedModel resolved = Baked.this.itemModels.get(individual.getSpecies().id());
+				if (resolved != null) {
+					return resolved;
+				}
+				return Baked.this.defaultModel != null ? Baked.this.defaultModel : model;
 			}
 		}
 	}

@@ -42,6 +42,14 @@ public abstract class SpeciesRegistration<I extends ISpeciesBuilder<? extends IS
 		this.species.modify(id, action);
 	}
 
+	/**
+	 * @return Whether a species with the given ID has already been registered in this pass. Used by the
+	 * datapack loader to decide between adding a new species and modifying an existing (code-registered) one.
+	 */
+	public boolean isRegistered(ResourceLocation id) {
+		return this.species.containsKey(id);
+	}
+
 	// Creates final map of species, the mutations manager, and populates the species chromosome
 	public Pair<ImmutableMap<ResourceLocation, S>, IMutationManager<S>> buildAll() {
 		IKaryotype karyotype = this.type.getKaryotype();

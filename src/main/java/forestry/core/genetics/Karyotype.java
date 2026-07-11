@@ -5,7 +5,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.Keyable;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import forestry.Forestry;
 import forestry.api.IForestryApi;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpecies;
@@ -36,9 +37,61 @@ public class Karyotype implements IKaryotype {
 		this.defaultSpecies = defaultSpecies;
 		this.weaklyInheritedChromosomes = weaklyInheritedChromosomes;
 
-		Keyable chromosomesKeyable = Keyable.forStrings(() -> this.chromosomes.keySet().stream().map(chromosome -> chromosome.id().toString()));
-		this.genomeCodec = Codec.simpleMap(IForestryApi.INSTANCE.getAlleleManager().chromosomeCodec(), AllelePair.CODEC, chromosomesKeyable)
-			.xmap(map -> Genome.sanitizeAlleles(this, map), IGenome::getChromosomes).codec();
+		// Decodes leniently: entries whose chromosome or allele ID no longer resolves (e.g. a saved bee whose
+		// species was removed with a datapack) are dropped rather than failing the whole decode, and
+		// sanitizeAlleles then fills the gaps from the default species. A strict codec would throw here — and,
+		// because the genome data component syncs via ByteBufCodecs.fromCodec (getOrThrow), that would hard-crash
+		// the client when the orphaned item is sent over the network instead of degrading to the default bee.
+		this.genomeCodec = Codec.unboundedMap(ResourceLocation.CODEC, RawAllelePair.CODEC)
+			.xmap(this::resolveGenome, Karyotype::encodeGenome);
+	}
+
+	// The serialized shape of a single chromosome's allele pair; keys/values stay as raw IDs so an unknown
+	// one can be detected and skipped during resolution rather than aborting the decode.
+	private record RawAllelePair(ResourceLocation active, ResourceLocation inactive) {
+		static final Codec<RawAllelePair> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			ResourceLocation.CODEC.fieldOf("active").forGetter(RawAllelePair::active),
+			ResourceLocation.CODEC.fieldOf("inactive").forGetter(RawAllelePair::inactive)
+		).apply(instance, RawAllelePair::new));
+	}
+
+	private IGenome resolveGenome(Map<ResourceLocation, RawAllelePair> raw) {
+		IAlleleManager alleleManager = IForestryApi.INSTANCE.getAlleleManager();
+		Map<IChromosome<?>, AllelePair<?>> resolved = new IdentityHashMap<>(raw.size());
+
+		for (Map.Entry<ResourceLocation, RawAllelePair> entry : raw.entrySet()) {
+			IChromosome<?> chromosome = alleleManager.getChromosome(entry.getKey());
+			if (chromosome == null) {
+				Forestry.LOGGER.warn("Dropping unknown chromosome '{}' while loading a genome for karyotype {}; it will fall back to the default.", entry.getKey(), this.id);
+				continue;
+			}
+			IAllele active = alleleManager.getAllele(entry.getValue().active());
+			IAllele inactive = alleleManager.getAllele(entry.getValue().inactive());
+			if (active == null || inactive == null || !isResolvable(chromosome, active) || !isResolvable(chromosome, inactive)) {
+				Forestry.LOGGER.warn("Dropping chromosome '{}' with unresolved allele(s) '{}'/'{}' while loading a genome for karyotype {}; it will fall back to the default. Was a datapack breed removed?", entry.getKey(), entry.getValue().active(), entry.getValue().inactive(), this.id);
+				continue;
+			}
+			resolved.put(chromosome, new AllelePair<>(active, inactive));
+		}
+
+		return Genome.sanitizeAlleles(this, resolved);
+	}
+
+	// A registry allele (e.g. a species allele) can linger in the allele manager after its value was removed
+	// by a datapack rebuild within the same game session: the object is kept so it can be re-attached if the
+	// datapack comes back (see AlleleManager#registryAllele). getAllele then returns a non-null-but-stale
+	// allele whose value() would throw. Reject it here so the chromosome falls back to the default instead.
+	private static boolean isResolvable(IChromosome<?> chromosome, IAllele allele) {
+		return !(chromosome instanceof IRegistryChromosome<?> registry) || registry.isValidAllele(allele);
+	}
+
+	private static Map<ResourceLocation, RawAllelePair> encodeGenome(IGenome genome) {
+		Map<ResourceLocation, RawAllelePair> raw = new LinkedHashMap<>();
+		for (Map.Entry<IChromosome<?>, AllelePair<?>> entry : genome.getChromosomes().entrySet()) {
+			AllelePair<?> pair = entry.getValue();
+			raw.put(entry.getKey().id(), new RawAllelePair(pair.active().alleleId(), pair.inactive().alleleId()));
+		}
+		return raw;
 	}
 
 	@Override

@@ -67,6 +67,18 @@ public class BeeSpeciesBuilder extends SpeciesBuilder<IBeeSpeciesType, IBeeSpeci
 	}
 
 	@Override
+	public IBeeSpeciesBuilder clearProducts() {
+		this.products.clear();
+		return this;
+	}
+
+	@Override
+	public IBeeSpeciesBuilder clearSpecialties() {
+		this.specialties.clear();
+		return this;
+	}
+
+	@Override
 	public List<IProduct> buildProducts() {
 		return List.copyOf(this.products);
 	}

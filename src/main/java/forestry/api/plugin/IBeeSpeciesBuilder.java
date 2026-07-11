@@ -79,6 +79,17 @@ public interface IBeeSpeciesBuilder extends ISpeciesBuilder<IBeeSpeciesType, IBe
 	 */
 	IBeeSpeciesBuilder setJubilance(IBeeJubilance jubilance);
 
+	/**
+	 * Removes all products added so far. Used when overriding a species from a datapack, where the
+	 * definition fully specifies the product list and should replace any previously registered products.
+	 */
+	IBeeSpeciesBuilder clearProducts();
+
+	/**
+	 * Removes all specialty products added so far. See {@link #clearProducts()}.
+	 */
+	IBeeSpeciesBuilder clearSpecialties();
+
 	List<IProduct> buildProducts();
 
 	List<IProduct> buildSpecialties();

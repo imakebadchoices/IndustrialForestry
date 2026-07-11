@@ -2,7 +2,6 @@ package forestry.core.genetics.alleles;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import forestry.Forestry;
 import forestry.api.genetics.alleles.IAllele;
 import forestry.api.genetics.alleles.IRegistryAllele;
 import forestry.api.genetics.alleles.IRegistryAlleleValue;
@@ -69,7 +68,16 @@ public class RegistryChromosome<V extends IRegistryAlleleValue> extends ValueChr
 
 	@Override
 	public void populate(ImmutableMap<ResourceLocation, V> registry) {
-		Preconditions.checkState(this.registry == null, "Registry has already been populated");
+		// Re-entrant: a datapack-driven rebuild re-runs species registration and re-populates this
+		// chromosome. Reset cached values on existing alleles so overridden IDs resolve to the rebuilt
+		// value. Alleles created during the current pass have a null cache already, so this is safe.
+		if (this.registry != null) {
+			for (IRegistryAllele<V> allele : this.alleles.values()) {
+				if (allele instanceof RegistryAllele<V> registryAllele) {
+					registryAllele.resetCachedValue();
+				}
+			}
+		}
 
 		this.registry = registry;
 		this.reverseLookup = new IdentityHashMap<>(registry.size());
@@ -78,16 +86,34 @@ public class RegistryChromosome<V extends IRegistryAlleleValue> extends ValueChr
 			this.reverseLookup.put(entry.getValue(), entry.getKey());
 		}
 
-		for (ResourceLocation alleleId : this.alleles.keySet()) {
-			if (!registry.containsKey(alleleId)) {
-				Forestry.LOGGER.warn("No IRegistryAllele found for registered value {}, did you forget to create one?", alleleId);
-			}
-		}
+		// Drop alleles whose value is no longer registered — e.g. a species removed by a datapack rebuild.
+		// Leaving them would let stale alleles be resolved (RegistryAllele.value() throws) and would trip the
+		// missing-value verification in AlleleManager.setRegistrationState.
+		this.alleles.keySet().removeIf(alleleId -> !registry.containsKey(alleleId));
 	}
 
 	@Override
 	public boolean isPopulated() {
 		return this.registry != null;
+	}
+
+	/**
+	 * Resets this chromosome to its unpopulated state so a datapack-driven rebuild can re-run species
+	 * registration. While unpopulated, {@link forestry.core.genetics.Karyotype#isAlleleValid} treats any
+	 * allele as valid, which is what lets {@code buildAll} construct genomes for newly added species before
+	 * the chromosome is re-populated with the full set. Cached values on existing alleles are cleared so
+	 * overridden IDs resolve to the rebuilt value.
+	 */
+	public void reset() {
+		if (this.registry != null) {
+			for (IRegistryAllele<V> allele : this.alleles.values()) {
+				if (allele instanceof RegistryAllele<V> registryAllele) {
+					registryAllele.resetCachedValue();
+				}
+			}
+		}
+		this.registry = null;
+		this.reverseLookup = null;
 	}
 
 	// called by RegistryAllele

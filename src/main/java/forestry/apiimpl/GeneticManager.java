@@ -80,4 +80,18 @@ public class GeneticManager implements IGeneticManager {
 	public void setMutations(ImmutableMap<ISpeciesType<?, ?>, IMutationManager<?>> mutationsByType) {
 		this.mutationsByType = mutationsByType;
 	}
+
+	/**
+	 * Replaces the mutation manager for a single species type, preserving the others. Used by the
+	 * datapack loader when it rebuilds one species type's breeds on reload.
+	 */
+	@ApiStatus.Internal
+	public void setMutationsForType(ISpeciesType<?, ?> speciesType, IMutationManager<?> mutations) {
+		if (this.mutationsByType == null) {
+			throw new IllegalStateException("Mutations have not been registered yet");
+		}
+		java.util.IdentityHashMap<ISpeciesType<?, ?>, IMutationManager<?>> map = new java.util.IdentityHashMap<>(this.mutationsByType);
+		map.put(speciesType, mutations);
+		this.mutationsByType = ImmutableMap.copyOf(map);
+	}
 }

@@ -49,6 +49,20 @@ public class ApicultureRegistration extends SpeciesRegistration<IBeeSpeciesBuild
 			.setOutline(outline);
 	}
 
+	/**
+	 * Adds a new species, or modifies it if one with the given ID was already registered this pass.
+	 * The datapack loader uses this so a JSON entry with an existing ID overrides the code-registered
+	 * species instead of colliding with it. The action receives the builder in both cases.
+	 */
+	public void registerOrModify(ResourceLocation id, String genus, String species, boolean dominant, TextColor outline, Consumer<IBeeSpeciesBuilder> action) {
+		if (isRegistered(id)) {
+			modifySpecies(id, action);
+		} else {
+			IBeeSpeciesBuilder builder = registerSpecies(id, genus, species, dominant, outline);
+			action.accept(builder);
+		}
+	}
+
 	@Override
 	public void addVillageBee(ResourceLocation speciesId, boolean rare, Map<IChromosome<?>, IAllele> alleles) {
 		(rare ? this.rareVillageHives : this.commonVillageHives).add(new VillageHive(speciesId, alleles));

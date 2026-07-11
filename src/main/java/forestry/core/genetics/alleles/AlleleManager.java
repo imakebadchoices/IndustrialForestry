@@ -110,7 +110,17 @@ public class AlleleManager implements IAlleleManager {
 	@Override
 	public <V extends IRegistryAlleleValue> IRegistryAllele<V> registryAllele(ResourceLocation id, IRegistryChromosome<V> chromosome) {
 		checkAlleleRegistration();
-		return (IRegistryAllele<V>) this.allelesByName.computeIfAbsent(id, key -> new RegistryAllele<>(key, chromosome));
+		RegistryAllele<V> existing = (RegistryAllele<V>) this.allelesByName.get(id);
+		if (existing != null) {
+			// Re-attach to the chromosome and clear any stale cached value, in case a previous datapack
+			// rebuild pruned this allele when its species was temporarily removed (see RegistryChromosome.populate).
+			((RegistryChromosome<V>) chromosome).add(id, existing);
+			existing.resetCachedValue();
+			return existing;
+		}
+		RegistryAllele<V> allele = new RegistryAllele<>(id, chromosome);
+		this.allelesByName.put(id, allele);
+		return allele;
 	}
 
 	@Override
@@ -226,6 +236,16 @@ public class AlleleManager implements IAlleleManager {
 			// Crash in case of conflicting chromosome.
 			throw new IllegalStateException("A chromosome is already registered with ID " + id + " with a different value type: " + existing.valueClass() + " was registered, but tried register again with valueClass: " + valueClass);
 		}
+	}
+
+	/**
+	 * Reopens allele registration for a datapack-driven species rebuild. Returns to the
+	 * post-chromosome state so new species alleles (and any interned value alleles) can be created
+	 * again; chromosomes stay locked. Call {@link #setRegistrationState}({@link #REGISTRATION_ALLELES_COMPLETE})
+	 * afterwards to relock and re-run validation.
+	 */
+	public void reopenForReload() {
+		this.registrationState = REGISTRATION_CHROMOSOMES_COMPLETE;
 	}
 
 	public void setRegistrationState(int state) {

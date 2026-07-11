@@ -4,6 +4,7 @@ import forestry.api.apiculture.genetics.IBeeSpecies;
 import forestry.api.genetics.ILifeStage;
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -20,4 +21,11 @@ public interface IBeeClientManager {
 	 * @return A bee model map for the given life stage. (Ex. all drone models)
 	 */
 	Map<IBeeSpecies, ResourceLocation> getBeeModels(ILifeStage stage);
+
+	/**
+	 * @return The default model location for the given life stage, used for species that have no custom model.
+	 * Also used as the fallback for species that were added by a datapack after models were baked.
+	 */
+	@Nullable
+	ResourceLocation getDefaultBeeModel(ILifeStage stage);
 }
