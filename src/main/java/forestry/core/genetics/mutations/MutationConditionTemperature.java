@@ -1,5 +1,8 @@
 package forestry.core.genetics.mutations;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.TemperatureType;
 import forestry.api.genetics.ClimateHelper;
@@ -11,12 +14,22 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 
 public class MutationConditionTemperature implements IMutationCondition {
+	public static final MapCodec<MutationConditionTemperature> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+		TemperatureType.CODEC.fieldOf("min").forGetter(condition -> condition.minTemperature),
+		TemperatureType.CODEC.fieldOf("max").forGetter(condition -> condition.maxTemperature)
+	).apply(instance, MutationConditionTemperature::new));
+
 	private final TemperatureType minTemperature;
 	private final TemperatureType maxTemperature;
 
 	public MutationConditionTemperature(TemperatureType minTemperature, TemperatureType maxTemperature) {
 		this.minTemperature = minTemperature;
 		this.maxTemperature = maxTemperature;
+	}
+
+	@Override
+	public MapCodec<MutationConditionTemperature> codec() {
+		return MAP_CODEC;
 	}
 
 	@Override

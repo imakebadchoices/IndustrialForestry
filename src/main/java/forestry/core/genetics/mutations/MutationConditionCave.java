@@ -1,5 +1,7 @@
 package forestry.core.genetics.mutations;
 
+import com.mojang.serialization.MapCodec;
+
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutation;
@@ -11,6 +13,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 
 public class MutationConditionCave implements IMutationCondition {
+	public static final MapCodec<MutationConditionCave> MAP_CODEC = MapCodec.unit(MutationConditionCave::new);
+
+	@Override
+	public MapCodec<MutationConditionCave> codec() {
+		return MAP_CODEC;
+	}
+
 	@Override
 	public float modifyChance(Level level, BlockPos pos, IMutation<?> mutation, IGenome firstGenome, IGenome secondGenome, IClimateProvider climate, float currentChance) {
 		for (Direction direction : Direction.VALUES) {

@@ -1,11 +1,15 @@
 package forestry.api.core;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+
 import forestry.api.ForestryTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Many things Forestry use temperature and humidity of a biome to determine whether they can or how they can work or spawn at a given location.
@@ -18,6 +22,21 @@ public enum HumidityType {
 	DAMP(ForestryTags.Biomes.DAMP_HUMIDITY, 0x6e56b3);
 
 	public static final List<HumidityType> VALUES = List.of(values());
+
+	/**
+	 * Codec keyed by the (case-insensitive) enum name, used by datapack species and mutation definitions.
+	 */
+	public static final Codec<HumidityType> CODEC = Codec.STRING.comapFlatMap(
+		name -> {
+			for (HumidityType value : values()) {
+				if (value.name().equalsIgnoreCase(name)) {
+					return DataResult.success(value);
+				}
+			}
+			return DataResult.error(() -> "Unknown humidity: " + name);
+		},
+		value -> value.name().toLowerCase(Locale.ROOT)
+	);
 
 	public final TagKey<Biome> tag;
 	public final int color;

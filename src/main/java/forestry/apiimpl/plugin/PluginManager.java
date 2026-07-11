@@ -26,6 +26,7 @@ import forestry.api.plugin.IForestryPlugin;
 import forestry.api.plugin.IPollenRegistration;
 import forestry.apiimpl.ForestryApiImpl;
 import forestry.apiimpl.GeneticManager;
+import forestry.apiculture.genetics.BeeMutationDefinition;
 import forestry.apiculture.genetics.BeeSpeciesDefinition;
 import forestry.apiculture.genetics.DatapackBeePlugin;
 import forestry.core.genetics.alleles.AlleleManager;
@@ -279,24 +280,26 @@ public class PluginManager {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static void reloadDatapackSpecies(RegistryAccess registryAccess) {
 		Optional<Registry<BeeSpeciesDefinition>> registryOpt = registryAccess.registry(BeeSpeciesDefinition.REGISTRY_KEY);
-		if (registryOpt.isEmpty()) {
+		Optional<Registry<BeeMutationDefinition>> mutationRegistryOpt = registryAccess.registry(BeeMutationDefinition.REGISTRY_KEY);
+		if (registryOpt.isEmpty() || mutationRegistryOpt.isEmpty()) {
 			return;
 		}
 		Registry<BeeSpeciesDefinition> registry = registryOpt.get();
+		Registry<BeeMutationDefinition> mutationRegistry = mutationRegistryOpt.get();
 
-		if (registry.size() == 0 && !appliedDatapackSpecies) {
-			// No datapack breeds now and none applied last time: leave the code-registered species untouched.
+		if (registry.size() == 0 && mutationRegistry.size() == 0 && !appliedDatapackSpecies) {
+			// Nothing datapack-defined now and nothing applied last time: leave the code-registered content untouched.
 			return;
 		}
-		appliedDatapackSpecies = registry.size() > 0;
+		appliedDatapackSpecies = registry.size() > 0 || mutationRegistry.size() > 0;
 
 		ForestryApiImpl api = (ForestryApiImpl) IForestryApi.INSTANCE;
 		AlleleManager alleleManager = (AlleleManager) api.getAlleleManager();
 		IBeeSpeciesType beeType = SpeciesUtil.BEE_TYPE.get();
 
-		// Code plugins first, then the datapack breeds so JSON entries add/override last.
+		// Code plugins first, then the datapack breeds/mutations so JSON entries add/override last.
 		List<IForestryPlugin> plugins = new ArrayList<>(LOADED_PLUGINS);
-		plugins.add(new DatapackBeePlugin(registry));
+		plugins.add(new DatapackBeePlugin(registry, mutationRegistry));
 
 		alleleManager.reopenForReload();
 		// Reset the species chromosome to unpopulated so buildAll can validate/construct genomes for newly
@@ -310,7 +313,7 @@ public class PluginManager {
 		beeType.onSpeciesRegistered((ImmutableMap) pair.getFirst(), (IMutationManager) pair.getSecond());
 		((GeneticManager) api.getGeneticManager()).setMutationsForType(beeType, pair.getSecond());
 
-		Forestry.LOGGER.info("Applied {} datapack bee definitions; {} bee species now registered", registry.size(), beeType.getAllSpecies().size());
+		Forestry.LOGGER.info("Applied {} datapack bee definitions and {} datapack mutations; {} bee species and {} mutations now registered", registry.size(), mutationRegistry.size(), beeType.getAllSpecies().size(), beeType.getMutations().getAllMutations().size());
 
 		if (FMLEnvironment.dist.isClient()) {
 			// Client render maps (models/sprites/tints) are keyed by species instance, so they must be

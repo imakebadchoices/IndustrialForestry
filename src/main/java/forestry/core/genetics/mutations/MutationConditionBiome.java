@@ -1,10 +1,14 @@
 package forestry.core.genetics.mutations;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IMutationCondition;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
@@ -12,10 +16,19 @@ import net.minecraft.world.level.biome.Biome;
 
 // todo separate classes for single biome and tag
 public class MutationConditionBiome implements IMutationCondition {
+	public static final MapCodec<MutationConditionBiome> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+		TagKey.codec(Registries.BIOME).fieldOf("biomes").forGetter(condition -> condition.validBiomes)
+	).apply(instance, MutationConditionBiome::new));
+
 	private final TagKey<Biome> validBiomes;
 
 	public MutationConditionBiome(TagKey<Biome> validBiomes) {
 		this.validBiomes = validBiomes;
+	}
+
+	@Override
+	public MapCodec<MutationConditionBiome> codec() {
+		return MAP_CODEC;
 	}
 
 	@Override

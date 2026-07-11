@@ -97,6 +97,7 @@ public class ModuleCore extends BlankForestryModule {
 		event.register(ForestryRegistries.SPECIES_TYPE);
 		event.register(ForestryRegistries.PRODUCT_TYPE);
 		event.register(ForestryRegistries.BEE_JUBILANCE_TYPE);
+		event.register(ForestryRegistries.BEE_MUTATION_CONDITION_TYPE);
 	}
 
 	private static void onGatherData(net.neoforged.neoforge.data.event.GatherDataEvent event) {

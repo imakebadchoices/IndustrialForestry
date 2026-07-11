@@ -1,5 +1,9 @@
 package forestry.core.genetics.mutations;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutation;
@@ -9,10 +13,19 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 
 public class MutationConditionDaytime implements IMutationCondition {
+	public static final MapCodec<MutationConditionDaytime> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+		Codec.BOOL.fieldOf("daytime").forGetter(condition -> condition.daytime)
+	).apply(instance, MutationConditionDaytime::new));
+
 	private final boolean daytime;
 
 	public MutationConditionDaytime(boolean daytime) {
 		this.daytime = daytime;
+	}
+
+	@Override
+	public MapCodec<MutationConditionDaytime> codec() {
+		return MAP_CODEC;
 	}
 
 	@Override

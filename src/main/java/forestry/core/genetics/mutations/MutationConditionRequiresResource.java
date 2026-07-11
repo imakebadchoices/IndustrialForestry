@@ -1,5 +1,8 @@
 package forestry.core.genetics.mutations;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IGenome;
@@ -17,10 +20,19 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
+	public static final MapCodec<MutationConditionRequiresResource> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+		BlockState.CODEC.listOf().fieldOf("blocks").forGetter(condition -> condition.acceptedBlockStates)
+	).apply(instance, blocks -> new MutationConditionRequiresResource(blocks.toArray(new BlockState[0]))));
+
 	private final List<BlockState> acceptedBlockStates;
 
 	public MutationConditionRequiresResource(BlockState... acceptedBlockStates) {
 		this.acceptedBlockStates = Arrays.asList(acceptedBlockStates);
+	}
+
+	@Override
+	public MapCodec<MutationConditionRequiresResource> codec() {
+		return MAP_CODEC;
 	}
 
 	@Override

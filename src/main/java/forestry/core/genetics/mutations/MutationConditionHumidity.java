@@ -1,5 +1,8 @@
 package forestry.core.genetics.mutations;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.HumidityType;
 import forestry.api.genetics.ClimateHelper;
@@ -11,12 +14,22 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 
 public class MutationConditionHumidity implements IMutationCondition {
+	public static final MapCodec<MutationConditionHumidity> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+		HumidityType.CODEC.fieldOf("min").forGetter(condition -> condition.minHumidity),
+		HumidityType.CODEC.fieldOf("max").forGetter(condition -> condition.maxHumidity)
+	).apply(instance, MutationConditionHumidity::new));
+
 	private final HumidityType minHumidity;
 	private final HumidityType maxHumidity;
 
 	public MutationConditionHumidity(HumidityType minHumidity, HumidityType maxHumidity) {
 		this.minHumidity = minHumidity;
 		this.maxHumidity = maxHumidity;
+	}
+
+	@Override
+	public MapCodec<MutationConditionHumidity> codec() {
+		return MAP_CODEC;
 	}
 
 	@Override
