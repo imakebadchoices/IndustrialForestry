@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import forestry.api.ForestryConstants;
 import forestry.api.genetics.IMutationCondition;
-import forestry.api.genetics.alleles.IAllele;
 import forestry.api.genetics.alleles.IChromosome;
 
 /**
@@ -31,7 +30,7 @@ public record BeeMutationDefinition(
 	ResourceLocation result,
 	float chance,
 	List<IMutationCondition> conditions,
-	Map<IChromosome<?>, IAllele> specialAlleles
+	Map<IChromosome<?>, ResourceLocation> specialAlleles
 ) {
 	/**
 	 * The datapack registry that holds every bee mutation definition. Entries live at

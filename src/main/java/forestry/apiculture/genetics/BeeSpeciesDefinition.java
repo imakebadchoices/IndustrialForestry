@@ -20,7 +20,6 @@ import forestry.api.apiculture.IBeeJubilance;
 import forestry.api.core.HumidityType;
 import forestry.api.core.IProduct;
 import forestry.api.core.TemperatureType;
-import forestry.api.genetics.alleles.IAllele;
 import forestry.api.genetics.alleles.IChromosome;
 
 /**
@@ -47,7 +46,7 @@ public record BeeSpeciesDefinition(
 	List<IProduct> products,
 	List<IProduct> specialties,
 	IBeeJubilance jubilance,
-	Map<IChromosome<?>, IAllele> genome
+	Map<IChromosome<?>, ResourceLocation> genome
 ) {
 	/**
 	 * The datapack registry that holds every bee species definition. Entries live at
@@ -83,7 +82,14 @@ public record BeeSpeciesDefinition(
 		IChromosome::id
 	);
 
-	public static final Codec<Map<IChromosome<?>, IAllele>> GENOME_CODEC = Codec.unboundedMap(CHROMOSOME_CODEC, IAllele.CODEC);
+	/**
+	 * Genome codec. Allele values are kept as raw IDs (not resolved to {@link IAllele}) so that a genome may
+	 * reference an allele that does not exist yet at datapack-decode time — notably a datapack-defined effect,
+	 * flower or taxon allele, which is only created later during the rebuild's chromosome population. The IDs
+	 * are resolved at apply time (see {@link DatapackBeePlugin}), where a dangling reference is skipped and
+	 * logged rather than failing the whole entry.
+	 */
+	public static final Codec<Map<IChromosome<?>, ResourceLocation>> GENOME_CODEC = Codec.unboundedMap(CHROMOSOME_CODEC, ResourceLocation.CODEC);
 
 	public static final Codec<BeeSpeciesDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		Codec.STRING.fieldOf("genus").forGetter(BeeSpeciesDefinition::genus),

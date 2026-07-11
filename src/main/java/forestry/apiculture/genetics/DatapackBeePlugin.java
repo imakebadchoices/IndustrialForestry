@@ -9,11 +9,15 @@ import net.minecraft.resources.ResourceLocation;
 
 import forestry.Forestry;
 import forestry.api.ForestryConstants;
+import forestry.api.IForestryApi;
+import forestry.api.apiculture.genetics.IBeeEffect;
 import forestry.api.core.IProduct;
 import forestry.api.genetics.IMutationCondition;
 import forestry.api.genetics.alleles.AllelePair;
 import forestry.api.genetics.alleles.IAllele;
+import forestry.api.genetics.alleles.IAlleleManager;
 import forestry.api.genetics.alleles.IChromosome;
+import forestry.api.genetics.alleles.IRegistryChromosome;
 import forestry.api.plugin.IApicultureRegistration;
 import forestry.api.plugin.IBeeSpeciesBuilder;
 import forestry.api.plugin.IForestryPlugin;
@@ -42,15 +46,23 @@ public class DatapackBeePlugin implements IForestryPlugin {
 
 	private final Registry<BeeSpeciesDefinition> definitions;
 	private final Registry<BeeMutationDefinition> mutations;
+	private final Registry<IBeeEffect> effects;
 
-	public DatapackBeePlugin(Registry<BeeSpeciesDefinition> definitions, Registry<BeeMutationDefinition> mutations) {
+	public DatapackBeePlugin(Registry<BeeSpeciesDefinition> definitions, Registry<BeeMutationDefinition> mutations, Registry<IBeeEffect> effects) {
 		this.definitions = definitions;
 		this.mutations = mutations;
+		this.effects = effects;
 	}
 
 	@Override
 	public void registerApiculture(IApicultureRegistration apiculture) {
 		ApicultureRegistration registration = (ApicultureRegistration) apiculture;
+
+		// Effect alleles must exist before species are built, because a species genome references its effect
+		// allele by ID. Each datapack effect entry's key becomes the allele ID.
+		for (Map.Entry<ResourceKey<IBeeEffect>, IBeeEffect> entry : this.effects.entrySet()) {
+			registration.registerBeeEffect(entry.getKey().location(), entry.getValue());
+		}
 
 		for (Map.Entry<ResourceKey<BeeSpeciesDefinition>, BeeSpeciesDefinition> entry : this.definitions.entrySet()) {
 			ResourceLocation id = entry.getKey().location();
@@ -91,13 +103,52 @@ public class DatapackBeePlugin implements IForestryPlugin {
 			for (IMutationCondition condition : definition.conditions()) {
 				mutation.addMutationCondition(condition);
 			}
-			definition.specialAlleles().forEach((chromosome, allele) -> addSpecialAllele(mutation, chromosome, allele));
+			definition.specialAlleles().forEach((chromosome, alleleId) -> {
+				IAllele allele = resolveAllele(chromosome, alleleId, "mutation " + mutationId);
+				if (allele != null) {
+					addSpecialAllele(mutation, chromosome, allele);
+				}
+			});
 		}));
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	private static void addSpecialAllele(IMutationBuilder mutation, IChromosome<?> chromosome, IAllele allele) {
 		mutation.addSpecialAllele((IChromosome) chromosome, allele);
+	}
+
+	/**
+	 * Resolves an allele ID against the runtime allele manager at apply time. Genomes store raw IDs (not
+	 * resolved {@link IAllele}s) so they can reference a datapack-defined effect/flower/activity allele that
+	 * only becomes available during this same rebuild.
+	 * <p>
+	 * For a {@link IRegistryChromosome} (effect/flower/activity), the allele is <em>created on demand</em> via
+	 * {@link IAlleleManager#registryAllele} — {@link IRegistryChromosome#populate} only fills the chromosome's
+	 * lookup, it does not register alleles, and {@link IAlleleManager#getAllele} is a pure lookup that would
+	 * only find pre-existing (base) alleles. {@link IRegistryChromosome#getSafe} validates the ID against the
+	 * populated registry first, so a typo/dangling reference is skipped-and-logged instead of creating an
+	 * allele whose {@code value()} would later throw. Non-registry alleles (float/int/value/boolean) always
+	 * pre-exist, so they use the plain lookup.
+	 */
+	private static IAllele resolveAllele(IChromosome<?> chromosome, ResourceLocation alleleId, String context) {
+		IAlleleManager manager = IForestryApi.INSTANCE.getAlleleManager();
+		if (chromosome instanceof IRegistryChromosome<?> registryChromosome) {
+			if (registryChromosome.getSafe(alleleId) == null) {
+				Forestry.LOGGER.error("Skipping unknown allele {} referenced by datapack {} (not in {} registry)", alleleId, context, chromosome.id());
+				return null;
+			}
+			return createRegistryAllele(manager, registryChromosome, alleleId);
+		}
+		IAllele allele = manager.getAllele(alleleId);
+		if (allele == null) {
+			Forestry.LOGGER.error("Skipping unknown allele {} referenced by datapack {}", alleleId, context);
+		}
+		return allele;
+	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private static IAllele createRegistryAllele(IAlleleManager manager, IRegistryChromosome<?> chromosome, ResourceLocation alleleId) {
+		return (IAllele) manager.registryAllele(alleleId, (IRegistryChromosome) chromosome);
 	}
 
 	private static void apply(IBeeSpeciesBuilder builder, BeeSpeciesDefinition definition) {
@@ -128,7 +179,14 @@ public class DatapackBeePlugin implements IForestryPlugin {
 
 		// Definitions carry the full genome, so setting each chromosome (both alleles) reproduces the
 		// species exactly; on the modify path this overrides the code-set alleles chromosome-by-chromosome.
-		builder.setGenome(genome -> definition.genome().forEach((chromosome, allele) -> setChromosome(genome, chromosome, allele)));
+		// Allele IDs are resolved here (build time), after registry chromosomes are populated, so a genome may
+		// reference a datapack-defined effect/flower/taxon allele created earlier in this same rebuild.
+		builder.setGenome(genome -> definition.genome().forEach((chromosome, alleleId) -> {
+			IAllele allele = resolveAllele(chromosome, alleleId, "species genome");
+			if (allele != null) {
+				setChromosome(genome, chromosome, allele);
+			}
+		}));
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})

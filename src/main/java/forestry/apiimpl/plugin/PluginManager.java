@@ -23,6 +23,7 @@ import forestry.api.genetics.ITaxon;
 import forestry.api.genetics.pollen.IPollenType;
 import forestry.api.lepidopterology.genetics.IButterflySpecies;
 import forestry.api.plugin.IForestryPlugin;
+import forestry.api.apiculture.genetics.IBeeEffect;
 import forestry.api.plugin.IPollenRegistration;
 import forestry.apiimpl.ForestryApiImpl;
 import forestry.apiimpl.GeneticManager;
@@ -281,17 +282,20 @@ public class PluginManager {
 	public static void reloadDatapackSpecies(RegistryAccess registryAccess) {
 		Optional<Registry<BeeSpeciesDefinition>> registryOpt = registryAccess.registry(BeeSpeciesDefinition.REGISTRY_KEY);
 		Optional<Registry<BeeMutationDefinition>> mutationRegistryOpt = registryAccess.registry(BeeMutationDefinition.REGISTRY_KEY);
-		if (registryOpt.isEmpty() || mutationRegistryOpt.isEmpty()) {
+		Optional<Registry<IBeeEffect>> effectRegistryOpt = registryAccess.registry(IBeeEffect.REGISTRY_KEY);
+		if (registryOpt.isEmpty() || mutationRegistryOpt.isEmpty() || effectRegistryOpt.isEmpty()) {
 			return;
 		}
 		Registry<BeeSpeciesDefinition> registry = registryOpt.get();
 		Registry<BeeMutationDefinition> mutationRegistry = mutationRegistryOpt.get();
+		Registry<IBeeEffect> effectRegistry = effectRegistryOpt.get();
 
-		if (registry.size() == 0 && mutationRegistry.size() == 0 && !appliedDatapackSpecies) {
+		boolean anyDatapackContent = registry.size() > 0 || mutationRegistry.size() > 0 || effectRegistry.size() > 0;
+		if (!anyDatapackContent && !appliedDatapackSpecies) {
 			// Nothing datapack-defined now and nothing applied last time: leave the code-registered content untouched.
 			return;
 		}
-		appliedDatapackSpecies = registry.size() > 0 || mutationRegistry.size() > 0;
+		appliedDatapackSpecies = anyDatapackContent;
 
 		ForestryApiImpl api = (ForestryApiImpl) IForestryApi.INSTANCE;
 		AlleleManager alleleManager = (AlleleManager) api.getAlleleManager();
@@ -299,7 +303,7 @@ public class PluginManager {
 
 		// Code plugins first, then the datapack breeds/mutations so JSON entries add/override last.
 		List<IForestryPlugin> plugins = new ArrayList<>(LOADED_PLUGINS);
-		plugins.add(new DatapackBeePlugin(registry, mutationRegistry));
+		plugins.add(new DatapackBeePlugin(registry, mutationRegistry, effectRegistry));
 
 		alleleManager.reopenForReload();
 		// Reset the species chromosome to unpopulated so buildAll can validate/construct genomes for newly
@@ -313,7 +317,7 @@ public class PluginManager {
 		beeType.onSpeciesRegistered((ImmutableMap) pair.getFirst(), (IMutationManager) pair.getSecond());
 		((GeneticManager) api.getGeneticManager()).setMutationsForType(beeType, pair.getSecond());
 
-		Forestry.LOGGER.info("Applied {} datapack bee definitions and {} datapack mutations; {} bee species and {} mutations now registered", registry.size(), mutationRegistry.size(), beeType.getAllSpecies().size(), beeType.getMutations().getAllMutations().size());
+		Forestry.LOGGER.info("Applied {} datapack bee definitions, {} datapack mutations and {} datapack effects; {} bee species and {} mutations now registered", registry.size(), mutationRegistry.size(), effectRegistry.size(), beeType.getAllSpecies().size(), beeType.getMutations().getAllMutations().size());
 
 		if (FMLEnvironment.dist.isClient()) {
 			// Client render maps (models/sprites/tints) are keyed by species instance, so they must be

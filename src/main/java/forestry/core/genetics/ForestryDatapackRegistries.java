@@ -6,6 +6,7 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 // DataPackRegistryEvent.NewRegistry is a mod-bus event; @EventBusSubscriber auto-detects the bus.
 
 import forestry.api.ForestryConstants;
+import forestry.api.apiculture.genetics.IBeeEffect;
 import forestry.apiculture.genetics.BeeMutationDefinition;
 import forestry.apiculture.genetics.BeeSpeciesDefinition;
 
@@ -24,5 +25,8 @@ public class ForestryDatapackRegistries {
 		// networkCodec == codec: definitions are synced to clients so breeds/mutations agree in multiplayer.
 		event.dataPackRegistry(BeeSpeciesDefinition.REGISTRY_KEY, BeeSpeciesDefinition.CODEC, BeeSpeciesDefinition.CODEC);
 		event.dataPackRegistry(BeeMutationDefinition.REGISTRY_KEY, BeeMutationDefinition.CODEC, BeeMutationDefinition.CODEC);
+		// Effect alleles must exist on clients too (the effect chromosome is populated during the client-side
+		// species rebuild), so this registry is synced like the others.
+		event.dataPackRegistry(IBeeEffect.REGISTRY_KEY, IBeeEffect.CODEC, IBeeEffect.CODEC);
 	}
 }
