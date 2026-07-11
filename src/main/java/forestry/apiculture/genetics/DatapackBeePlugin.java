@@ -23,6 +23,7 @@ import forestry.api.plugin.IBeeSpeciesBuilder;
 import forestry.api.plugin.IForestryPlugin;
 import forestry.api.plugin.IGenomeBuilder;
 import forestry.api.plugin.IMutationBuilder;
+import forestry.apiculture.FlowerTypeDefinition;
 import forestry.apiimpl.plugin.ApicultureRegistration;
 
 /**
@@ -47,11 +48,13 @@ public class DatapackBeePlugin implements IForestryPlugin {
 	private final Registry<BeeSpeciesDefinition> definitions;
 	private final Registry<BeeMutationDefinition> mutations;
 	private final Registry<IBeeEffect> effects;
+	private final Registry<FlowerTypeDefinition> flowerTypes;
 
-	public DatapackBeePlugin(Registry<BeeSpeciesDefinition> definitions, Registry<BeeMutationDefinition> mutations, Registry<IBeeEffect> effects) {
+	public DatapackBeePlugin(Registry<BeeSpeciesDefinition> definitions, Registry<BeeMutationDefinition> mutations, Registry<IBeeEffect> effects, Registry<FlowerTypeDefinition> flowerTypes) {
 		this.definitions = definitions;
 		this.mutations = mutations;
 		this.effects = effects;
+		this.flowerTypes = flowerTypes;
 	}
 
 	@Override
@@ -62,6 +65,11 @@ public class DatapackBeePlugin implements IForestryPlugin {
 		// allele by ID. Each datapack effect entry's key becomes the allele ID.
 		for (Map.Entry<ResourceKey<IBeeEffect>, IBeeEffect> entry : this.effects.entrySet()) {
 			registration.registerBeeEffect(entry.getKey().location(), entry.getValue());
+		}
+
+		// Flower type alleles, like effects, must exist before species reference them by ID.
+		for (Map.Entry<ResourceKey<FlowerTypeDefinition>, FlowerTypeDefinition> entry : this.flowerTypes.entrySet()) {
+			registration.registerFlowerType(entry.getKey().location(), entry.getValue().asFlowerType());
 		}
 
 		for (Map.Entry<ResourceKey<BeeSpeciesDefinition>, BeeSpeciesDefinition> entry : this.definitions.entrySet()) {

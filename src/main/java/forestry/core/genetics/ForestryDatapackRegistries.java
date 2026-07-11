@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 
 import forestry.api.ForestryConstants;
 import forestry.api.apiculture.genetics.IBeeEffect;
+import forestry.apiculture.FlowerTypeDefinition;
 import forestry.apiculture.genetics.BeeMutationDefinition;
 import forestry.apiculture.genetics.BeeSpeciesDefinition;
 
@@ -28,5 +29,8 @@ public class ForestryDatapackRegistries {
 		// Effect alleles must exist on clients too (the effect chromosome is populated during the client-side
 		// species rebuild), so this registry is synced like the others.
 		event.dataPackRegistry(IBeeEffect.REGISTRY_KEY, IBeeEffect.CODEC, IBeeEffect.CODEC);
+		// Flower type alleles are synced for the same reason as effects (flower_type chromosome is populated
+		// during the client-side rebuild).
+		event.dataPackRegistry(FlowerTypeDefinition.REGISTRY_KEY, FlowerTypeDefinition.CODEC, FlowerTypeDefinition.CODEC);
 	}
 }

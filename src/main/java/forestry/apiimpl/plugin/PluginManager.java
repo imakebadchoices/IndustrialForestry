@@ -27,6 +27,7 @@ import forestry.api.apiculture.genetics.IBeeEffect;
 import forestry.api.plugin.IPollenRegistration;
 import forestry.apiimpl.ForestryApiImpl;
 import forestry.apiimpl.GeneticManager;
+import forestry.apiculture.FlowerTypeDefinition;
 import forestry.apiculture.genetics.BeeMutationDefinition;
 import forestry.apiculture.genetics.BeeSpeciesDefinition;
 import forestry.apiculture.genetics.DatapackBeePlugin;
@@ -283,14 +284,16 @@ public class PluginManager {
 		Optional<Registry<BeeSpeciesDefinition>> registryOpt = registryAccess.registry(BeeSpeciesDefinition.REGISTRY_KEY);
 		Optional<Registry<BeeMutationDefinition>> mutationRegistryOpt = registryAccess.registry(BeeMutationDefinition.REGISTRY_KEY);
 		Optional<Registry<IBeeEffect>> effectRegistryOpt = registryAccess.registry(IBeeEffect.REGISTRY_KEY);
-		if (registryOpt.isEmpty() || mutationRegistryOpt.isEmpty() || effectRegistryOpt.isEmpty()) {
+		Optional<Registry<FlowerTypeDefinition>> flowerRegistryOpt = registryAccess.registry(FlowerTypeDefinition.REGISTRY_KEY);
+		if (registryOpt.isEmpty() || mutationRegistryOpt.isEmpty() || effectRegistryOpt.isEmpty() || flowerRegistryOpt.isEmpty()) {
 			return;
 		}
 		Registry<BeeSpeciesDefinition> registry = registryOpt.get();
 		Registry<BeeMutationDefinition> mutationRegistry = mutationRegistryOpt.get();
 		Registry<IBeeEffect> effectRegistry = effectRegistryOpt.get();
+		Registry<FlowerTypeDefinition> flowerRegistry = flowerRegistryOpt.get();
 
-		boolean anyDatapackContent = registry.size() > 0 || mutationRegistry.size() > 0 || effectRegistry.size() > 0;
+		boolean anyDatapackContent = registry.size() > 0 || mutationRegistry.size() > 0 || effectRegistry.size() > 0 || flowerRegistry.size() > 0;
 		if (!anyDatapackContent && !appliedDatapackSpecies) {
 			// Nothing datapack-defined now and nothing applied last time: leave the code-registered content untouched.
 			return;
@@ -303,7 +306,7 @@ public class PluginManager {
 
 		// Code plugins first, then the datapack breeds/mutations so JSON entries add/override last.
 		List<IForestryPlugin> plugins = new ArrayList<>(LOADED_PLUGINS);
-		plugins.add(new DatapackBeePlugin(registry, mutationRegistry, effectRegistry));
+		plugins.add(new DatapackBeePlugin(registry, mutationRegistry, effectRegistry, flowerRegistry));
 
 		alleleManager.reopenForReload();
 		// Reset the species chromosome to unpopulated so buildAll can validate/construct genomes for newly
