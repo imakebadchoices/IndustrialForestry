@@ -1,0 +1,50 @@
+name: Wiki
+
+# Builds the Forestry: CE wiki (static site + breeding explorer) from source.
+# The species data is produced by the mod's own datagen (`runData`) reading the
+# live registry, then folded together with the on-disk datapack species by the
+# Python generator — so the generated snapshot is a build artifact and is never
+# committed. Manual for now (matches build.yml while the 1.21 port stabilises).
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Use Gradle cache for faster builds
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python deps
+        run: pip install -r wiki/requirements.txt
+
+      - name: Datagen — dump live species registry
+        run: ./gradlew runData --console=plain --max-workers 1
+
+      - name: Build site + explorer
+        # Renders markdown, generates the genetics appendix tables, and bundles the
+        # explorer (fetches pinned Mermaid from the npm CDN — needs network).
+        run: python3 wiki/build.py --out wiki/site
+
+      - name: Upload wiki site
+        uses: actions/upload-artifact@v4
+        with:
+          name: forestry-wiki
+          path: wiki/site
