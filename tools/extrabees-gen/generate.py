@@ -40,12 +40,20 @@ SPECIES_PRODUCTS = {
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 BINNIE = os.path.join(REPO, "..", "Binnie", "extrabees", "src", "main", "java", "binnie", "extrabees")
 GEN = os.path.join(BINNIE, "genetics")
-OUT = os.path.join(REPO, "tools", "extrabees-gen", "pack")
+# The pack is bundled INTO the mod jar: data under src/main/resources/data/extrabees, names as a
+# resourcepack lang file under src/main/resources/assets/extrabees/lang. Both ship in the jar.
+OUT = os.path.join(REPO, "src", "main", "resources")
 DATA = os.path.join(OUT, "data", NS, "forestry")
 RECIPE = os.path.join(OUT, "data", NS, "recipe", "centrifuge")
+LANG = os.path.join(OUT, "assets", NS, "lang", "en_us.json")
 
 warnings = []
 items_needed = set()   # extrabees:* items the module must register
+lang = {}              # translation key -> display name, written to the bundled lang file
+
+
+def _title(s):
+    return " ".join(w.capitalize() for w in s.replace("_", " ").split())
 
 
 def _load_eb_lang():
@@ -446,6 +454,7 @@ def emit_species_and_mutations():
     for sp in species:
         sid = sp["name"].lower()
         result_id = f"{NS}:{sid}"
+        lang[f"allele.forestry.bee_species.{NS}.{sid}"] = EB_LANG.get(f"extrabees.species.{sid}.name") or _title(sid)
         props = extract_block(sp["chunk"], "setSpeciesProperties")
         prods, specs = parse_products(props)
         prods += SPECIES_PRODUCTS.get(sid, [])   # products the source copies programmatically
@@ -570,9 +579,7 @@ def emit_combs():
             if c["primary"] is not None:
                 extract["color"] = color_int(c["primary"])   # tint the extract cohesively with its comb
             ct["extract"] = extract   # lets the creative tab / JEI enumerate the comb's fluid intermediary
-        name = EB_LANG.get("extrabees.item.comb." + cid)
-        if name:
-            ct["name"] = name   # e.g. "Oily Comb" — matches old Extra Bees
+        lang[f"comb.{NS}.{cid}"] = EB_LANG.get("extrabees.item.comb." + cid) or (_title(cid) + " Comb")
         write_json(os.path.join(DATA, "comb_type", cid + ".json"), ct)
         emit_centrifuge(c)
     return combs
@@ -589,7 +596,9 @@ def emit_alloy_bees():
     for cid, (primary, name, output, p1, p2, epithet) in ALLOY_BEES.items():
         # comb_type — metal-comb look (shared dark secondary), alloy-tinted primary
         write_json(os.path.join(DATA, "comb_type", cid + ".json"),
-                   {"primary_color": primary, "secondary_color": COMB_METAL_SECONDARY, "name": name})
+                   {"primary_color": primary, "secondary_color": COMB_METAL_SECONDARY})
+        lang[f"comb.{NS}.{cid}"] = name                                  # e.g. "Bronze Comb"
+        lang[f"allele.forestry.bee_species.{NS}.{cid}"] = _title(cid)    # e.g. "Bronze"
 
         # centrifuge — same byproducts as the metal combs (STONE template) + the alloy dust/ingot
         recipe = {
@@ -630,7 +639,8 @@ def emit_quartz_comb():
     """VanillaComb.QUARTZ has no base ForestryCE comb (3 species referenced it). Provide it as an extrabees
     datapack comb that centrifuges to vanilla nether quartz, instead of falling back to the honey comb."""
     write_json(os.path.join(DATA, "comb_type", "quartz.json"),
-               {"primary_color": "#f0ece2", "secondary_color": "#d9cfc0", "name": "Quartz Comb"})
+               {"primary_color": "#f0ece2", "secondary_color": "#d9cfc0"})
+    lang[f"comb.{NS}.quartz"] = "Quartz Comb"
     write_json(os.path.join(RECIPE, "quartz.json"), {
         "type": "forestry:centrifuge",
         "id": f"{NS}:centrifuge/quartz",
@@ -667,10 +677,10 @@ DROP_FLUIDS = {   # EnumHoneyDrop.<NAME> that map to a real pack fluid (others s
 
 def extract_component(enum_name, fluid, amount, flavor):
     comp = {"fluid": {"id": fluid, "amount": amount}, "flavor": flavor, "source": NS}
+    # name lives in the bundled lang, keyed exactly how ItemCombExtract derives it from the component
     prefix = "extrabees.item.propolis." if flavor == "propolis" else "extrabees.item.honeydrop."
-    name = EB_LANG.get(prefix + enum_name.lower())
-    if name:
-        comp["name"] = name   # e.g. "Oily Propolis" / "Nutdew" — matches old Extra Bees
+    fns, fpath = fluid.split(":", 1)
+    lang[f"comb_extract.{NS}.{flavor}.{fns}.{fpath}"] = EB_LANG.get(prefix + enum_name.lower()) or _title(enum_name)
     return comp
 
 
@@ -803,8 +813,10 @@ def emit_flowers():
     for fid, accepted in FLOWER_ACCEPTED.items():
         write_json(os.path.join(DATA, "flower_type", "flower_" + fid + ".json"),
                    {"accepted": accepted, "dominant": True})
+        lang[f"allele.forestry.flower_type.{NS}.flower_{fid}"] = EB_LANG.get(f"extrabees.flowers.{fid}.name") or _title(fid)
     # FRUIT: bespoke code flower (FruitFlowerType, IFruitBearer block entity) — driven by the "type" discriminator.
     write_json(os.path.join(DATA, "flower_type", "flower_fruit.json"), {"type": "fruit", "dominant": True})
+    lang[f"allele.forestry.flower_type.{NS}.flower_fruit"] = EB_LANG.get("extrabees.flowers.fruit.name") or "Fruit"
     # MYSTICAL still deferred (Botania-gated + affectProducts emits petals) — needs its own bespoke type.
     warn("flower_type 'mystical' deferred (needs bespoke code, not a block predicate)")
 
@@ -864,18 +876,14 @@ def emit_effects(referenced):
     for eid in sorted(referenced):
         if eid in EFFECTS:
             write_json(os.path.join(DATA, "bee_effect", "effect_" + eid + ".json"), EFFECTS[eid])
+            lang[f"allele.forestry.bee_effect.{NS}.effect_{eid}"] = EB_LANG.get(f"extrabees.effect.{eid}.name") or _title(eid)
         else:
             warn(f"referenced effect '{eid}' has no primitive mapping (bee will lose its effect)")
 
 
 # ---------------------------------------------------------------------------------------------
-def emit_pack_meta():
-    write_json(os.path.join(OUT, "pack.mcmeta"),
-               {"pack": {"pack_format": 48, "description": "Extra Bees (generated datapack)"}})
-
-
 def main():
-    emit_pack_meta()
+    # Content is bundled in the mod jar (no pack.mcmeta needed for in-jar data).
     species, genera, mut_count = emit_species_and_mutations()
     branches = emit_taxa(genera)
     combs = emit_combs()
@@ -883,6 +891,9 @@ def main():
     emit_quartz_comb()  # extrabees quartz comb for VanillaComb.QUARTZ refs (no base comb)
     emit_flowers()
     emit_effects(referenced_effects)
+
+    # bundled resourcepack lang: names for every component (species/effects/flowers/combs/extracts)
+    write_json(LANG, dict(sorted(lang.items())))
 
     # manifest of items the thin extrabees module must register
     write_json(os.path.join(REPO, "tools", "extrabees-gen", "items-needed.json"),
@@ -892,6 +903,7 @@ def main():
     print(f"mutations: {mut_count}")
     print(f"taxa:      {len(genera)}")
     print(f"combs:     {len(combs)}")
+    print(f"lang keys: {len(lang)}")
     print(f"items module must register: {len(items_needed)}")
     print(f"warnings:  {len(warnings)}")
     if warnings:
