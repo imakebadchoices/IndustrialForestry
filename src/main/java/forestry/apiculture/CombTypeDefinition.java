@@ -1,6 +1,7 @@
 package forestry.apiculture;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -40,7 +41,11 @@ public record CombTypeDefinition(TextColor primaryColor, TextColor secondaryColo
 	public static final Codec<CombTypeDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		TextColor.CODEC.fieldOf("primary_color").forGetter(CombTypeDefinition::primaryColor),
 		TextColor.CODEC.fieldOf("secondary_color").forGetter(CombTypeDefinition::secondaryColor),
-		// name comes from a lang key (comb.<ns>.<path>) shipped with the pack's assets, not embedded here
-		CombExtract.CODEC.optionalFieldOf("extract").forGetter(CombTypeDefinition::extract)
+		// name comes from a lang key (comb.<ns>.<path>) shipped with the pack's assets, not embedded here.
+		// Drop an extract whose fluid didn't resolve (an optional mod that isn't installed — CombExtract.FLUID_CODEC
+		// leaves it EMPTY): the comb keeps its colours/identity, only the now-inert fluid intermediary goes away.
+		CombExtract.CODEC.optionalFieldOf("extract")
+			.xmap(extract -> extract.filter(e -> !e.fluid().isEmpty()), Function.identity())
+			.forGetter(CombTypeDefinition::extract)
 	).apply(instance, CombTypeDefinition::new));
 }

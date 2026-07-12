@@ -58,11 +58,11 @@ neoForge {
 		// Multiblock inventory-conservation GameTest suite. Runs ONLY via `gradlew runGameTestServer`; the
 		// enabled-namespaces property is what makes NeoForge execute the @GameTestHolder("forestry") classes, so the
 		// tests are completely inert in normal client/server play.
-		//gameTestServer {
-		//	type = "gameTestServer"
-		//	gameDirectory.set(project.layout.projectDirectory.dir('run/gametest'))
-		//	systemProperty 'neoforge.enabledGameTestNamespaces', 'forestry'
-		//}
+		gameTestServer {
+			type = "gameTestServer"
+			gameDirectory.set(project.layout.projectDirectory.dir('run/gametest'))
+			systemProperty 'neoforge.enabledGameTestNamespaces', 'forestry'
+		}
 	}
 
 	mods {
@@ -70,13 +70,13 @@ neoForge {
 			sourceSet sourceSets.main
 			// GameTest suite lives in src/test (forestry.gametest). It is part of the forestry mod so the
 			// gameTestServer run loads it, but stays out of the published jar (jar/apiJar use main only).
-			// sourceSet sourceSets.test
+			sourceSet sourceSets.test
 		}
 	}
 
 	// src/test has no Minecraft/NeoForge on its classpath by default — moddev only wires that into source sets
 	// it's told about. Without this the gametest sources won't compile.
-	// addModdingDependenciesTo sourceSets.test
+	addModdingDependenciesTo sourceSets.test
 }
 
 repositories {

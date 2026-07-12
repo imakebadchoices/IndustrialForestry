@@ -7,10 +7,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import io.netty.buffer.ByteBuf;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 /**
@@ -29,8 +33,25 @@ public record CombExtract(FluidStack fluid, String flavor, Optional<String> sour
 	private static final StreamCodec<ByteBuf, TextColor> COLOR_STREAM_CODEC =
 		ByteBufCodecs.INT.map(TextColor::fromRgb, TextColor::getValue);
 
+	/**
+	 * Lenient {@code {"id": …, "amount": …}} fluid codec used in place of {@link FluidStack#CODEC}. An {@code id} that
+	 * isn't in the fluid registry — an optional-mod fluid (Modern Industrialization, Create, …) whose mod isn't
+	 * installed — decodes to {@link FluidStack#EMPTY} instead of failing the whole load. Because a {@code CombExtract}
+	 * lives in the synced {@code forestry:comb_type} datapack registry, a hard failure here aborts <em>all</em> registry
+	 * loading (a server/world that won't start); the empty fluid lets the comb keep its identity while
+	 * {@link CombTypeDefinition} drops the now-inert extract. Only {@code id}/{@code amount} are read (no data
+	 * components) — that's all the comb data ever carries.
+	 */
+	static final Codec<FluidStack> FLUID_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		ResourceLocation.CODEC.fieldOf("id").forGetter(stack -> BuiltInRegistries.FLUID.getKey(stack.getFluid())),
+		Codec.INT.optionalFieldOf("amount", 1).forGetter(FluidStack::getAmount)
+	).apply(instance, (id, amount) -> {
+		Fluid fluid = BuiltInRegistries.FLUID.getOptional(id).orElse(Fluids.EMPTY);
+		return fluid == Fluids.EMPTY ? FluidStack.EMPTY : new FluidStack(fluid, amount);
+	}));
+
 	public static final Codec<CombExtract> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		FluidStack.CODEC.fieldOf("fluid").forGetter(CombExtract::fluid),
+		FLUID_CODEC.fieldOf("fluid").forGetter(CombExtract::fluid),
 		Codec.STRING.optionalFieldOf("flavor", PROPOLIS).forGetter(CombExtract::flavor),
 		// namespace the extract is attributed to in JEI/creative (getCreatorModId); the fluid comb's pack
 		Codec.STRING.optionalFieldOf("source").forGetter(CombExtract::source),
