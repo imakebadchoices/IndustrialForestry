@@ -56,12 +56,27 @@ public class ItemBeeComb extends ItemForestry implements IColoredItem {
 
 	@Override
 	public Component getName(ItemStack stack) {
+		CombTypeDefinition type = resolveCombType(stack);
+		if (type != null && type.name().isPresent()) {
+			return type.name().get();   // name embedded in the data (matches old Extra Bees)
+		}
 		ResourceLocation id = getCombTypeId(stack);
 		if (id != null) {
-			// Name keyed on the comb id, e.g. "comb.forestry.honey"; datapacks ship the matching lang entry.
+			// Fallback: name keyed on the comb id, e.g. "comb.forestry.honey" (needs a lang entry).
 			return Component.translatable(Util.makeDescriptionId("comb", id));
 		}
 		return super.getName(stack);
+	}
+
+	/**
+	 * Attribute a comb to the mod that defines its {@code comb_type} (e.g. Extra Bees combs show as
+	 * {@code @extrabees} in JEI/creative), not to Forestry which only ships the one generic item. Mirrors
+	 * {@code ItemGE.getCreatorModId} for bees.
+	 */
+	@Override
+	public String getCreatorModId(ItemStack stack) {
+		ResourceLocation id = getCombTypeId(stack);
+		return id != null ? id.getNamespace() : super.getCreatorModId(stack);
 	}
 
 	@Override

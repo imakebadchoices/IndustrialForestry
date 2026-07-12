@@ -38,6 +38,8 @@ public class ApicultureItems {
 	// One generic comb whose variant lives in a data component + the forestry:comb_type datapack registry,
 	// exactly how ItemBeeGE drives 70+ species. Datapack combs (e.g. Extra Bees) are pure data on top of this.
 	public static final FeatureItem<ItemBeeComb> COMB = REGISTRY.item(ItemBeeComb::new, "comb");
+	// the one generic fluid-intermediary item (propolis / honey drop); its fluid + flavor live in a component
+	public static final FeatureItem<ItemCombExtract> COMB_EXTRACT = REGISTRY.item(ItemCombExtract::new, "comb_extract");
 
 	// / BEE FOOD PRODUCTS
 	public static final FeatureItem<ItemForestryFood> HONEYED_SLICE = REGISTRY.item(() -> new ItemForestryFood(8, 0.6f), "honeyed_slice");

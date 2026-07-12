@@ -1,7 +1,13 @@
 package forestry.factory.tiles;
 
+import forestry.api.ForestryConstants;
 import forestry.api.IForestryApi;
 import forestry.api.circuits.ForestryCircuitSocketTypes;
+import forestry.apiculture.CombExtract;
+import forestry.apiculture.features.ApicultureItems;
+import forestry.core.features.CoreDataComponents;
+import forestry.factory.recipes.SqueezerRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.core.ForestryError;
 import forestry.api.core.IErrorLogic;
@@ -173,6 +179,25 @@ public class TileSqueezer extends TilePowered implements ISocketable, WorldlyCon
 				for (ItemStack resource : resources) {
 					if (matchingRecipe == null) {
 						matchingRecipe = RecipeUtils.getSqueezerContainerRecipe(getLevel().getRecipeManager(), resource);
+					}
+				}
+			}
+
+			// Generic fluid-intermediary rule: any comb_extract stack squeezes to the fluid it carries in its
+			// CombExtract component (no per-fluid recipe or registry — the "implicit propolis" mechanism).
+			if (matchingRecipe == null) {
+				for (ItemStack resource : resources) {
+					CombExtract extract = resource.get(CoreDataComponents.COMB_EXTRACT);
+					if (extract != null && !extract.fluid().isEmpty()) {
+						matchingRecipe = new SqueezerRecipe(
+							ForestryConstants.forestry("comb_extract_squeeze"),
+							extract.squeezeTime(),
+							List.of(Ingredient.of(ApicultureItems.COMB_EXTRACT.item())),
+							extract.fluid(),
+							ItemStack.EMPTY,
+							0f
+						);
+						break;
 					}
 				}
 			}

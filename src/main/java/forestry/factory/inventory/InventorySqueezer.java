@@ -1,5 +1,7 @@
 package forestry.factory.inventory;
 
+import forestry.apiculture.CombExtract;
+import forestry.core.features.CoreDataComponents;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -37,6 +39,13 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 		if (slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
 			if (FluidHelper.isFillableEmptyContainer(stack)) {
 				return false;
+			}
+
+			// comb_extract squeezes via a dynamic recipe (see TileSqueezer), so it isn't a registered
+			// ingredient — accept it directly when it carries a fluid.
+			CombExtract extract = stack.get(CoreDataComponents.COMB_EXTRACT);
+			if (extract != null && !extract.fluid().isEmpty()) {
+				return true;
 			}
 
 			RecipeManager recipeManager = this.tile.getLevel().getRecipeManager();

@@ -38,6 +38,18 @@ public class CoreDataComponents {
 				.networkSynchronized(SimpleFluidContent.STREAM_CODEC)
 				.build());
 
+	/**
+	 * Fluid + flavor carried by the generic {@code forestry:comb_extract} item (the propolis/honey-drop
+	 * intermediary a fluid comb produces and a squeezer converts back into the fluid).
+	 */
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<forestry.apiculture.CombExtract>> COMB_EXTRACT =
+		DATA_COMPONENT_TYPES.register(
+			"comb_extract",
+			() -> DataComponentType.<forestry.apiculture.CombExtract>builder()
+				.persistent(forestry.apiculture.CombExtract.CODEC)
+				.networkSynchronized(forestry.apiculture.CombExtract.STREAM_CODEC)
+				.build());
+
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<IGenome>> GENOME =
 		DATA_COMPONENT_TYPES.register(
 			"genome",

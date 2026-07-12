@@ -56,6 +56,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
+
+import forestry.apiculture.CombTypeDefinition;
+import forestry.core.features.CoreDataComponents;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -251,6 +254,20 @@ public class ForestryCreativeTabs {
 		items.accept(ApicultureItems.AMBER_DRONE);
 
 		SpeciesUtil.addTypeToCreativeTab(items, ForestrySpeciesTypes.BEE);
+
+		// One generic forestry:comb (and its fluid comb_extract, if any) per datapack comb_type, so every
+		// variant shows in the creative menu / JEI, attributed to its own namespace via getCreatorModId.
+		params.holders().lookup(CombTypeDefinition.REGISTRY_KEY).ifPresent(lookup ->
+			lookup.listElements().forEach(holder -> {
+				ItemStack comb = new ItemStack(ApicultureItems.COMB.item());
+				comb.set(CoreDataComponents.COMB_TYPE, holder.key().location());
+				items.accept(comb);
+				holder.value().extract().ifPresent(extract -> {
+					ItemStack extractStack = new ItemStack(ApicultureItems.COMB_EXTRACT.item());
+					extractStack.set(CoreDataComponents.COMB_EXTRACT, extract);
+					items.accept(extractStack);
+				});
+			}));
 	}
 
 	private static void addArboricultureItems(CreativeModeTab.ItemDisplayParameters params, CreativeModeTab.Output items) {

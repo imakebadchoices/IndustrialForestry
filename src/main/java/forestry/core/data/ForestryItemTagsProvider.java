@@ -102,6 +102,9 @@ public class ForestryItemTagsProvider {
 
 		tags.tag(ItemTags.SAPLINGS).add(ArboricultureItems.SAPLING.item());
 		tags.tag(ForestryTags.Items.BEE_COMBS).add(ApicultureItems.BEE_COMBS.itemArray());
+		// the one generic datapack-driven comb counts as a comb too, so its comb_type variants work in
+		// generic #forestry:combs recipes alongside the vanilla combs
+		tags.tag(ForestryTags.Items.BEE_COMBS).add(ApicultureItems.COMB.item());
 		tags.tag(ForestryTags.Items.VILLAGE_COMBS).add(ApicultureItems.BEE_COMBS.itemArray());
 		tags.tag(ForestryTags.Items.PROPOLIS).add(ApicultureItems.PROPOLIS.itemArray());
 		tags.tag(ForestryTags.Items.DROP_HONEY).add(ApicultureItems.HONEY_DROP, ApicultureItems.HONEYDEW);

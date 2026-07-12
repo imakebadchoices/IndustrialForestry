@@ -1,8 +1,16 @@
 package forestry.factory.recipes.jei;
 
+import forestry.api.ForestryConstants;
+import forestry.api.core.Product;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
 import forestry.api.modules.ForestryModuleIds;
+import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.api.recipes.ISqueezerRecipe;
+import forestry.apiculture.CombExtract;
+import forestry.core.features.CoreDataComponents;
+import forestry.factory.recipes.SqueezerRecipe;
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import forestry.core.ClientsideCode;
 import forestry.core.features.FluidsItems;
 import forestry.core.gui.GuiForestry;
@@ -86,12 +94,37 @@ public class FactoryJeiPlugin implements IModPlugin {
 		registry.addRecipes(ForestryRecipeType.RAINMAKER, FuelManager.rainSubstrate.values().stream()
 			.sorted(Comparator.comparing(RainSubstrate::duration))
 			.toList());
-		registry.addRecipes(ForestryRecipeType.SQUEEZER, RecipeUtils.getRecipes(manager, FactoryRecipeTypes.SQUEEZER).toList());
+		registry.addRecipes(ForestryRecipeType.SQUEEZER, collectSqueezerRecipes(manager));
 		registry.addRecipes(ForestryRecipeType.STILL, RecipeUtils.getRecipes(manager, FactoryRecipeTypes.STILL).toList());
 
 		BlockFactoryPlain rainTank = FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.RAINTANK).block();
 		JeiUtil.addDescription(registry, rainTank);
 		JeiUtil.addDescription(registry, FactoryBlocks.TESR.get(BlockTypeFactoryTesr.BOTTLER).block());
+	}
+
+	/**
+	 * Real squeezer recipes plus synthetic entries for the dynamic comb_extract → fluid squeeze (see
+	 * {@code TileSqueezer}). The extracts aren't in the recipe manager, so we derive them from every
+	 * centrifuge output that is a {@code comb_extract} — keeping JEI in sync with the data with no registry.
+	 */
+	private static List<ISqueezerRecipe> collectSqueezerRecipes(RecipeManager manager) {
+		List<ISqueezerRecipe> recipes = new java.util.ArrayList<>(RecipeUtils.getRecipes(manager, FactoryRecipeTypes.SQUEEZER).toList());
+		java.util.Set<String> seen = new java.util.HashSet<>();
+		int i = 0;
+		for (ICentrifugeRecipe centrifuge : RecipeUtils.getRecipes(manager, FactoryRecipeTypes.CENTRIFUGE).toList()) {
+			for (Product product : centrifuge.getAllProducts()) {
+				ItemStack stack = product.createStack();
+				CombExtract extract = stack.get(CoreDataComponents.COMB_EXTRACT);
+				if (extract != null && !extract.fluid().isEmpty() && seen.add(extract.subtypeKey())) {
+					recipes.add(new SqueezerRecipe(
+						ForestryConstants.forestry("jei/comb_extract_squeeze_" + (i++)),
+						extract.squeezeTime(),
+						List.of(DataComponentIngredient.of(true, stack)),
+						extract.fluid(), ItemStack.EMPTY, 0f));
+				}
+			}
+		}
+		return recipes;
 	}
 
 	@Override

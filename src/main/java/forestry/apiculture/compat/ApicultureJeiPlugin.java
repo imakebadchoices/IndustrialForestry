@@ -8,6 +8,9 @@ import forestry.api.genetics.ISpeciesType;
 import forestry.api.genetics.alleles.BeeChromosomes;
 import forestry.api.modules.ForestryModuleIds;
 import forestry.apiculture.features.ApicultureItems;
+import forestry.apiculture.CombExtract;
+import forestry.apiculture.items.ItemBeeComb;
+import forestry.apiculture.items.ItemCombExtract;
 import forestry.apiculture.items.ItemCreativeHiveFrame;
 import forestry.core.utils.JeiUtil;
 import forestry.core.utils.SpeciesUtil;
@@ -72,6 +75,37 @@ public class ApicultureJeiPlugin implements IModPlugin {
 			@Override
 			public String getLegacyStringSubtypeInfo(ItemStack stack, UidContext context) {
 				return String.valueOf(ItemCreativeHiveFrame.hasForceMutations(stack));
+			}
+		});
+		// distinguish comb variants by their comb_type component so JEI lists each comb separately
+		// instead of collapsing every forestry:comb into one ingredient
+		registry.registerSubtypeInterpreter(ApicultureItems.COMB.item(), new ISubtypeInterpreter<>() {
+			@Override
+			public Object getSubtypeData(ItemStack stack, UidContext context) {
+				return ItemBeeComb.getCombTypeId(stack);
+			}
+
+			@Override
+			public String getLegacyStringSubtypeInfo(ItemStack stack, UidContext context) {
+				ResourceLocation id = ItemBeeComb.getCombTypeId(stack);
+				return id != null ? id.toString() : "";
+			}
+		});
+		// distinguish comb_extract variants by the fluid they carry, so each squeezes/looks up on its own
+		registry.registerSubtypeInterpreter(ApicultureItems.COMB_EXTRACT.item(), new ISubtypeInterpreter<>() {
+			@Override
+			public Object getSubtypeData(ItemStack stack, UidContext context) {
+				return combExtractKey(stack);
+			}
+
+			@Override
+			public String getLegacyStringSubtypeInfo(ItemStack stack, UidContext context) {
+				return combExtractKey(stack);
+			}
+
+			private String combExtractKey(ItemStack stack) {
+				CombExtract extract = ItemCombExtract.getExtract(stack);
+				return extract != null ? extract.subtypeKey() : "";
 			}
 		});
 	}
