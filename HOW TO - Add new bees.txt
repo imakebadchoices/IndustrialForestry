@@ -1,0 +1,467 @@
+HOW TO — Add new bees (datapack / addon authors)
+
+Unlike trees, bees in ForestryCE are fully data-driven. Species, mutations, flowers, effects, taxonomy and
+combs are all loaded from datapack registries, so an addon mod or a plain datapack + resourcepack can add a
+complete species line without touching Forestry's code. This document walks through one worked example that
+exercises every feature, then provides a full schema reference in the appendices.
+
+Throughout, "mypack" stands in for your own namespace.
+
+The worked example is the "Cinder" bee: a nether species of a new genus that produces a custom comb, applies
+a passive effect, and is bred from Forest + Sinister under a biome condition.
+
+
+--------------------------------------------------------------------------------------------------------
+0. FILE LAYOUT
+--------------------------------------------------------------------------------------------------------
+Gameplay data lives under the "forestry" folder inside your namespace (it feeds Forestry's datapack
+registries). Recipes use the vanilla recipe location. Display names live in a resourcepack.
+
+  <datapack>/
+    pack.mcmeta
+    data/mypack/forestry/taxon/emberapis.json           genus (only if you need a new one)
+    data/mypack/forestry/flower_type/flower_ember.json   what the queen accepts as a flower
+    data/mypack/forestry/bee_effect/effect_scorch.json   the passive effect it radiates
+    data/mypack/forestry/comb_type/ember.json            the comb's appearance (+ optional fluid)
+    data/mypack/forestry/bee_species/cinder.json         the bee
+    data/mypack/forestry/bee_mutation/cinder.json        how to breed it
+    data/mypack/recipe/centrifuge/ember.json             what the comb centrifuges into
+  <resourcepack>/
+    assets/mypack/lang/en_us.json                        display names
+
+A file's ID is its namespace + path: data/mypack/forestry/comb_type/ember.json has ID "mypack:ember", and
+that is how you reference it elsewhere. Unresolved references (a missing genus, a typo'd flower ID) are
+skipped and logged rather than crashing the load, so check the log if something falls back to a default.
+
+
+--------------------------------------------------------------------------------------------------------
+1. GENUS (taxon)  — skip if reusing an existing genus
+--------------------------------------------------------------------------------------------------------
+Every bee needs a genus that resolves to a taxon; otherwise the bee degrades to a display-only genus with no
+classification. Reuse a Forestry genus where one fits (see forestry.api.genetics.ForestryTaxa) or declare
+your own under a parent taxon (the bee family is "forestry:apidae"):
+
+  data/mypack/forestry/taxon/emberapis.json
+  {
+    "parent": "forestry:apidae",
+    "name": "emberapis"
+  }
+
+Rank is derived from the parent, so a taxon only needs to exist. You may chain your own families/orders, and
+parents can be declared in any file order.
+
+
+--------------------------------------------------------------------------------------------------------
+2. FLOWER TYPE
+--------------------------------------------------------------------------------------------------------
+A flower type is the predicate for what a queen accepts as a flower. The default kind is a block/tag list:
+
+  data/mypack/forestry/flower_type/flower_ember.json
+  {
+    "accepted": ["minecraft:netherrack", "minecraft:magma_block"],
+    "plantable": [],
+    "dominant": true
+  }
+
+- "accepted" is either an inline block list or a single block tag (e.g. "#minecraft:base_stone_nether").
+- "plantable" (optional) lists blockstates the queen spreads near the hive; empty means non-planting.
+- "dominant" (optional, default true) sets allele dominance.
+
+For fruit-bearing blocks (Forestry leaves / fruit pods), use the code-backed variant via the "type" field:
+
+  { "type": "fruit", "dominant": true }
+
+See Appendix D for the flower_type schema.
+
+
+--------------------------------------------------------------------------------------------------------
+3. BEE EFFECT
+--------------------------------------------------------------------------------------------------------
+Effects are assembled from parameterised primitives: choose a "type" and supply its fields. Cinder grants
+nearby players fire resistance:
+
+  data/mypack/forestry/bee_effect/effect_scorch.json
+  {
+    "type": "forestry:apply_potion",
+    "effect": "minecraft:fire_resistance",
+    "duration": 100,
+    "throttle": 40,
+    "chance": 1.0
+  }
+
+You may instead point the genome directly at a built-in effect by ID (e.g. "forestry:bee_effect_ignition",
+"forestry:bee_effect_none"; see forestry.api.apiculture.ForestryBeeEffects) and skip this file. The full
+primitive catalogue is in Appendix F.
+
+
+--------------------------------------------------------------------------------------------------------
+4. COMB TYPE (and optional fluid)
+--------------------------------------------------------------------------------------------------------
+Combs are a single generic item, "forestry:comb", whose appearance and identity come from a comb_type. At
+minimum, define the two tint colours (hex or named):
+
+  data/mypack/forestry/comb_type/ember.json
+  {
+    "primary_color": "#ff6a00",
+    "secondary_color": "#3a1a0a"
+  }
+
+Optionally, a comb can carry a fluid intermediary. Add an "extract" block and the comb will centrifuge into
+a generic "forestry:comb_extract" item holding that fluid, which a Squeezer converts back to the fluid — no
+per-fluid item or recipe required:
+
+  {
+    "primary_color": "#ff6a00",
+    "secondary_color": "#3a1a0a",
+    "extract": {
+      "fluid": { "id": "minecraft:lava", "amount": 100 },
+      "flavor": "propolis",
+      "source": "mypack",
+      "color": "#ff6a00"
+    }
+  }
+
+The fluid ID must be a registered fluid at load time, or the comb_type registry fails to load. See Appendix E
+for the extract schema.
+
+
+--------------------------------------------------------------------------------------------------------
+5. BEE SPECIES
+--------------------------------------------------------------------------------------------------------
+The species ties the genus, flower, effect and comb together.
+
+  data/mypack/forestry/bee_species/cinder.json
+  {
+    "genus": "emberapis",
+    "species": "ignis",
+    "dominant": false,
+    "authority": "mypack",
+
+    "outline": "#ff6a00",
+    "body": "#ffdc16",
+    "stripes": "#000000",
+
+    "temperature": "hellish",
+    "humidity": "arid",
+    "glint": true,
+
+    "products":    [ { "item": "forestry:comb", "tag": { "forestry:comb_type": "mypack:ember" }, "chance": 0.30 } ],
+    "specialties": [ { "item": "minecraft:blaze_powder", "chance": 0.10 } ],
+
+    "jubilance": { "type": "forestry:requires_resource", "blocks": [ { "Name": "minecraft:magma_block" } ] },
+
+    "genome": {
+      "forestry:speed": "forestry:0.6fd",
+      "forestry:lifespan": "forestry:40i",
+      "forestry:fertility": "forestry:2id",
+      "forestry:temperature_tolerance": "forestry:tolerance_up_2",
+      "forestry:humidity_tolerance": "forestry:tolerance_none",
+      "forestry:tolerates_rain": "forestry:falsed",
+      "forestry:cave_dwelling": "forestry:trued",
+      "forestry:flower_type": "mypack:flower_ember",
+      "forestry:pollination": "forestry:10i",
+      "forestry:territory": "forestry:9_6_9",
+      "forestry:bee_effect": "mypack:effect_scorch",
+      "forestry:activity": "forestry:activity_cathemeral"
+    }
+  }
+
+- "genus" is the taxon's "name"; "species" is the epithet, giving the binomial "Emberapis ignis".
+- "products" always drop; "specialties" drop only while the bee is jubilant. Any product may carry a "tag"
+  (a data-component patch) — that is how the comb variant is stamped onto the generic comb item.
+- The genome maps a chromosome ID to an allele ID. Omitted chromosomes fall back to the genus default, then
+  Forestry's baseline, so you only need to specify what differs. The genome may reference your own datapack
+  alleles (flower_type / bee_effect / activity) by ID — they are created during the reload before the genome
+  is resolved.
+
+The full species field list is in Appendix C; the genome/chromosome model is in Appendix G.
+
+
+--------------------------------------------------------------------------------------------------------
+6. MUTATION
+--------------------------------------------------------------------------------------------------------
+  data/mypack/forestry/bee_mutation/cinder.json
+  {
+    "first_parent": "forestry:bee_forest",
+    "second_parent": "forestry:bee_sinister",
+    "result": "mypack:cinder",
+    "chance": 0.15,
+    "conditions": [ { "type": "forestry:biome", "biomes": "#minecraft:is_nether" } ]
+  }
+
+Parents and result are species IDs; base bees are "forestry:bee_<name>" (see ForestryBeeSpecies). "chance" is
+0.0–1.0. "conditions" (optional) all must pass — see Appendix H. "special_alleles" (optional, same shape as
+a genome) overrides specific alleles on offspring from this mutation.
+
+
+--------------------------------------------------------------------------------------------------------
+7. CENTRIFUGE RECIPE
+--------------------------------------------------------------------------------------------------------
+Give the comb something to process into. The input is a component-aware ingredient so it matches only your
+comb variant rather than every comb:
+
+  data/mypack/recipe/centrifuge/ember.json
+  {
+    "type": "forestry:centrifuge",
+    "id": "mypack:centrifuge/ember",
+    "time": 20,
+    "input": {
+      "type": "neoforge:components",
+      "items": "forestry:comb",
+      "components": { "forestry:comb_type": "mypack:ember" }
+    },
+    "products": [
+      { "item": "forestry:beeswax", "chance": 0.5 },
+      { "item": "minecraft:blaze_powder", "chance": 0.2 }
+    ]
+  }
+
+If any output comes from an optional mod, gate the whole recipe so it no-ops when that mod is absent instead
+of erroring on a missing item:
+
+    "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "someothermod" } ]
+
+If you defined a comb "extract" (step 4), this is where it is produced — a centrifuge output that is the
+generic comb_extract item carrying the same fluid payload:
+
+    { "item": "forestry:comb_extract",
+      "tag": { "forestry:comb_extract": { "fluid": { "id": "minecraft:lava", "amount": 100 },
+                                          "flavor": "propolis", "source": "mypack", "color": "#ff6a00" } },
+      "chance": 1.0 }
+
+
+--------------------------------------------------------------------------------------------------------
+8. DISPLAY NAMES (resourcepack)
+--------------------------------------------------------------------------------------------------------
+Data cannot ship display names, so names are translation keys resolved from a lang file (bundle it in your
+mod's assets or ship a paired resourcepack). Keys are derived and must match exactly:
+
+  assets/mypack/lang/en_us.json
+  {
+    "allele.forestry.bee_species.mypack.cinder":      "Cinder",
+    "allele.forestry.flower_type.mypack.flower_ember": "Ember",
+    "allele.forestry.bee_effect.mypack.effect_scorch": "Scorching",
+    "comb.mypack.ember":                               "Ember Comb",
+    "comb_extract.mypack.propolis.minecraft.lava":     "Molten Propolis"
+  }
+
+Key formats are listed in Appendix I. The genus binomial is built from the raw genus/species strings and
+needs no lang key.
+
+
+--------------------------------------------------------------------------------------------------------
+9. LOADING AND TESTING
+--------------------------------------------------------------------------------------------------------
+- Datapack registries load at WORLD LOAD, not on /reload. Change a bee, then reopen the world; /reload only
+  re-applies the world-load snapshot.
+- Sprites/colours/names may also need a client resource reload (F3+T); a brand-new bee bakes its model only
+  after a resource reload.
+- A blank bee or a raw "allele.forestry...." string indicates a missing name or unbaked model, not a data
+  error — check the lang key and press F3+T.
+- Watch the world-load log for skip-and-log lines (unknown genus / flower / effect / allele): the load will
+  not crash, but they indicate a reference that did not resolve.
+
+
+========================================================================================================
+APPENDIX A — THE GENERAL MODEL
+========================================================================================================
+Every "knob" below is a Forestry datapack registry. They share one shape:
+
+  - Location:  data/<namespace>/forestry/<registry>/<name>.json  (recipes are the exception: vanilla recipe/)
+  - Identity:  the entry's ID is <namespace>:<name>; you reference entries across files by ID.
+  - Merging:   entries from all datapacks (including bundled mod data) are merged; later packs override
+               earlier ones by ID.
+  - Failure:   unresolved cross-references are skipped and logged, never fatal (except an unknown FLUID ID in
+               a comb_type "extract", which fails that registry's load).
+  - Timing:    these are dynamic (worldgen) registries — they load at world load, not on /reload.
+
+Two of the knobs (bee_effect, and the sub-objects "jubilance" and mutation "conditions") are DISPATCHED: the
+JSON object carries a "type" field naming a variant, and the remaining fields are that variant's parameters.
+This is the standard dispatch-codec pattern; the variant list for each is fixed by the mod but open to
+addons that register new types in code. flower_type uses a lighter "type" discriminator ("block" | "fruit")
+over a shared field set.
+
+The registries (knobs):
+
+  forestry:bee_species    a bee                              Appendix C
+  forestry:bee_mutation   a breeding recipe                  Appendix B
+  forestry:taxon          a genus/family/... classification   Appendix (below)
+  forestry:flower_type    what a queen accepts as a flower   Appendix D
+  forestry:bee_effect     a passive effect (dispatched)      Appendix F
+  forestry:comb_type      a comb's appearance + fluid        Appendices C/E
+
+Shared value objects used inside those entries:
+
+  Product                 an item output (products/specialties/recipe outputs)   Appendix C
+  IBeeJubilance           the jubilance sub-object (dispatched)                  Appendix C
+  IMutationCondition      a mutation condition (dispatched)                      Appendix H
+  CombExtract             the fluid-intermediary payload                        Appendix E
+  genome                  chromosome-ID -> allele-ID map                        Appendix G
+
+forestry:taxon (TaxonDefinition):
+  parent   string   required   parent taxon ID (e.g. "forestry:apidae")
+  name     string   required   this taxon's name (lowercase, one word); the bee's "genus" references this
+
+
+========================================================================================================
+APPENDIX B — forestry:bee_mutation
+========================================================================================================
+  first_parent     ID      required        parent species
+  second_parent    ID      required        parent species
+  result           ID      required        offspring species
+  chance           float   required        0.0–1.0 base chance
+  conditions       list    optional  []    IMutationCondition objects; ALL must pass (Appendix H)
+  special_alleles  genome  optional  {}    allele overrides applied to offspring of this mutation (Appendix G)
+
+
+========================================================================================================
+APPENDIX C — forestry:bee_species
+========================================================================================================
+  genus            string   required           taxon name (Appendix A / taxon)
+  species          string   required           binomial epithet
+  dominant         bool     optional  false     allele dominance of the species
+  outline          color    required           primary bee body colour
+  body             color    optional  #ffdc16   secondary body colour
+  stripes          color    optional  #000000   stripe colour
+  temperature      enum     optional  normal    icy | cold | normal | warm | hot | hellish
+  humidity         enum     optional  normal    arid | normal | damp
+  complexity       int      optional  0         index/analysis difficulty hint
+  glint            bool     optional  false     enchantment shimmer on the bee item
+  secret           bool     optional  false     hide from the species index
+  authority        string   optional  "Sengir"  binomial authority text
+  escritoire_color int      optional  -1        escritoire minigame tint
+  products         list     optional  []        Product objects, always dropped
+  specialties      list     optional  []        Product objects, dropped only while jubilant
+  jubilance        object   optional  always    IBeeJubilance (dispatched); omit for always-jubilant
+  genome           genome   optional  {}        chromosome-ID -> allele-ID (Appendix G)
+
+  color is a JSON string: "#rrggbb" or a named colour.
+
+Product (an entry in products / specialties / centrifuge outputs):
+  item     ID      required        item ID
+  count    int     optional  1     stack size (1–64)
+  tag      object  optional  {}    data-component patch, e.g. { "forestry:comb_type": "mypack:ember" }
+  chance   float   required        0.0–1.0
+
+IBeeJubilance types:
+  forestry:requires_resource   { "blocks": [ blockstate, ... ] }   jubilant when one is near the hive
+  forestry:hermit              { }                                 jubilant when isolated
+  (omit "jubilance" entirely for always-jubilant)
+
+
+========================================================================================================
+APPENDIX D — forestry:flower_type
+========================================================================================================
+  type       string   optional  "block"   "block" (block/tag predicate) or "fruit" (IFruitBearer blocks)
+  accepted   blocks   optional  []         inline block list OR a single "#tag"; the accepted flowers
+  plantable  list     optional  []         blockstates the queen spreads near the hive; empty = non-planting
+  dominant   bool     optional  true       allele dominance
+
+  "accepted" is ignored by the "fruit" type (it tests for fruit-bearing block entities instead).
+
+
+========================================================================================================
+APPENDIX E — comb_type + CombExtract (the fluid intermediary)
+========================================================================================================
+forestry:comb_type (CombTypeDefinition):
+  primary_color    color    required         layer-1 tint of the comb item
+  secondary_color  color    required         layer-0 tint
+  extract          object   optional         a CombExtract payload if the comb squeezes to a fluid
+
+CombExtract (the "extract" sub-object, and the payload of the forestry:comb_extract component):
+  fluid    object   required                 { "id": <fluid ID>, "amount": <int mB> }; the ID must be a
+                                             registered fluid at load time
+  flavor   string   optional  "propolis"     "propolis" or "honey_drop" (sprite + squeeze time only)
+  source   string   optional                 namespace the extract is attributed to in JEI
+  color    color    optional                 extract item tint; use the comb's colour for a matched look
+
+The same CombExtract object appears in two places: on the comb_type (drives creative/JEI enumeration) and as
+the "tag" of a forestry:comb_extract output in the centrifuge recipe (the actual produced item).
+
+
+========================================================================================================
+APPENDIX F — forestry:bee_effect primitives
+========================================================================================================
+Each effect JSON has a "type" and, for most, "throttle" (minimum ticks between activations) and "chance".
+
+  forestry:apply_potion       effect, duration, amplifier?, throttle, chance
+  forestry:spawn_mob          entity, cap, player_range, check_spawn_rules?, throttle, chance
+  forestry:damage_entities    damage, armor_scaling?, throttle, chance
+  forestry:feed               nutrition, saturation, throttle
+  forestry:firework           colors:[int], shape, trail, flicker, throttle, chance
+  forestry:strike_lightning   throttle, chance
+  forestry:spawn_projectile   entity, height, speed, throttle, chance
+  forestry:teleport           throttle, chance
+  forestry:entity_force       attract:bool, strength, throttle
+  forestry:bonemeal           throttle, chance
+  forestry:transform_block    transforms:[{ from, to:{ Name } }], throttle, chance
+  forestry:place_block        block:{ Name }, throttle, chance
+  forestry:fill_fluid         fluid, amount, throttle
+  forestry:inject_energy      amount, throttle
+
+Built-in effects (no JSON) can be referenced by ID from a genome, e.g. forestry:bee_effect_ignition,
+forestry:bee_effect_none — see forestry.api.apiculture.ForestryBeeEffects.
+
+
+========================================================================================================
+APPENDIX G — genome (chromosomes and allele IDs)
+========================================================================================================
+A genome is a map of chromosome ID -> allele ID. Omit any chromosome to inherit the genus/baseline default.
+
+Chromosomes and their allele kind:
+  forestry:speed                 float
+  forestry:lifespan              integer
+  forestry:fertility             integer
+  forestry:pollination           integer
+  forestry:temperature_tolerance value (ToleranceType)
+  forestry:humidity_tolerance    value (ToleranceType)
+  forestry:territory             value (Vec3i)
+  forestry:cave_dwelling         boolean
+  forestry:tolerates_rain        boolean
+  forestry:activity              registry (IActivityType)
+  forestry:flower_type           registry (IFlowerType)
+  forestry:bee_effect            registry (IBeeEffect)
+
+Allele-ID naming, by kind (the trailing "d" marks the dominant variant):
+  integer    forestry:<n>id  (dominant) / forestry:<n>i  (recessive)     e.g. forestry:40i
+  float      forestry:<v>fd  (dominant) / forestry:<v>f  (recessive)     e.g. forestry:0.6fd
+  boolean    forestry:trued / forestry:falsed (dom) / forestry:true / forestry:false (rec)
+  value      forestry:tolerance_<name>[d]  (e.g. tolerance_up_2, tolerance_both_1d, tolerance_none)
+             forestry:<x>_<y>_<z>[d]       (territory, e.g. 9_6_9, 11_8_11)
+  registry   the referenced value's own ID (activity/flower/effect):
+             forestry:activity_{diurnal,nocturnal,crepuscular,metaturnal,cathemeral}
+             a flower_type ID (built-in "forestry:flower_type_*" or your "mypack:flower_*")
+             a bee_effect ID (built-in "forestry:bee_effect_*" or your "mypack:effect_*")
+
+The reliable source of built-in allele IDs is forestry.api.genetics.alleles.ForestryAlleles, or copy them
+from an existing bee_species JSON.
+
+
+========================================================================================================
+APPENDIX H — mutation conditions (IMutationCondition)
+========================================================================================================
+Each is a "type" plus fields; list any number in a mutation's "conditions" (all must pass).
+
+  forestry:temperature        min, max                                 temperature range (Appendix C enum)
+  forestry:humidity           min, max                                 humidity range (Appendix C enum)
+  forestry:biome              biomes: "#tag"                           a biome tag (plain "#..." form)
+  forestry:daytime            daytime: bool                            true = only during the day
+  forestry:time_limited       start_month, start_day, end_month, end_day   calendar window (month 1–12)
+  forestry:requires_resource  blocks: [ blockstate, ... ]              a required block near the hive
+  forestry:cave               (no fields)                              must be under cover / low light
+
+
+========================================================================================================
+APPENDIX I — lang key formats
+========================================================================================================
+Translation keys share Minecraft's single flat namespace, so these may live in any lang file; the string is
+what matters.
+
+  species    allele.forestry.bee_species.<namespace>.<path>
+  effect     allele.forestry.bee_effect.<namespace>.<path>
+  flower     allele.forestry.flower_type.<namespace>.<path>
+  comb       comb.<namespace>.<path>
+  extract    comb_extract.<source>.<flavor>.<fluidNamespace>.<fluidPath>
+
+<path> is the file name (without .json). The extract key is derived from its component fields (source,
+flavor, and the fluid's namespace/path), so it must match those exactly.
