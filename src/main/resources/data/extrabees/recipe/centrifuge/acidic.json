@@ -1,0 +1,43 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/acidic",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:acidic"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.8
+    },
+    {
+      "item": "forestry:comb_extract",
+      "tag": {
+        "forestry:comb_extract": {
+          "fluid": {
+            "id": "modern_industrialization:sulfuric_acid",
+            "amount": 200
+          },
+          "flavor": "honey_drop",
+          "source": "extrabees",
+          "color": "#14f73e"
+        }
+      },
+      "chance": 0.5
+    },
+    {
+      "item": "modern_industrialization:sulfur_dust",
+      "chance": 0.75
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "modern_industrialization"
+    }
+  ]
+}

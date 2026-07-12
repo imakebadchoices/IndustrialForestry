@@ -1,0 +1,6 @@
+{
+  "type": "forestry:fill_fluid",
+  "fluid": "minecraft:water",
+  "amount": 200,
+  "throttle": 40
+}

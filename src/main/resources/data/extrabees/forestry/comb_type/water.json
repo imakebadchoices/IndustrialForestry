@@ -1,0 +1,13 @@
+{
+  "primary_color": "#79a8c9",
+  "secondary_color": "#2732cf",
+  "extract": {
+    "fluid": {
+      "id": "minecraft:water",
+      "amount": 500
+    },
+    "flavor": "propolis",
+    "source": "extrabees",
+    "color": "#79a8c9"
+  }
+}

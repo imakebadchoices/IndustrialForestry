@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:distilled",
+  "second_parent": "extrabees:oil",
+  "result": "extrabees:fuel",
+  "chance": 0.08
+}

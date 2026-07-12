@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:nuclear",
+  "second_parent": "extrabees:silver",
+  "result": "extrabees:radioactive",
+  "chance": 0.05
+}

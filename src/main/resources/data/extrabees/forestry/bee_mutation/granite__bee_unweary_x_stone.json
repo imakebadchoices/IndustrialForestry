@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_unweary",
+  "second_parent": "extrabees:stone",
+  "result": "extrabees:granite",
+  "chance": 0.1
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_boggy",
+  "second_parent": "extrabees:swamp",
+  "result": "extrabees:boggy",
+  "chance": 0.08
+}

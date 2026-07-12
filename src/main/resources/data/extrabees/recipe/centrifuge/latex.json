@@ -1,0 +1,32 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/latex",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:latex"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.5
+    },
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.85
+    },
+    {
+      "item": "modern_industrialization:rubber_sheet",
+      "chance": 1.0
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "modern_industrialization"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/saltpeter",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:saltpeter"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.25
+    },
+    {
+      "item": "immersiveengineering:dust_saltpeter",
+      "chance": 1.0
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ]
+}

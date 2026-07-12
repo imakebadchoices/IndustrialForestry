@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_industrious",
+  "second_parent": "extrabees:thriving",
+  "result": "extrabees:blooming",
+  "chance": 0.08
+}

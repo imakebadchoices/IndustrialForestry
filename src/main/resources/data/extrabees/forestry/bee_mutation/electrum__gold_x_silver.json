@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:gold",
+  "second_parent": "extrabees:silver",
+  "result": "extrabees:electrum",
+  "chance": 0.08
+}

@@ -1,0 +1,28 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/venomous",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:venomous"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.8
+    },
+    {
+      "item": "extrabees:drop_poison",
+      "chance": 0.8
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "extrabees"
+    }
+  ]
+}

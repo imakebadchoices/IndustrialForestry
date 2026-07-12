@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:purple",
+  "second_parent": "extrabees:pink",
+  "result": "extrabees:magenta",
+  "chance": 0.05
+}

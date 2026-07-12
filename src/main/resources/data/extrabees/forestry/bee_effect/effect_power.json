@@ -1,0 +1,5 @@
+{
+  "type": "forestry:inject_energy",
+  "amount": 20,
+  "throttle": 5
+}

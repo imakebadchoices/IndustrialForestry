@@ -1,0 +1,33 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/alcohol",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:alcohol"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:comb_extract",
+      "tag": {
+        "forestry:comb_extract": {
+          "fluid": {
+            "id": "forestry:short_mead",
+            "amount": 200
+          },
+          "flavor": "honey_drop",
+          "source": "extrabees",
+          "color": "#ded94e"
+        }
+      },
+      "chance": 1.0
+    },
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.9
+    }
+  ]
+}

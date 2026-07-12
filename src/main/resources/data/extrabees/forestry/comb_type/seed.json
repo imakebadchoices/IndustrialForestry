@@ -1,0 +1,13 @@
+{
+  "primary_color": "#71cc6e",
+  "secondary_color": "#344f33",
+  "extract": {
+    "fluid": {
+      "id": "forestry:seed_oil",
+      "amount": 200
+    },
+    "flavor": "honey_drop",
+    "source": "extrabees",
+    "color": "#71cc6e"
+  }
+}

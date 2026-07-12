@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:primeval",
+  "second_parent": "extrabees:ancient",
+  "result": "extrabees:prehistoric",
+  "chance": 0.08
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_industrious",
+  "second_parent": "extrabees:oil",
+  "result": "extrabees:distilled",
+  "chance": 0.08
+}

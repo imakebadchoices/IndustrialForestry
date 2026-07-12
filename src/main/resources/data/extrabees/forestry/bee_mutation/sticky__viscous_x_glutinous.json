@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:viscous",
+  "second_parent": "extrabees:glutinous",
+  "result": "extrabees:sticky",
+  "chance": 0.08
+}

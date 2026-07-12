@@ -1,0 +1,13 @@
+{
+  "primary_color": "#ffffff",
+  "secondary_color": "#d7d9c7",
+  "extract": {
+    "fluid": {
+      "id": "minecraft:milk",
+      "amount": 200
+    },
+    "flavor": "honey_drop",
+    "source": "extrabees",
+    "color": "#ffffff"
+  }
+}

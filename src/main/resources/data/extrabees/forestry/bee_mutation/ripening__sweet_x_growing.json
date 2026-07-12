@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:sweet",
+  "second_parent": "extrabees:growing",
+  "result": "extrabees:ripening",
+  "chance": 0.05
+}

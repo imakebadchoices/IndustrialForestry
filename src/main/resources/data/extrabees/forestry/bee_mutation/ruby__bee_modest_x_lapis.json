@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_modest",
+  "second_parent": "extrabees:lapis",
+  "result": "extrabees:ruby",
+  "chance": 0.05
+}

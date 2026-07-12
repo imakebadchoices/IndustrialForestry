@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:prehistoric",
+  "second_parent": "extrabees:mineral",
+  "result": "extrabees:unstable",
+  "chance": 0.05
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:ocean",
+  "second_parent": "extrabees:primeval",
+  "result": "extrabees:oil",
+  "chance": 0.08
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:copper",
+  "second_parent": "extrabees:tin",
+  "result": "extrabees:bronze",
+  "chance": 0.08
+}

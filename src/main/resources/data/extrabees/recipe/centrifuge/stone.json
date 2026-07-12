@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/stone",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:stone"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.5
+    },
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.25
+    }
+  ]
+}

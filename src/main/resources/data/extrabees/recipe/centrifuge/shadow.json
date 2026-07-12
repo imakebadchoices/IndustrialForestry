@@ -1,0 +1,28 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/shadow",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:shadow"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.5
+    },
+    {
+      "item": "extrabees:dustobsidian",
+      "chance": 0.75
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "extrabees"
+    }
+  ]
+}

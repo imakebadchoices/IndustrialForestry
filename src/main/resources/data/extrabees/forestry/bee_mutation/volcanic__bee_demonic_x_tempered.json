@@ -1,0 +1,12 @@
+{
+  "first_parent": "forestry:bee_demonic",
+  "second_parent": "extrabees:tempered",
+  "result": "extrabees:volcanic",
+  "chance": 0.2,
+  "conditions": [
+    {
+      "type": "forestry:biome",
+      "biomes": "minecraft:is_nether"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "type": "forestry:apply_potion",
+  "effect": "minecraft:wither",
+  "duration": 100,
+  "throttle": 40,
+  "chance": 1.0
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:corrosive",
+  "second_parent": "extrabees:caustic",
+  "result": "extrabees:acidic",
+  "chance": 0.04
+}

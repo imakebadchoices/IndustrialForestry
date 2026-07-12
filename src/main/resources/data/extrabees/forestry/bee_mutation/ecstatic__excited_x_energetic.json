@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:excited",
+  "second_parent": "extrabees:energetic",
+  "result": "extrabees:ecstatic",
+  "chance": 0.08
+}

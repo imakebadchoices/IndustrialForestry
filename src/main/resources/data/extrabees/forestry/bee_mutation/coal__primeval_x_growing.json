@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:primeval",
+  "second_parent": "extrabees:growing",
+  "result": "extrabees:coal",
+  "chance": 0.08
+}

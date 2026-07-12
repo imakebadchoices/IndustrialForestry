@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:ocean",
+  "second_parent": "extrabees:artic",
+  "result": "extrabees:freezing",
+  "chance": 0.1
+}

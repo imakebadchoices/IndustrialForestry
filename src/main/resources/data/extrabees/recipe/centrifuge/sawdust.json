@@ -1,0 +1,26 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/sawdust",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:sawdust"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.25
+    },
+    {
+      "item": "forestry:wood_pulp",
+      "chance": 1.0
+    },
+    {
+      "item": "forestry:wood_pulp",
+      "chance": 1.0
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_miry",
+  "second_parent": "extrabees:primeval",
+  "result": "extrabees:resin",
+  "chance": 0.08
+}

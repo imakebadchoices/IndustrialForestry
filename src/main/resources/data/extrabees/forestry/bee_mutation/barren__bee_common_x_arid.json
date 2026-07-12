@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_common",
+  "second_parent": "extrabees:arid",
+  "result": "extrabees:barren",
+  "chance": 0.1
+}

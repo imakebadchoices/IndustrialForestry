@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:malicious",
+  "second_parent": "extrabees:viscous",
+  "result": "extrabees:corrosive",
+  "chance": 0.1
+}

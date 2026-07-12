@@ -1,0 +1,31 @@
+{
+  "genus": "historic",
+  "species": "antiquus",
+  "dominant": true,
+  "authority": "Binnie",
+  "outline": "#f2db8f",
+  "body": "#ffdc16",
+  "products": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:old"
+      },
+      "chance": 0.3
+    }
+  ],
+  "genome": {
+    "forestry:speed": "forestry:0.6fd",
+    "forestry:lifespan": "forestry:45id",
+    "forestry:fertility": "forestry:3i",
+    "forestry:temperature_tolerance": "forestry:tolerance_none",
+    "forestry:humidity_tolerance": "forestry:tolerance_none",
+    "forestry:tolerates_rain": "forestry:falsed",
+    "forestry:cave_dwelling": "forestry:falsed",
+    "forestry:flower_type": "forestry:flower_type_vanilla",
+    "forestry:pollination": "forestry:15i",
+    "forestry:territory": "forestry:9_6_9",
+    "forestry:bee_effect": "forestry:bee_effect_none",
+    "forestry:activity": "forestry:activity_diurnal"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:malicious",
+  "second_parent": "extrabees:infectious",
+  "result": "extrabees:virulent",
+  "chance": 0.08
+}

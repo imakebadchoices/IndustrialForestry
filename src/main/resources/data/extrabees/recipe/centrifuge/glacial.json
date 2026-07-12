@@ -1,0 +1,33 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/glacial",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:glacial"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:comb_extract",
+      "tag": {
+        "forestry:comb_extract": {
+          "fluid": {
+            "id": "forestry:ice",
+            "amount": 200
+          },
+          "flavor": "honey_drop",
+          "source": "extrabees",
+          "color": "#cbf2f2"
+        }
+      },
+      "chance": 0.8
+    },
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.75
+    }
+  ]
+}

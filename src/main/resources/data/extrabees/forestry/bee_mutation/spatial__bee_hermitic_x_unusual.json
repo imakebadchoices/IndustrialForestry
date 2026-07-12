@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_hermitic",
+  "second_parent": "extrabees:unusual",
+  "result": "extrabees:spatial",
+  "chance": 0.05
+}

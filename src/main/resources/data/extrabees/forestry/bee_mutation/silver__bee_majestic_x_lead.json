@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_majestic",
+  "second_parent": "extrabees:lead",
+  "result": "extrabees:silver",
+  "chance": 0.02
+}

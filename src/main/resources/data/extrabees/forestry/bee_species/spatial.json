@@ -1,0 +1,41 @@
+{
+  "genus": "quantum",
+  "species": "spatia",
+  "dominant": true,
+  "authority": "Binnie",
+  "outline": "#4c1be0",
+  "body": "#a44ecc",
+  "temperature": "cold",
+  "products": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:quartz"
+      },
+      "chance": 0.25
+    }
+  ],
+  "specialties": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:certus"
+      },
+      "chance": 0.05
+    }
+  ],
+  "genome": {
+    "forestry:speed": "forestry:0.6fd",
+    "forestry:lifespan": "forestry:60i",
+    "forestry:fertility": "forestry:2id",
+    "forestry:temperature_tolerance": "forestry:tolerance_up_1d",
+    "forestry:humidity_tolerance": "forestry:tolerance_none",
+    "forestry:tolerates_rain": "forestry:falsed",
+    "forestry:cave_dwelling": "forestry:falsed",
+    "forestry:flower_type": "forestry:flower_type_end",
+    "forestry:pollination": "forestry:5id",
+    "forestry:territory": "forestry:11_8_11",
+    "forestry:bee_effect": "extrabees:effect_gravity",
+    "forestry:activity": "forestry:activity_cathemeral"
+  }
+}

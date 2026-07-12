@@ -1,0 +1,41 @@
+{
+  "genus": "ftb",
+  "species": "jadeca",
+  "dominant": true,
+  "authority": "Binnie",
+  "outline": "#fa0a6a",
+  "body": "#dc8aeb",
+  "products": [
+    {
+      "item": "forestry:bee_comb_honey",
+      "chance": 0.3
+    }
+  ],
+  "specialties": [
+    {
+      "item": "forestry:pollen_cluster_normal",
+      "chance": 0.2
+    },
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:purple"
+      },
+      "chance": 0.15
+    }
+  ],
+  "genome": {
+    "forestry:speed": "forestry:0.6fd",
+    "forestry:lifespan": "forestry:40i",
+    "forestry:fertility": "forestry:4i",
+    "forestry:temperature_tolerance": "forestry:tolerance_none",
+    "forestry:humidity_tolerance": "forestry:tolerance_none",
+    "forestry:tolerates_rain": "forestry:falsed",
+    "forestry:cave_dwelling": "forestry:falsed",
+    "forestry:flower_type": "forestry:flower_type_vanilla",
+    "forestry:pollination": "forestry:99id",
+    "forestry:territory": "forestry:15_13_15",
+    "forestry:bee_effect": "forestry:bee_effect_beatific",
+    "forestry:activity": "forestry:activity_diurnal"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "primary_color": "#ffc400",
+  "secondary_color": "#9c6f40",
+  "extract": {
+    "fluid": {
+      "id": "modern_industrialization:diesel",
+      "amount": 500
+    },
+    "flavor": "propolis",
+    "source": "extrabees",
+    "color": "#ffc400"
+  }
+}

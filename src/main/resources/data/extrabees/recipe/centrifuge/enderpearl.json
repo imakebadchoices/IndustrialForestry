@@ -1,0 +1,28 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/enderpearl",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:enderpearl"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.25
+    },
+    {
+      "item": "ae2:ender_dust",
+      "chance": 0.25
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ae2"
+    }
+  ]
+}

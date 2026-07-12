@@ -1,0 +1,12 @@
+{
+  "first_parent": "forestry:bee_diligent",
+  "second_parent": "extrabees:water",
+  "result": "extrabees:ocean",
+  "chance": 0.1,
+  "conditions": [
+    {
+      "type": "forestry:biome",
+      "biomes": "minecraft:is_ocean"
+    }
+  ]
+}

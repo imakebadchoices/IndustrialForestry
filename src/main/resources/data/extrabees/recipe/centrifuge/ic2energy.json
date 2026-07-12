@@ -1,0 +1,32 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/ic2energy",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:ic2energy"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.8
+    },
+    {
+      "item": "minecraft:redstone",
+      "chance": 0.75
+    },
+    {
+      "item": "extrabees:drop_energy",
+      "chance": 1.0
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "extrabees"
+    }
+  ]
+}

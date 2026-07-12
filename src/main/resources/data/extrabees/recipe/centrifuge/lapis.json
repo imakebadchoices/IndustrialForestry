@@ -1,0 +1,26 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/lapis",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:lapis"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.5
+    },
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.25
+    },
+    {
+      "item": "minecraft:lapis_lazuli",
+      "chance": 1.0
+    }
+  ]
+}

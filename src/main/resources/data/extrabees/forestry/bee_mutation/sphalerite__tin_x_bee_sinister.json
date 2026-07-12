@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:tin",
+  "second_parent": "forestry:bee_sinister",
+  "result": "extrabees:sphalerite",
+  "chance": 0.05
+}

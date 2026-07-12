@@ -1,0 +1,33 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/creosote",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:creosote"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:comb_extract",
+      "tag": {
+        "forestry:comb_extract": {
+          "fluid": {
+            "id": "modern_industrialization:creosote",
+            "amount": 500
+          },
+          "flavor": "propolis",
+          "source": "extrabees",
+          "color": "#bdaa57"
+        }
+      },
+      "chance": 0.7
+    },
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.5
+    }
+  ]
+}

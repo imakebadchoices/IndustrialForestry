@@ -1,0 +1,42 @@
+{
+  "genus": "hostile",
+  "species": "os",
+  "dominant": true,
+  "authority": "Binnie",
+  "outline": "#e9ede8",
+  "body": "#cbe374",
+  "temperature": "hot",
+  "humidity": "arid",
+  "products": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:barren"
+      },
+      "chance": 0.3
+    }
+  ],
+  "specialties": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:bone"
+      },
+      "chance": 0.1
+    }
+  ],
+  "genome": {
+    "forestry:speed": "forestry:0.6fd",
+    "forestry:lifespan": "forestry:30id",
+    "forestry:fertility": "forestry:2id",
+    "forestry:temperature_tolerance": "forestry:tolerance_up_1d",
+    "forestry:humidity_tolerance": "forestry:tolerance_down_1d",
+    "forestry:tolerates_rain": "forestry:trued",
+    "forestry:cave_dwelling": "forestry:trued",
+    "forestry:flower_type": "extrabees:flower_dead",
+    "forestry:pollination": "forestry:5id",
+    "forestry:territory": "forestry:9_6_9",
+    "forestry:bee_effect": "extrabees:effect_spawn_skeleton",
+    "forestry:activity": "forestry:activity_cathemeral"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_ended",
+  "second_parent": "extrabees:relic",
+  "result": "extrabees:jaded",
+  "chance": 0.02
+}

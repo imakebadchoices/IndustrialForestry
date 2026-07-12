@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:mineral",
+  "second_parent": "forestry:bee_sinister",
+  "result": "extrabees:cinnabar",
+  "chance": 0.05
+}

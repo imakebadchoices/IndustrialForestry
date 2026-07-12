@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:cyanite",
+  "second_parent": "extrabees:yellorium",
+  "result": "extrabees:blutonium",
+  "chance": 0.05
+}

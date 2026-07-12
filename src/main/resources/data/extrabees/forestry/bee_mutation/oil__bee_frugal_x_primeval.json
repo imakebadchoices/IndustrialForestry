@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_frugal",
+  "second_parent": "extrabees:primeval",
+  "result": "extrabees:oil",
+  "chance": 0.08
+}

@@ -1,0 +1,26 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/fungal",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:fungal"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.9
+    },
+    {
+      "item": "minecraft:brown_mushroom_block",
+      "chance": 1.0
+    },
+    {
+      "item": "minecraft:red_mushroom_block",
+      "chance": 0.75
+    }
+  ]
+}

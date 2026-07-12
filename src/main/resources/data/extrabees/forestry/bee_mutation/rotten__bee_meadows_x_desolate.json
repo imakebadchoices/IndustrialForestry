@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_meadows",
+  "second_parent": "extrabees:desolate",
+  "result": "extrabees:rotten",
+  "chance": 0.15
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:tempered",
+  "second_parent": "extrabees:excited",
+  "result": "extrabees:glowstone",
+  "chance": 0.05
+}

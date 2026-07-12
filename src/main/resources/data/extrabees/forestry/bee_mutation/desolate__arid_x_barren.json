@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:arid",
+  "second_parent": "extrabees:barren",
+  "result": "extrabees:desolate",
+  "chance": 0.1
+}

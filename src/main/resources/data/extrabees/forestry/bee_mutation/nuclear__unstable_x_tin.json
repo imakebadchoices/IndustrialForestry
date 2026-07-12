@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:unstable",
+  "second_parent": "extrabees:tin",
+  "result": "extrabees:nuclear",
+  "chance": 0.05
+}

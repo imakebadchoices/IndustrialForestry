@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_fiendish",
+  "second_parent": "extrabees:corrosive",
+  "result": "extrabees:caustic",
+  "chance": 0.08
+}

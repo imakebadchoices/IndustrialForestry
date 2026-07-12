@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_tropical",
+  "second_parent": "extrabees:malicious",
+  "result": "extrabees:infectious",
+  "chance": 0.08
+}

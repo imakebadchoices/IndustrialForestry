@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:lapis",
+  "second_parent": "forestry:bee_diligent",
+  "result": "extrabees:sodalite",
+  "chance": 0.05
+}

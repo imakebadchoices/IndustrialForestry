@@ -1,0 +1,13 @@
+{
+  "primary_color": "#14f73e",
+  "secondary_color": "#348543",
+  "extract": {
+    "fluid": {
+      "id": "modern_industrialization:sulfuric_acid",
+      "amount": 200
+    },
+    "flavor": "honey_drop",
+    "source": "extrabees",
+    "color": "#14f73e"
+  }
+}

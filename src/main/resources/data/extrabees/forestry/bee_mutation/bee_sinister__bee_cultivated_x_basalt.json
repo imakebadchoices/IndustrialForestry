@@ -1,0 +1,12 @@
+{
+  "first_parent": "forestry:bee_cultivated",
+  "second_parent": "extrabees:basalt",
+  "result": "forestry:bee_sinister",
+  "chance": 0.6,
+  "conditions": [
+    {
+      "type": "forestry:biome",
+      "biomes": "minecraft:is_nether"
+    }
+  ]
+}

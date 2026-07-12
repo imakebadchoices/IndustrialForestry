@@ -1,0 +1,32 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/zinc",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:zinc"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.5
+    },
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.25
+    },
+    {
+      "item": "create:zinc_ingot",
+      "chance": 1.0
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ]
+}

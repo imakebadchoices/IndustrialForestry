@@ -1,0 +1,13 @@
+{
+  "primary_color": "#2c2b36",
+  "secondary_color": "#060608",
+  "extract": {
+    "fluid": {
+      "id": "modern_industrialization:crude_oil",
+      "amount": 500
+    },
+    "flavor": "propolis",
+    "source": "extrabees",
+    "color": "#2c2b36"
+  }
+}

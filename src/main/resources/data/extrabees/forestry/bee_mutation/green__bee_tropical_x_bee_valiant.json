@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_tropical",
+  "second_parent": "forestry:bee_valiant",
+  "result": "extrabees:green",
+  "chance": 0.05
+}

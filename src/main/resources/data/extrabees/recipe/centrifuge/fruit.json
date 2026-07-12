@@ -1,0 +1,33 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/fruit",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:fruit"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:comb_extract",
+      "tag": {
+        "forestry:comb_extract": {
+          "fluid": {
+            "id": "forestry:juice",
+            "amount": 200
+          },
+          "flavor": "honey_drop",
+          "source": "extrabees",
+          "color": "#db4f62"
+        }
+      },
+      "chance": 1.0
+    },
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.9
+    }
+  ]
+}

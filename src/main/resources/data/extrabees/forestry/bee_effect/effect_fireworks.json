@@ -1,0 +1,13 @@
+{
+  "type": "forestry:firework",
+  "colors": [
+    16711680,
+    65280,
+    255
+  ],
+  "shape": "star",
+  "trail": true,
+  "flicker": true,
+  "throttle": 40,
+  "chance": 0.5
+}

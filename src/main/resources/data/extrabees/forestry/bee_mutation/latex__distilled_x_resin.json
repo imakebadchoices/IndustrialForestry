@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:distilled",
+  "second_parent": "extrabees:resin",
+  "result": "extrabees:latex",
+  "chance": 0.08
+}

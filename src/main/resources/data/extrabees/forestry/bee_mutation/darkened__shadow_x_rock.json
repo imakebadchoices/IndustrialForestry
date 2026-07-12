@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:shadow",
+  "second_parent": "extrabees:rock",
+  "result": "extrabees:darkened",
+  "chance": 0.08
+}

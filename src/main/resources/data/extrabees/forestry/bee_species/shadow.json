@@ -1,0 +1,33 @@
+{
+  "genus": "shadow",
+  "species": "shadowa",
+  "dominant": false,
+  "authority": "Binnie",
+  "outline": "#595959",
+  "body": "#333333",
+  "temperature": "hellish",
+  "humidity": "arid",
+  "products": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:shadow"
+      },
+      "chance": 0.05
+    }
+  ],
+  "genome": {
+    "forestry:speed": "forestry:0.6fd",
+    "forestry:lifespan": "forestry:40i",
+    "forestry:fertility": "forestry:3i",
+    "forestry:temperature_tolerance": "forestry:tolerance_down_2",
+    "forestry:humidity_tolerance": "forestry:tolerance_none",
+    "forestry:tolerates_rain": "forestry:falsed",
+    "forestry:cave_dwelling": "forestry:falsed",
+    "forestry:flower_type": "forestry:flower_type_nether",
+    "forestry:pollination": "forestry:20i",
+    "forestry:territory": "forestry:9_6_9",
+    "forestry:bee_effect": "extrabees:effect_blindness",
+    "forestry:activity": "forestry:activity_nocturnal"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:mineral",
+  "second_parent": "forestry:bee_diligent",
+  "result": "extrabees:bauxite",
+  "chance": 0.05
+}

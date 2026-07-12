@@ -1,0 +1,13 @@
+{
+  "primary_color": "#cbf2f2",
+  "secondary_color": "#4e8787",
+  "extract": {
+    "fluid": {
+      "id": "forestry:ice",
+      "amount": 200
+    },
+    "flavor": "honey_drop",
+    "source": "extrabees",
+    "color": "#cbf2f2"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/blue",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:blue"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.8
+    },
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.8
+    },
+    {
+      "item": "minecraft:blue_dye",
+      "chance": 1.0
+    }
+  ]
+}

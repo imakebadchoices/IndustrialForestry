@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_forest",
+  "second_parent": "extrabees:barren",
+  "result": "extrabees:gnawing",
+  "chance": 0.15
+}

@@ -1,0 +1,41 @@
+{
+  "genus": "saccharine",
+  "species": "ripa",
+  "dominant": true,
+  "authority": "Binnie",
+  "outline": "#b2c75d",
+  "body": "#ffdc16",
+  "products": [
+    {
+      "item": "forestry:bee_comb_honey",
+      "chance": 0.3
+    },
+    {
+      "item": "minecraft:sugar",
+      "chance": 0.1
+    }
+  ],
+  "specialties": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:fruit"
+      },
+      "chance": 0.1
+    }
+  ],
+  "genome": {
+    "forestry:speed": "forestry:0.3fd",
+    "forestry:lifespan": "forestry:20id",
+    "forestry:fertility": "forestry:3i",
+    "forestry:temperature_tolerance": "forestry:tolerance_none",
+    "forestry:humidity_tolerance": "forestry:tolerance_none",
+    "forestry:tolerates_rain": "forestry:falsed",
+    "forestry:cave_dwelling": "forestry:falsed",
+    "forestry:flower_type": "extrabees:flower_fruit",
+    "forestry:pollination": "forestry:5id",
+    "forestry:territory": "forestry:9_6_9",
+    "forestry:bee_effect": "forestry:bee_effect_none",
+    "forestry:activity": "forestry:activity_diurnal"
+  }
+}

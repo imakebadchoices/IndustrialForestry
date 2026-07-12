@@ -1,0 +1,39 @@
+{
+  "genus": "virulent",
+  "species": "morbus",
+  "dominant": false,
+  "authority": "Binnie",
+  "outline": "#f013ec",
+  "body": "#069764",
+  "temperature": "warm",
+  "humidity": "damp",
+  "products": [
+    {
+      "item": "forestry:bee_comb_silky",
+      "chance": 0.25
+    }
+  ],
+  "specialties": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:venomous"
+      },
+      "chance": 0.12
+    }
+  ],
+  "genome": {
+    "forestry:speed": "forestry:0.6fd",
+    "forestry:lifespan": "forestry:30id",
+    "forestry:fertility": "forestry:3i",
+    "forestry:temperature_tolerance": "forestry:tolerance_up_1d",
+    "forestry:humidity_tolerance": "forestry:tolerance_up_1d",
+    "forestry:tolerates_rain": "forestry:falsed",
+    "forestry:cave_dwelling": "forestry:falsed",
+    "forestry:flower_type": "forestry:flower_type_jungle",
+    "forestry:pollination": "forestry:20i",
+    "forestry:territory": "forestry:9_6_9",
+    "forestry:bee_effect": "forestry:bee_effect_miasmic",
+    "forestry:activity": "forestry:activity_diurnal"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_forest",
+  "second_parent": "extrabees:mineral",
+  "result": "extrabees:iron",
+  "chance": 0.05
+}

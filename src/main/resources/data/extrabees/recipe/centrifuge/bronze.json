@@ -1,0 +1,26 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/bronze",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:bronze"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.5
+    },
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.25
+    },
+    {
+      "item": "forestry:ingot_bronze",
+      "chance": 1.0
+    }
+  ]
+}

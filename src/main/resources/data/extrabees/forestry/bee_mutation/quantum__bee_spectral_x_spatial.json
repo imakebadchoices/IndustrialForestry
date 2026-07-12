@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_spectral",
+  "second_parent": "extrabees:spatial",
+  "result": "extrabees:quantum",
+  "chance": 0.05
+}

@@ -1,0 +1,32 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/coffee",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:coffee"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.9
+    },
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.75
+    },
+    {
+      "item": "croptopia:coffee_beans",
+      "chance": 0.75
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "croptopia"
+    }
+  ]
+}

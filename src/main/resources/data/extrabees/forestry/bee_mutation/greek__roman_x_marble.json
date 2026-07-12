@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:roman",
+  "second_parent": "extrabees:marble",
+  "result": "extrabees:greek",
+  "chance": 0.08
+}

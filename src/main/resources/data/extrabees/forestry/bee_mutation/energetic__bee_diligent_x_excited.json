@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_diligent",
+  "second_parent": "extrabees:excited",
+  "result": "extrabees:energetic",
+  "chance": 0.08
+}

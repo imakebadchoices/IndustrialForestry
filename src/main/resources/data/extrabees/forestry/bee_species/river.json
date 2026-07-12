@@ -1,0 +1,41 @@
+{
+  "genus": "aquatic",
+  "species": "flumen",
+  "dominant": true,
+  "authority": "Binnie",
+  "outline": "#83b3d4",
+  "body": "#ffdc16",
+  "humidity": "damp",
+  "products": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:water"
+      },
+      "chance": 0.3
+    }
+  ],
+  "specialties": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:clay"
+      },
+      "chance": 0.2
+    }
+  ],
+  "genome": {
+    "forestry:speed": "forestry:0.3fd",
+    "forestry:lifespan": "forestry:20id",
+    "forestry:fertility": "forestry:3i",
+    "forestry:temperature_tolerance": "forestry:tolerance_none",
+    "forestry:humidity_tolerance": "forestry:tolerance_both_1d",
+    "forestry:tolerates_rain": "forestry:trued",
+    "forestry:cave_dwelling": "forestry:falsed",
+    "forestry:flower_type": "extrabees:flower_water",
+    "forestry:pollination": "forestry:5id",
+    "forestry:territory": "forestry:9_6_9",
+    "forestry:bee_effect": "extrabees:effect_water",
+    "forestry:activity": "forestry:activity_diurnal"
+  }
+}

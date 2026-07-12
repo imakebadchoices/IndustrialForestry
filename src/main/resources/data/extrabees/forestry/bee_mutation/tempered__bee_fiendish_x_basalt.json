@@ -1,0 +1,12 @@
+{
+  "first_parent": "forestry:bee_fiendish",
+  "second_parent": "extrabees:basalt",
+  "result": "extrabees:tempered",
+  "chance": 0.3,
+  "conditions": [
+    {
+      "type": "forestry:biome",
+      "biomes": "minecraft:is_nether"
+    }
+  ]
+}

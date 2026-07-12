@@ -1,0 +1,13 @@
+{
+  "primary_color": "#ded94e",
+  "secondary_color": "#418521",
+  "extract": {
+    "fluid": {
+      "id": "forestry:short_mead",
+      "amount": 200
+    },
+    "flavor": "honey_drop",
+    "source": "extrabees",
+    "color": "#ded94e"
+  }
+}

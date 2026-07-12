@@ -1,0 +1,34 @@
+{
+  "genus": "classical",
+  "species": "classica",
+  "dominant": false,
+  "authority": "Binnie",
+  "outline": "#831d8c",
+  "body": "#ffdc16",
+  "products": [
+    {
+      "item": "forestry:bee_comb_honey",
+      "chance": 0.3
+    }
+  ],
+  "specialties": [
+    {
+      "item": "forestry:royal_jelly",
+      "chance": 0.25
+    }
+  ],
+  "genome": {
+    "forestry:speed": "forestry:0.6fd",
+    "forestry:lifespan": "forestry:30id",
+    "forestry:fertility": "forestry:3i",
+    "forestry:temperature_tolerance": "forestry:tolerance_none",
+    "forestry:humidity_tolerance": "forestry:tolerance_none",
+    "forestry:tolerates_rain": "forestry:falsed",
+    "forestry:cave_dwelling": "forestry:falsed",
+    "forestry:flower_type": "forestry:flower_type_vanilla",
+    "forestry:pollination": "forestry:15i",
+    "forestry:territory": "forestry:9_6_9",
+    "forestry:bee_effect": "forestry:bee_effect_none",
+    "forestry:activity": "forestry:activity_diurnal"
+  }
+}

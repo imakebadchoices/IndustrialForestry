@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_farmerly",
+  "second_parent": "forestry:bee_meadows",
+  "result": "extrabees:alcohol",
+  "chance": 0.1
+}

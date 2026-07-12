@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_secluded",
+  "second_parent": "forestry:bee_ended",
+  "result": "extrabees:unusual",
+  "chance": 0.05
+}

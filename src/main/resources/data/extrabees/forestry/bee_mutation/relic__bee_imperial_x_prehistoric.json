@@ -1,0 +1,6 @@
+{
+  "first_parent": "forestry:bee_imperial",
+  "second_parent": "extrabees:prehistoric",
+  "result": "extrabees:relic",
+  "chance": 0.08
+}

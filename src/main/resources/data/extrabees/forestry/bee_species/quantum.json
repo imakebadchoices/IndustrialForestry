@@ -1,0 +1,47 @@
+{
+  "genus": "quantum",
+  "species": "quanta",
+  "dominant": true,
+  "authority": "Binnie",
+  "outline": "#37c5db",
+  "body": "#d50fdb",
+  "products": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:quartz"
+      },
+      "chance": 0.25
+    }
+  ],
+  "specialties": [
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:certus"
+      },
+      "chance": 0.15
+    },
+    {
+      "item": "forestry:comb",
+      "tag": {
+        "forestry:comb_type": "extrabees:enderpearl"
+      },
+      "chance": 0.15
+    }
+  ],
+  "genome": {
+    "forestry:speed": "forestry:0.3fd",
+    "forestry:lifespan": "forestry:20id",
+    "forestry:fertility": "forestry:3i",
+    "forestry:temperature_tolerance": "forestry:tolerance_none",
+    "forestry:humidity_tolerance": "forestry:tolerance_none",
+    "forestry:tolerates_rain": "forestry:falsed",
+    "forestry:cave_dwelling": "forestry:falsed",
+    "forestry:flower_type": "forestry:flower_type_vanilla",
+    "forestry:pollination": "forestry:5id",
+    "forestry:territory": "forestry:9_6_9",
+    "forestry:bee_effect": "forestry:bee_effect_none",
+    "forestry:activity": "forestry:activity_diurnal"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:water",
+  "second_parent": "extrabees:marble",
+  "result": "forestry:bee_common",
+  "chance": 0.15
+}

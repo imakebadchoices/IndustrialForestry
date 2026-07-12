@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:distilled",
+  "second_parent": "extrabees:coal",
+  "result": "extrabees:creosote",
+  "chance": 0.08
+}

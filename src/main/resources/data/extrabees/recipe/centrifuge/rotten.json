@@ -1,0 +1,26 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/rotten",
+  "time": 20,
+  "input": {
+    "type": "neoforge:components",
+    "items": "forestry:comb",
+    "components": {
+      "forestry:comb_type": "extrabees:rotten"
+    }
+  },
+  "products": [
+    {
+      "item": "forestry:beeswax",
+      "chance": 0.2
+    },
+    {
+      "item": "forestry:honey_drop",
+      "chance": 0.2
+    },
+    {
+      "item": "minecraft:rotten_flesh",
+      "chance": 0.8
+    }
+  ]
+}

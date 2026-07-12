@@ -1,0 +1,6 @@
+{
+  "first_parent": "extrabees:water",
+  "second_parent": "extrabees:mineral",
+  "result": "extrabees:lapis",
+  "chance": 0.05
+}
