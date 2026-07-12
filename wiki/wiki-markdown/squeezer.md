@@ -1,5 +1,7 @@
 # Squeezer
 
+<figure class="showcase"><img src="images/squeezer.png" alt="A Squeezer"><figcaption>The Squeezer</figcaption></figure>
+
 The **Squeezer** presses liquids out of items. It is the machine that turns raw bee and tree products into the fluids the rest of Forestry runs on.
 
 ## What it makes

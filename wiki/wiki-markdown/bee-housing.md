@@ -25,6 +25,8 @@ What it *is* good at is keeping a bee alive: it triples both lifespan and pollin
 
 ## Apiary
 
+<figure class="illus-right"><img src="images/apiary.png" alt="An Apiary"><figcaption>The Apiary</figcaption></figure>
+
 The Apiary is the workhorse of beekeeping. It mates a Princess and Drone into a Queen, runs breeding cycles at full mutation chance, collects combs and drops, and — unlike the Bee House — can be piped into and automated.
 
 On its own the Apiary is actually the *slowest* producer (×0.1), but it has three **frame** slots, and that is where its real output comes from.
@@ -44,6 +46,8 @@ Frames wear out as bees work and eventually break. They differ in how long they 
 The **Proven Frame** lasts nearly ten times as long as the Untreated one and is the kindest to your bloodlines, so it is the frame to settle on once you can craft it. (There is also a Creative frame for testing, with unlimited durability.)
 
 ## Alveary
+
+<figure class="illus-right"><img src="images/alveary.png" alt="An Alveary multiblock"><figcaption>The Alveary</figcaption></figure>
 
 The Alveary is the endgame of beekeeping: a **3×3×3 multiblock** of Alveary blocks, capped with a roof, that runs bees at full production (×1.0) over double their normal territory. Assemble twenty-seven Alveary blocks into a cube, block off the top layer, and the structure forms itself, leaving the small openings where bees come and go.
 

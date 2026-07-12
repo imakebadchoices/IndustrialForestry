@@ -1,5 +1,7 @@
 # Introduction
 
+<img class="splash" src="images/farm.jpg" alt="A Forestry multifarm">
+
 **Forestry** is a mod about farming, renewable energy, and — above all — the breeding of bees, trees, and butterflies. It rewards patient players: you start by catching a wild bee or planting a strange sapling, and end up running automated farms, genetic breeding programmes, and honey-fuelled engines that power an entire base.
 
 This is the wiki for **Forestry: Community Edition** — a fork that continues the classic mod for modern Minecraft. Its pages are written against the current source, so what you read here matches what the mod actually does.

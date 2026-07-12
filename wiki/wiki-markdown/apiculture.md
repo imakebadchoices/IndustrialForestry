@@ -9,6 +9,8 @@ This page is the overview. The details of where bees live and how you work them 
 
 ## Finding your first bees
 
+<figure class="illus-right"><img src="images/hive.png" alt="A wild bee hive"><figcaption>A wild hive</figcaption></figure>
+
 Bees live in **wild hives** that generate throughout the world, and the hive tells you what climate the bee inside prefers. Hives glow faintly as the bees inside work, so the easiest way to find them is to explore at night — though the same glow tends to attract other, less friendly things.
 
 To get the bees out you need a **[Scoop](bee-tools.md)**. Beat on a hive with it and it breaks cleanly, dropping a **Princess** and one or more **Drones**; hit it with anything else and you destroy the bee along with the hive. A Princess and a single Drone are all you need to begin.
@@ -32,6 +34,8 @@ Each hive generates in a biome that matches its bee's tastes:
 The **Valiant** bee is the odd one out: it has no hive of its own, but occasionally turns up living alongside the bees in an ordinary hive. Together with the overworld hive bees it forms the root stock every other line is bred from.
 
 ## Breeding and genetics
+
+<figure class="illus-right"><img src="images/bee.png" alt="A Forestry bee"><figcaption>Princess, Drone, or Queen</figcaption></figure>
 
 Placing a Princess and a Drone together in an [Apiary or Alveary](bee-housing.md) mates them into a **Queen**. The Queen works through a fixed lifespan producing combs, then dies — leaving behind a fresh Princess and several Drones. That death-and-renewal *is* the reproduction step, and it is why your bee population grows quickly enough that storage becomes a real problem.
 

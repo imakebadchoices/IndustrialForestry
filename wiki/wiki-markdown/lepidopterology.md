@@ -1,5 +1,7 @@
 # Lepidopterology — Butterflies
 
+<img class="splash" src="images/butterfly.jpg" alt="Forestry butterflies">
+
 Lepidopterology is the third genetics branch, and the most ornamental. You catch, breed, and mutate butterflies much as you do bees and trees, but the payoff leans toward collection, decoration, pollination, and a handful of caterpillar products rather than an industrial supply chain. If you have learned the bee system, the mental model carries over directly.
 
 ## Catching butterflies

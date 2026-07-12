@@ -19,6 +19,16 @@ Four special blocks give the farm what it needs to run. Each replaces a Farm Blo
 
 ## Building one
 
+Multifarms are built to set footprints. The top-down layouts below show the common sizes:
+
+<div style="text-align:center">
+<figure class="diagram"><img src="images/farm-3x3.png" alt="3×3 farm layout"><figcaption>3×3</figcaption></figure>
+<figure class="diagram"><img src="images/farm-3x4.png" alt="3×4 farm layout"><figcaption>3×4</figcaption></figure>
+<figure class="diagram"><img src="images/farm-3x5.png" alt="3×5 farm layout"><figcaption>3×5</figcaption></figure>
+<figure class="diagram"><img src="images/farm-4x4.png" alt="4×4 farm layout"><figcaption>4×4</figcaption></figure>
+<figure class="diagram"><img src="images/farm-5x5.png" alt="5×5 farm layout"><figcaption>5×5</figcaption></figure>
+</div>
+
 1. Decide on a size — farms are built to set footprints (commonly 3×3 through 5×5 across).
 2. Lay the walls from **Farm Blocks**, keeping the whole third layer solid farm blocks.
 3. Swap in at least one **Valve**, **Gearbox**, **Hatch**, and **Control** where they fit.

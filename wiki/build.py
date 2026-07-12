@@ -21,6 +21,7 @@ import argparse
 import html
 import json
 import re
+import shutil
 import sys
 import urllib.request
 from pathlib import Path
@@ -308,6 +309,11 @@ def build_explorer(out: Path, model, cache_dir: Path):
 
 def convert(src: Path, out: Path, model, cache_dir: Path, skip_explorer: bool):
     out.mkdir(parents=True, exist_ok=True)
+    # Curated images (flavor + structure) ship alongside the prose; deploy them to site/images.
+    img_src = HERE / "images"
+    if img_src.is_dir():
+        shutil.copytree(img_src, out / "images", dirs_exist_ok=True)
+        print(f"  images/ ({len(list(img_src.glob('*')))} files)")
     for f in sorted(src.glob("*.md")):
         slug = slug_for(f)
         text = re.sub(r"^#\s+.*\n", "", f.read_text(encoding="utf-8"), count=1)
@@ -421,6 +427,38 @@ h3.sidebar-section {
 .page h4 { font-size: 1.05em; border-bottom: none; }
 .page p, .page li { line-height: 1.6; }
 
+/* Images & figures */
+.page img { max-width: 100%; height: auto; }
+.page figure { margin: 1em 0; text-align: center; }
+.page figure img {
+  border: 1px solid var(--border); background: #fff; padding: 4px; border-radius: 2px;
+}
+.page figure figcaption {
+  font-size: 0.85em; color: #777; margin-top: 0.3em; font-style: italic;
+}
+/* Flavour illustration floated beside the prose */
+.page figure.illus-right {
+  float: right; width: 190px; margin: 0.2em 0 0.8em 1.3em;
+}
+.page figure.illus-right img { width: 100%; display: block; }
+/* Block "showcase" render — anchored top-right as an infobox below the TOC, so it
+   never crosses a section separator. */
+.page figure.showcase {
+  float: right; clear: right; width: 150px; margin: 0.2em 0 1em 1.3em;
+}
+.page figure.showcase img { width: 100%; display: block; }
+/* Tiny pixel-grid diagrams (farm layouts) — keep crisp, don't over-enlarge */
+.page figure.diagram { display: inline-block; margin: 0.6em; vertical-align: top; }
+.page figure.diagram img { image-rendering: pixelated; width: 132px; height: auto; }
+/* Full-width splash banner */
+.page img.splash {
+  display: block; width: 100%; border: 1px solid var(--border);
+  border-radius: 3px; margin: 0 0 1.2em;
+}
+@media (max-width: 720px) {
+  .page figure.illus-right { float: none; width: auto; max-width: 240px; margin: 1em auto; }
+}
+
 /* Blockquotes -> the "needs verification" callouts */
 .page blockquote {
   margin: 1em 0; padding: 0.6em 1em;
@@ -440,8 +478,9 @@ h3.sidebar-section {
 }
 .page th { background: var(--table-head); color: #2a2a2a; font-weight: bold; }
 .page tr:nth-child(even) td { background: var(--table-alt); }
-/* Generated genetics tables can get wide — let them scroll rather than break layout */
-.page table.genetics { display: block; overflow-x: auto; max-width: 100%; }
+/* Generated genetics tables: shrink to their content (no full-width "double box"),
+   but cap at the container and scroll horizontally when a table is genuinely wide. */
+.page table.genetics { display: block; width: max-content; max-width: 100%; overflow-x: auto; }
 
 .page code {
   background: #f4f4f4; border: 1px solid #d8d8d8; border-radius: 2px;

@@ -6,6 +6,8 @@ Bees are sensitive insects, and a working apiarist collects a small kit of speci
 
 ### Scoop
 
+<figure class="illus-right"><img src="images/scoop.png" alt="A Scoop"><figcaption>The Scoop</figcaption></figure>
+
 The **Scoop** is the one tool you cannot do without. When you find a wild hive, you break it with the Scoop to recover the **Princess** and **Drones** inside — any other tool destroys the bee and leaves you honeyless. It is a simple thing of sticks and wool and wears out after a limited number of uses, so keep a spare when you go hive-hunting.
 
 ### Smoker

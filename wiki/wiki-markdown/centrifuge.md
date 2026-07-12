@@ -1,5 +1,7 @@
 # Centrifuge
 
+<figure class="showcase"><img src="images/centrifuge.png" alt="A Centrifuge"><figcaption>The Centrifuge</figcaption></figure>
+
 The **Centrifuge** extracts bee products from honey **combs**. It is the first processing machine most beekeepers build, because it is the only way to turn the combs your bees produce into usable materials.
 
 ## What it makes
