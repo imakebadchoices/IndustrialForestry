@@ -29,7 +29,12 @@ import forestry.api.apiculture.IFlowerType;
  * optional list of block states the queen may plant near the hive (empty = non-planting). This single
  * parameterized shape covers the Extra Bees flower types (dead bush, rock, wood, sapling, …) as pure JSON.
  */
-public record FlowerTypeDefinition(HolderSet<Block> accepted, List<BlockState> plantable, boolean dominant) {
+public record FlowerTypeDefinition(String type, HolderSet<Block> accepted, List<BlockState> plantable, boolean dominant) {
+	/** The default, pure block/tag predicate flower (a {@link DataFlowerType}). */
+	public static final String TYPE_BLOCK = "block";
+	/** Extra Bees' FRUIT flower — accepts fruit-bearing block entities (a {@link FruitFlowerType}). */
+	public static final String TYPE_FRUIT = "fruit";
+
 	/**
 	 * The datapack registry that holds every flower type definition. Entries live at
 	 * {@code data/<namespace>/forestry/flower_type/<name>.json}. Synced to clients because the flower_type
@@ -38,15 +43,21 @@ public record FlowerTypeDefinition(HolderSet<Block> accepted, List<BlockState> p
 	public static final ResourceKey<Registry<FlowerTypeDefinition>> REGISTRY_KEY = ResourceKey.createRegistryKey(ForestryConstants.forestry("flower_type"));
 
 	public static final Codec<FlowerTypeDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		RegistryCodecs.homogeneousList(Registries.BLOCK).fieldOf("accepted").forGetter(FlowerTypeDefinition::accepted),
+		Codec.STRING.optionalFieldOf("type", TYPE_BLOCK).forGetter(FlowerTypeDefinition::type),
+		RegistryCodecs.homogeneousList(Registries.BLOCK).optionalFieldOf("accepted", HolderSet.direct()).forGetter(FlowerTypeDefinition::accepted),
 		BlockState.CODEC.listOf().optionalFieldOf("plantable", List.of()).forGetter(FlowerTypeDefinition::plantable),
 		Codec.BOOL.optionalFieldOf("dominant", true).forGetter(FlowerTypeDefinition::dominant)
 	).apply(instance, FlowerTypeDefinition::new));
 
 	/**
-	 * @return The runtime {@link IFlowerType} this definition describes.
+	 * @return The runtime {@link IFlowerType} this definition describes. Most flowers are a pure block/tag
+	 * predicate ({@link DataFlowerType}); {@code type: "fruit"} is the one code-shaped exception
+	 * ({@link FruitFlowerType}). Add another case here (not a new registry) for any future bespoke flower.
 	 */
 	public IFlowerType asFlowerType() {
-		return new DataFlowerType(this.accepted, this.plantable, this.dominant);
+		return switch (this.type) {
+			case TYPE_FRUIT -> new FruitFlowerType(this.dominant);
+			default -> new DataFlowerType(this.accepted, this.plantable, this.dominant);
+		};
 	}
 }

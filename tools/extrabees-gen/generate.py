@@ -567,6 +567,8 @@ def emit_combs():
             ct = {"primary_color": "#ffffff", "secondary_color": "#ffffff"}
         extract = comb_fluid_extract(c["chunk"])
         if extract:
+            if c["primary"] is not None:
+                extract["color"] = color_int(c["primary"])   # tint the extract cohesively with its comb
             ct["extract"] = extract   # lets the creative tab / JEI enumerate the comb's fluid intermediary
         name = EB_LANG.get("extrabees.item.comb." + cid)
         if name:
@@ -654,7 +656,7 @@ FLUID_INTERMEDIARIES = {   # EnumPropolis.<NAME>
 }
 DROP_FLUIDS = {   # EnumHoneyDrop.<NAME> that map to a real pack fluid (others stay module items)
     "SEED": ("forestry:seed_oil", 200, "honey_drop"),
-    "MILK": ("neoforge:milk", 200, "honey_drop"),                            # milk comb
+    "MILK": ("minecraft:milk", 200, "honey_drop"),                           # milk comb (NeoForge fills in vanilla-ns milk)
     "APPLE": ("forestry:juice", 200, "honey_drop"),                          # fruit comb -> Fruit Juice
     "ALCOHOL": ("forestry:short_mead", 200, "honey_drop"),                   # alcohol comb -> mead
     "ICE": ("forestry:ice", 200, "honey_drop"),                             # glacial comb -> Crushed Ice
@@ -759,6 +761,12 @@ def emit_centrifuge(c):
             outputs.append(spec)
     if not outputs:
         return
+    # bake the comb's colour onto any comb_extract output so the extract item reads cohesively with its comb
+    if c["primary"] is not None:
+        for o in outputs:
+            comp = o.get("tag", {}).get("forestry:comb_extract")
+            if comp is not None:
+                comp["color"] = color_int(c["primary"])
     cid = c["name"].lower()
     recipe = {
         "type": "forestry:centrifuge",
@@ -795,8 +803,10 @@ def emit_flowers():
     for fid, accepted in FLOWER_ACCEPTED.items():
         write_json(os.path.join(DATA, "flower_type", "flower_" + fid + ".json"),
                    {"accepted": accepted, "dominant": True})
-    for deferred in ("fruit", "mystical"):
-        warn(f"flower_type '{deferred}' deferred (needs bespoke code, not a block predicate)")
+    # FRUIT: bespoke code flower (FruitFlowerType, IFruitBearer block entity) — driven by the "type" discriminator.
+    write_json(os.path.join(DATA, "flower_type", "flower_fruit.json"), {"type": "fruit", "dominant": True})
+    # MYSTICAL still deferred (Botania-gated + affectProducts emits petals) — needs its own bespoke type.
+    warn("flower_type 'mystical' deferred (needs bespoke code, not a block predicate)")
 
 
 # ---------------------------------------------------------------------------------------------

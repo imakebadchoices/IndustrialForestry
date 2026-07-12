@@ -13,8 +13,10 @@ import forestry.api.client.IForestryClientApi;
 import forestry.api.client.apiculture.IBeeClientManager;
 import forestry.api.client.arboriculture.ITreeClientManager;
 import forestry.api.core.ISpectacleBlock;
+import forestry.apiculture.CombExtract;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
+import forestry.apiculture.items.ItemCombExtract;
 import forestry.apiimpl.client.ForestryClientApiImpl;
 import forestry.apiimpl.plugin.PluginManager;
 import forestry.arboriculture.features.ArboricultureBlocks;
@@ -42,6 +44,7 @@ import forestry.modules.ModuleUtil;
 import forestry.storage.features.BackpackItems;
 import forestry.storage.features.CrateItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
@@ -108,6 +111,12 @@ public class CoreClientHandler implements IClientModuleHandler {
 				ItemBlockRenderTypes.setRenderLayer(fluid.getFlowing(), RenderType.translucent());
 			}
 
+			// comb_extract picks its base sprite by flavor: propolis (1) -> propolis.0 model override, else honey_drop (0)
+			ItemProperties.register(ApicultureItems.COMB_EXTRACT.item(), ForestryConstants.forestry("flavor"),
+				(stack, clientLevel, holder, seed) -> {
+					CombExtract extract = ItemCombExtract.getExtract(stack);
+					return extract != null && CombExtract.PROPOLIS.equals(extract.flavor()) ? 1.0f : 0.0f;
+				});
 		});
 
 		bewlr = new ForestryBewlr(Minecraft.getInstance().getBlockEntityRenderDispatcher());

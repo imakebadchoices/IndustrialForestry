@@ -66,7 +66,15 @@ public class ItemCombExtract extends ItemForestry implements IColoredItem {
 	@OnlyIn(Dist.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
 		CombExtract extract = getExtract(stack);
-		if (extract == null || extract.fluid().isEmpty()) {
+		if (extract == null) {
+			return DEFAULT_TINT;
+		}
+		// prefer the baked comb colour (cohesive with the comb the extract came from); fall back to the
+		// fluid's own tint for extracts that don't carry a colour.
+		if (extract.color().isPresent()) {
+			return extract.color().get().getValue();
+		}
+		if (extract.fluid().isEmpty()) {
 			return DEFAULT_TINT;
 		}
 		FluidStack fluid = extract.fluid();

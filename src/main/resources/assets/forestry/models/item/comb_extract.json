@@ -2,5 +2,13 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "forestry:item/honey_drop"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "forestry:flavor": 1
+      },
+      "model": "forestry:item/comb_extract_propolis"
+    }
+  ]
 }
