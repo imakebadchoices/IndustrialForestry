@@ -2,7 +2,9 @@ package forestry.apiculture.items;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
@@ -37,14 +39,13 @@ public class ItemCombExtract extends ItemForestry implements IColoredItem {
 	@Override
 	public Component getName(ItemStack stack) {
 		CombExtract extract = getExtract(stack);
-		if (extract != null) {
-			if (extract.name().isPresent()) {
-				return extract.name().get();   // name embedded in the data (matches old Extra Bees)
-			}
-			if (!extract.fluid().isEmpty()) {
-				// fallback: e.g. "Crude Oil Propolis" — keyed on flavor, fluid name interpolated
-				return Component.translatable("item.forestry.comb_extract." + extract.flavor(), extract.fluid().getHoverName());
-			}
+		if (extract != null && !extract.fluid().isEmpty()) {
+			// Name keyed on source + flavor + fluid, e.g. "comb_extract.extrabees.honey_drop.minecraft.milk"
+			// — supplied by the pack's bundled lang (deterministic from the component, no embedded name).
+			ResourceLocation fluidId = BuiltInRegistries.FLUID.getKey(extract.fluid().getFluid());
+			String key = String.join(".", "comb_extract", extract.source().orElse("forestry"),
+				extract.flavor(), fluidId.getNamespace(), fluidId.getPath());
+			return Component.translatable(key);
 		}
 		return super.getName(stack);
 	}

@@ -56,13 +56,9 @@ public class ItemBeeComb extends ItemForestry implements IColoredItem {
 
 	@Override
 	public Component getName(ItemStack stack) {
-		CombTypeDefinition type = resolveCombType(stack);
-		if (type != null && type.name().isPresent()) {
-			return type.name().get();   // name embedded in the data (matches old Extra Bees)
-		}
 		ResourceLocation id = getCombTypeId(stack);
 		if (id != null) {
-			// Fallback: name keyed on the comb id, e.g. "comb.forestry.honey" (needs a lang entry).
+			// Name keyed on the comb id, e.g. "comb.extrabees.oil" — supplied by the pack's bundled lang.
 			return Component.translatable(Util.makeDescriptionId("comb", id));
 		}
 		return super.getName(stack);

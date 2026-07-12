@@ -6,8 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 
@@ -31,7 +29,7 @@ import forestry.api.ForestryConstants;
  * {@link forestry.api.core.Product} patch), and a centrifuge <em>input</em> uses a component-aware
  * {@code neoforge:components} ingredient keyed on the same component.
  */
-public record CombTypeDefinition(TextColor primaryColor, TextColor secondaryColor, Optional<CombExtract> extract, Optional<Component> name) {
+public record CombTypeDefinition(TextColor primaryColor, TextColor secondaryColor, Optional<CombExtract> extract) {
 	/**
 	 * The datapack registry that holds every comb type definition. Entries live at
 	 * {@code data/<namespace>/forestry/comb_type/<name>.json}. Synced to clients because the comb item
@@ -42,8 +40,7 @@ public record CombTypeDefinition(TextColor primaryColor, TextColor secondaryColo
 	public static final Codec<CombTypeDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		TextColor.CODEC.fieldOf("primary_color").forGetter(CombTypeDefinition::primaryColor),
 		TextColor.CODEC.fieldOf("secondary_color").forGetter(CombTypeDefinition::secondaryColor),
-		CombExtract.CODEC.optionalFieldOf("extract").forGetter(CombTypeDefinition::extract),
-		// display name embedded in the data (datapacks can't ship lang); else a "comb.<ns>.<path>" key
-		ComponentSerialization.CODEC.optionalFieldOf("name").forGetter(CombTypeDefinition::name)
+		// name comes from a lang key (comb.<ns>.<path>) shipped with the pack's assets, not embedded here
+		CombExtract.CODEC.optionalFieldOf("extract").forGetter(CombTypeDefinition::extract)
 	).apply(instance, CombTypeDefinition::new));
 }
