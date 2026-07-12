@@ -4,7 +4,7 @@
 
 The **Centrifuge** extracts bee products from honey **combs**. It is the first processing machine most beekeepers build, because it is the only way to turn the combs your bees produce into usable materials.
 
-## What it makes
+## Products
 
 Feed it the combs your bees leave in their [housing](bee-housing.md) and it breaks each type down into its outputs:
 
@@ -14,7 +14,7 @@ Feed it the combs your bees leave in their [housing](bee-housing.md) and it brea
 
 Different combs yield different things, which is a large part of *why* you breed toward exotic bees in the first place.
 
-## How it works
+## Usage
 
 Combs go into the **input slot** and the results collect in the **output**. The Centrifuge runs on **Forge Energy (FE)** and has a socket for a **circuit board** (see the [Thermionic Fabricator](fabricator.md)) that tunes its speed and power use — worth fitting once a busy apiary starts outproducing a single machine.
 

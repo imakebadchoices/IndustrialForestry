@@ -23,7 +23,7 @@ The method is simple:
 
 ### The Grafter
 
-Breaking leaves by hand often drops nothing, which makes tree breeding maddening. The **Grafter** fixes that: use it on leaves and you are almost guaranteed to extract a sapling, including the pollinated ones that carry mutations. The basic Grafter is fragile (good for a handful of uses); the **Proven Grafter** is far sturdier and lasts many times longer, and is the tool to carry once you are breeding seriously.
+Breaking leaves by hand often drops nothing. The **Grafter** fixes that: use it on leaves and you are almost guaranteed to extract a sapling, including the pollinated ones that carry mutations. The basic Grafter is fragile (good for a handful of uses); the **Proven Grafter** is far sturdier and lasts many times longer, and is the tool to carry once you are breeding seriously.
 
 ## Woods
 

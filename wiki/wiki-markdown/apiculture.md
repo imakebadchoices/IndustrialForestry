@@ -37,7 +37,7 @@ The **Valiant** bee is the odd one out: it has no hive of its own, but occasiona
 
 <figure class="illus-right"><img src="images/bee.png" alt="A Forestry bee"><figcaption>Princess, Drone, or Queen</figcaption></figure>
 
-Placing a Princess and a Drone together in an [Apiary or Alveary](bee-housing.md) mates them into a **Queen**. The Queen works through a fixed lifespan producing combs, then dies — leaving behind a fresh Princess and several Drones. That death-and-renewal *is* the reproduction step, and it is why your bee population grows quickly enough that storage becomes a real problem.
+Placing a Princess and a Drone together in an [Apiary or Alveary](bee-housing.md) mates them into a **Queen**. The Queen works through a fixed lifespan producing combs, then dies — leaving behind a fresh Princess and several Drones. That death-and-renewal *is* the reproduction step, and it makes bee populations grow quickly.
 
 Three rules govern everything that follows:
 
@@ -51,7 +51,7 @@ Three rules govern everything that follows:
 
 Two mutations open up the entire tree, and both are worked from the ten root **hive bees** (Forest, Marshy, Meadows, Modest, Savanna, Tropical, Valiant, Wintry, Lush, and Aquatic):
 
-- **Common** — cross any two *different* hive bees (base **15%** chance). It is unremarkable in itself but is the gateway every apiarist passes through.
+- **Common** — cross any two *different* hive bees (base **15%** chance). It is unremarkable in itself, but the gateway to the rest of the tree.
 - **Cultivated** — cross a Common with any hive bee (base **12%**). It is fast and productive, and it parents most of the noble and industrious lines.
 
 From Common and Cultivated the tree splits into two classic branches:

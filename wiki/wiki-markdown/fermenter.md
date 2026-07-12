@@ -2,7 +2,7 @@
 
 The **Fermenter** is the first step of Forestry's biofuel chain. It converts organic matter into **Biomass**, the liquid fuel the [Biogas Engine](energy.md) burns and the [Still](still.md) refines into Bio Ethanol.
 
-## How it works
+## Usage
 
 Fermentation needs three things together:
 
@@ -12,6 +12,6 @@ Fermentation needs three things together:
 
 The resulting Biomass collects in the output tank, ready to be piped out, bottled, or fed straight into a [Still](still.md) or [Biogas Engine](energy.md).
 
-The Fermenter can also brew **Short Mead** from honey and honeydew, a minor sideline for players who want it.
+The Fermenter can also brew **Short Mead** from honey and honeydew, a minor sideline.
 
 Like the other machines it runs on **Forge Energy (FE)** supplied by your [engines](energy.md).

@@ -20,7 +20,7 @@ Breeding two different species can therefore yield a third, following fixed muta
 
 ## Butterflies at work
 
-Butterflies are not purely decorative. As they rest on leaves they **pollinate trees**, which makes a population of loose butterflies a passive aid to [tree breeding](arboriculture.md). Their **caterpillars** are also a minor product in their own right, and a well-stocked collection is simply pleasant to keep around a base.
+Butterflies are not purely decorative. As they rest on leaves they **pollinate trees**, which makes a population of loose butterflies a passive aid to [tree breeding](arboriculture.md). Their **caterpillars** are also a minor product in their own right.
 
 ## Rarity and climate
 

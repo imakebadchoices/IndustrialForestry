@@ -2,7 +2,7 @@
 
 The **Worktable** is a crafting table with a memory. It remembers the **last nine recipes** you have made and keeps its own internal inventory of ingredients, which makes repetitive crafting far less tedious.
 
-## How it works
+## Usage
 
 The Worktable has four parts:
 
@@ -13,4 +13,4 @@ The Worktable has four parts:
 
 To stop a favourite recipe from being pushed out as you craft other things, **right-click it in the memory** to lock it; a small lock icon appears and it will no longer be bumped.
 
-The Worktable needs no power. It is a quality-of-life block, ideal as the crafting station beside your Forestry machines where you make the same intermediate parts over and over.
+The Worktable needs no power.

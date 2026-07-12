@@ -4,7 +4,7 @@ The **Multifarm** is Forestry's flagship automation block: a configurable multib
 
 This page covers what a Multifarm does and the crops it can grow; see **[Farm Structure](farm-structure.md)** for how to actually build one.
 
-## How it works
+## Usage
 
 A built Multifarm is a hollow structure with a central band of soil. What it grows is decided by the **farm logic** you install into it, and it draws two resources to operate:
 

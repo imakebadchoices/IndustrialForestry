@@ -12,9 +12,7 @@ Both a stone and a **deepslate** variant generate, and mining the ore rewards a 
 
 **Tin** generates much like copper does and smelts into **Tin Ingots**. Tin is combined with copper to make **Bronze**, the workhorse metal for Forestry's early machines and tools, and tin also goes into components like the Tin Electron Tube. It too has a **deepslate** variant.
 
-## Where they lead
+## Uses
 
 - **Apatite → Fertilizer** → farms and fermentation.
 - **Tin (+ Copper) → Bronze** → machine casings, gears, and tools.
-
-Between them, these two ores are what make Forestry's machinery and farming self-sufficient from fairly early in the game.

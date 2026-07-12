@@ -2,9 +2,13 @@
 
 <img class="splash" src="images/farm.jpg" alt="A Forestry multifarm">
 
-**Forestry** is a mod about farming, renewable energy, and — above all — the breeding of bees, trees, and butterflies. It rewards patient players: you start by catching a wild bee or planting a strange sapling, and end up running automated farms, genetic breeding programmes, and honey-fuelled engines that power an entire base.
+IndustrialForestry is a mod about farming, renewable energy, and the breeding of bees, trees, and butterflies.
 
-This is the wiki for **Forestry: Community Edition** — a fork that continues the classic mod for modern Minecraft. Its pages are written against the current source, so what you read here matches what the mod actually does.
+## Lineage
+
+IndustrialForestry is an experimental fork of [**Forestry: Community Edition**](https://github.com/thedarkcolour/ForestryCE), which is itself a continuation of the original [**Forestry**](https://github.com/ForestryMC/ForestryMC) mod. It also uses ideas from and references code in [**Binnie's mods**](https://github.com/ForestryMC/Binnie), most notably **Extra Bees**.
+
+What the fork adds on top of CE is listed on the **[Additions](industrialforestry.md)** page.
 
 ## Features
 
@@ -16,12 +20,6 @@ This is the wiki for **Forestry: Community Edition** — a fork that continues t
 - **Processing machines** — Carpenter, Centrifuge, Squeezer, Still, Fermenter and more, turning raw products into refined goods and fuels.
 - **Intelligent backpacks** — category storage that collects items as you play.
 - **A postal system** — send letters and parcels, and run automated trade stations.
-
-## Getting Started
-
-The most popular way into Forestry is **[Beekeeping](apiculture.md)**: find a wild hive, break it with a Scoop, and put the Princess and Drone into an Apiary to begin breeding. From there the mod opens up in whatever direction you like — the sidebar groups everything by system.
-
-If you prefer plants to insects, **[Tree Breeding](arboriculture.md)** and the **[Multifarm](farming.md)** are a natural starting point instead.
 
 ## How this wiki is organised
 

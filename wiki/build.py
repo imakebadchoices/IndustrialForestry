@@ -45,6 +45,7 @@ CATEGORY_MAIN_PAGE = {v: k for k, v in SLUG_CATEGORY.items()}
 
 SIDEBAR = [
     ("Getting Started", [("Introduction", "index")]),
+    ("IndustrialForestry", [("Additions", "industrialforestry")]),
     ("Bees", [
         ("Beekeeping", "apiculture"),
         ("Bee Housing", "bee-housing"),
@@ -79,7 +80,8 @@ SIDEBAR = [
 ]
 SLUG_OVERRIDES = {"README": "index"}
 PAGE_TITLES = {
-    "index": "Introduction", "apiculture": "Beekeeping",
+    "index": "Introduction", "industrialforestry": "Additions",
+    "apiculture": "Beekeeping",
     "bee-housing": "Bee Housing", "bee-tools": "Beekeeping Tools",
     "arboriculture": "Tree Breeding",
     "lepidopterology": "Butterfly Studies", "explorer": "Breeding Explorer",
@@ -123,6 +125,16 @@ def build_toc(html_body: str):
     toc = ('<div id="dw__toc" class="dw__toc">\n<h3 class="toggle">Table of Contents</h3>\n<div>\n'
            '<ul class="toc">\n' + "\n".join(items) + "\n</ul>\n</div>\n</div>\n")
     return toc, html_body
+
+
+def extract_banner(html_body: str):
+    """Pull a leading splash <img> out of the body and render it as a full-width
+    banner above the TOC, so it never gets squeezed beside the floated TOC."""
+    m = re.search(r'(?:<p>\s*)?(<img class="splash"[^>]*>)(?:\s*</p>)?', html_body)
+    if not m:
+        return "", html_body
+    banner = f'<div class="banner">{m.group(1)}</div>'
+    return banner, html_body[:m.start()] + html_body[m.end():]
 
 
 def render_sidebar(active_slug: str) -> str:
@@ -225,7 +237,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>{title} [Forestry: CE]</title>
+<title>{title} [IndustrialForestry]</title>
 <style>
 {style}
 </style>
@@ -235,20 +247,13 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <div id="dokuwiki__header"><div class="pad group">
   <div class="headings group">
-    <h1><a href="index.html"><span>Forestry: Community Edition</span></a></h1>
-  </div>
-  <div class="breadcrumbs">
-    <div class="trace"><span class="bchead">Trace:</span>
-      <span class="bcsep">&bull;</span>
-      <span class="curid">{title}</span>
-    </div>
+    <h1><a href="index.html"><span>IndustrialForestry</span></a></h1>
   </div>
 </div></div><!-- /header -->
 
 <div class="wrapper group">
 
   <div id="dokuwiki__aside"><div class="pad aside group">
-    <h3 class="toggle">Sidebar</h3>
     <div class="content">
       {sidebar}
     </div>
@@ -257,22 +262,13 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <div id="dokuwiki__content"><div class="pad group">
     <div class="pageId"><span>{title}</span></div>
     <div class="page group">
+      {banner}
       {toc}
       {body}
-    </div>
-    <div class="docInfo">
-      Generated from source (Forestry: Community Edition). Genetics tables are built
-      from the live registry + datapacks.
     </div>
   </div></div><!-- /content -->
 
 </div><!-- /wrapper -->
-
-<div id="dokuwiki__footer"><div class="pad">
-  <div class="license">
-    Forestry: Community Edition wiki &middot; content generated from mod source.
-  </div>
-</div></div><!-- /site -->
 
 </div></div>
 </body>
@@ -320,11 +316,12 @@ def convert(src: Path, out: Path, model, cache_dir: Path, skip_explorer: bool):
         body = rewrite_links(md.Markdown(extensions=["tables", "toc", "fenced_code"]).convert(text))
         if slug in SLUG_CATEGORY:
             body += "\n" + render_breeding_reference(SLUG_CATEGORY[slug], model[SLUG_CATEGORY[slug]])
+        banner, body = extract_banner(body)
         toc, body = build_toc(body)
         title = PAGE_TITLES.get(slug, slug.title())
         (out / f"{slug}.html").write_text(PAGE_TEMPLATE.format(
             title=html.escape(title), style=STYLESHEET, sidebar=render_sidebar(slug),
-            toc=toc, body=body), encoding="utf-8")
+            banner=banner, toc=toc, body=body), encoding="utf-8")
         print(f"  {f.name} -> {slug}.html")
 
     # Generated data pages: the full species + mutation tables, one per category.
@@ -333,7 +330,7 @@ def convert(src: Path, out: Path, model, cache_dir: Path, skip_explorer: bool):
         toc, body = build_toc(body)
         (out / f"{species_slug}.html").write_text(PAGE_TEMPLATE.format(
             title=html.escape(PAGE_TITLES[species_slug]), style=STYLESHEET,
-            sidebar=render_sidebar(species_slug), toc=toc, body=body), encoding="utf-8")
+            sidebar=render_sidebar(species_slug), banner="", toc=toc, body=body), encoding="utf-8")
         print(f"  (generated) -> {species_slug}.html")
 
     if not skip_explorer:
@@ -377,9 +374,6 @@ a:hover { text-decoration: underline; }
 #dokuwiki__header h1 { margin: 0; font-size: 1.9em; }
 #dokuwiki__header h1 a,
 #dokuwiki__header h1 a:visited { color: var(--green); font-weight: bold; }
-.breadcrumbs { font-size: 0.9em; color: #666; padding-top: 0.6em; }
-.breadcrumbs .bchead { color: #999; }
-.breadcrumbs .curid { color: var(--text); font-weight: bold; }
 
 /* Layout: sidebar + content */
 .wrapper { display: flex; align-items: flex-start; }
@@ -394,11 +388,6 @@ a:hover { text-decoration: underline; }
 #dokuwiki__content .pad { padding: 1em 1.5em 1.5em; }
 
 /* Sidebar sections */
-#dokuwiki__aside h3.toggle {
-  margin: 0 0 0.6em; padding-bottom: 0.3em;
-  color: var(--green); font-size: 1.1em;
-  border-bottom: 1px solid var(--border);
-}
 h3.sidebar-section {
   color: var(--green-dark);
   font-size: 1em; margin: 1em 0 0.2em; padding-bottom: 0.15em;
@@ -450,10 +439,11 @@ h3.sidebar-section {
 /* Tiny pixel-grid diagrams (farm layouts) — keep crisp, don't over-enlarge */
 .page figure.diagram { display: inline-block; margin: 0.6em; vertical-align: top; }
 .page figure.diagram img { image-rendering: pixelated; width: 132px; height: auto; }
-/* Full-width splash banner */
+/* Full-width splash banner — sits above the TOC and clears it */
+.page .banner { clear: both; margin: 0 0 1.2em; }
 .page img.splash {
-  display: block; width: 100%; border: 1px solid var(--border);
-  border-radius: 3px; margin: 0 0 1.2em;
+  display: block; width: 100%; height: 180px; object-fit: cover;
+  border: 1px solid var(--border); border-radius: 4px;
 }
 @media (max-width: 720px) {
   .page figure.illus-right { float: none; width: auto; max-width: 240px; margin: 1em auto; }
@@ -500,16 +490,6 @@ h3.sidebar-section {
 .dw__toc ul { list-style: none; margin: 0.4em 0; padding: 0 0.8em; }
 .dw__toc li.level3 { padding-left: 1em; }
 .dw__toc li { line-height: 1.7; }
-
-.docInfo {
-  margin-top: 2em; padding-top: 0.6em; font-size: 0.82em; color: #888;
-  border-top: 1px solid var(--border); font-style: italic;
-}
-
-/* Footer */
-#dokuwiki__footer { border-top: 1px solid var(--border); }
-#dokuwiki__footer .pad { padding: 0.8em 1.5em; }
-#dokuwiki__footer .license { font-size: 0.82em; color: #777; }
 
 /* Responsive: collapse sidebar above content on narrow screens */
 @media (max-width: 720px) {

@@ -1,6 +1,6 @@
 # Core Materials
 
-Underneath the bees, trees, and machines sits a layer of **shared materials** that nearly every part of Forestry is built from. You will craft these constantly, so it is worth knowing what they are and where they come from.
+Almost every part of Forestry is built from a small set of **shared materials** — casings, metals, electronics, fertilizer, and more. This page covers the ones you craft most often.
 
 ## Casings
 
@@ -9,7 +9,7 @@ Underneath the bees, trees, and machines sits a layer of **shared materials** th
 - **Sturdy Casing** — the standard machine base, built around bronze.
 - **Hardened Casing** — a tougher casing for higher-tier blocks.
 - **Impregnated Casing** — made with seed oil, used for wooden bee equipment like the Apiary.
-- **Flexible Casing** — a softer casing used where a machine needs to bend the rules.
+- **Flexible Casing** — a softer casing used by some recipes.
 
 ## Metals and gears
 
@@ -32,7 +32,7 @@ Automation runs on electronics made in the [Thermionic Fabricator](fabricator.md
 
 **Beeswax** and **Refractory Wax** (from the [Centrifuge](centrifuge.md)) make capsules and the Wax Casts the Fabricator needs, while cartons and capsules carry Forestry's fluids around.
 
-## Handy tools
+## Tools
 
 - **Wrench** — rotates and dismantles Forestry machines.
 - **Pipette** — draws liquid out of a machine's tank.

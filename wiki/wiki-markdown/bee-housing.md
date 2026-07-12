@@ -59,7 +59,7 @@ The Alveary does **not** take frames. Instead, several of its blocks can be swap
 - **Heater** and **Fan** — raise or lower temperature, letting you run a bee well outside its natural climate.
 - **Stabiliser** — steadies genetic behaviour within the structure.
 
-Because these components let you dial in any climate, the Alveary is where you finally run the volatile Nether, End, and frozen bees at full output without their environment fighting you.
+Because these components set the internal climate, the Alveary can run Nether, End, and frozen bees at full output regardless of the surrounding environment.
 
 ---
 

@@ -1,6 +1,6 @@
 # Beekeeping Tools
 
-Bees are sensitive insects, and a working apiarist collects a small kit of specialised tools to gather, read, and store them. None are complicated, but a few are essential.
+A few specialised tools cover gathering, reading, and storing bees.
 
 ## Gathering
 
@@ -12,7 +12,7 @@ The **Scoop** is the one tool you cannot do without. When you find a wild hive, 
 
 ### Smoker
 
-The **Smoker** is the traditional beekeeper's tool, puffing out a cloud of smoke as you use it. In Forestry: Community Edition it is mostly a piece of flavour — a nod to the real craft — rather than a mechanical necessity, but no apiarist's kit feels complete without one.
+The **Smoker** is the traditional beekeeper's tool, puffing out a cloud of smoke as you use it. In Forestry it is mostly flavour rather than a mechanical necessity.
 
 ## Analysis
 
@@ -20,7 +20,7 @@ A bee's appearance tells you almost nothing about the alleles it actually carrie
 
 ### Beealyzer
 
-The **Beealyzer** is the workhorse of bee analysis. Drop a bee into it — along with a little honey to keep the bee occupied — and it reads out the full genome: species, speed, lifespan, fertility, temperature and humidity tolerances, and any special traits, for both the active and inactive alleles. It is the single most useful tool for deciding which drones are worth breeding, and it is worth crafting early. Analysing a bee also reveals its second species and its possible mutations.
+The **Beealyzer** reads a bee's genome. Drop a bee into it — along with a little honey to keep the bee occupied — and it reads out the full genome: species, speed, lifespan, fertility, temperature and humidity tolerances, and any special traits, for both the active and inactive alleles. It is the main tool for choosing which drones to breed. Analysing a bee also reveals its second species and its possible mutations.
 
 ### Portable Analyzer
 
@@ -29,6 +29,8 @@ The **Portable Analyzer** does the same job as a stationary Analyzer but travels
 ## Protection
 
 ### Apiarist's Armour
+
+<figure class="illus-right"><img src="images/apiarist-armour.png" alt="The Apiarist's Armour set"><figcaption>Apiarist's Armour</figcaption></figure>
 
 Some bred bees are genuinely dangerous — poisonous, volatile, or outright aggressive — and will sting anyone working nearby. The **Apiarist's Armour** set (Helmet, Chest, Legs, and Boots) is tailored to shield a beekeeper from these effects. Wearing the full set gives the best protection; it is close to mandatory once you start breeding the nastier Nether and desert lines.
 
