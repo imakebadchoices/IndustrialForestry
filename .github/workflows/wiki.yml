@@ -1,12 +1,31 @@
 name: Wiki
 
-# Builds the Forestry: CE wiki (static site + breeding explorer) from source.
-# The species data is produced by the mod's own datagen (`runData`) reading the
-# live registry, then folded together with the on-disk datapack species by the
-# Python generator — so the generated snapshot is a build artifact and is never
-# committed. Manual for now (matches build.yml while the 1.21 port stabilises).
+# Builds the Forestry: CE wiki (static site + breeding explorer) from source and
+# deploys it to GitHub Pages. The species data is produced by the mod's own datagen
+# (`runData`) reading the live registry, then folded together with the on-disk
+# datapack species by the Python generator — so the generated snapshot is a build
+# artifact and is never committed.
+#
+# Deploy target (on the fork this runs in): https://<owner>.github.io/<repo>/
+# One-time setup: repo Settings -> Pages -> Source = "GitHub Actions".
 on:
   workflow_dispatch:
+  push:
+    branches: [ '1.21.1-custom' ]
+    paths:
+      - 'wiki/**'
+      - '.github/workflows/wiki.yml'
+
+# Allow the deploy job to publish to Pages via OIDC.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One concurrent Pages deployment; don't cancel an in-progress publish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -39,12 +58,22 @@ jobs:
         run: ./gradlew runData --console=plain --max-workers 1
 
       - name: Build site + explorer
-        # Renders markdown, generates the genetics appendix tables, and bundles the
-        # explorer (fetches pinned Mermaid from the npm CDN — needs network).
+        # Renders markdown, generates the genetics tables, deploys images, and bundles
+        # the explorer (fetches pinned Mermaid from the npm CDN — needs network).
         run: python3 wiki/build.py --out wiki/site
 
-      - name: Upload wiki site
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: forestry-wiki
           path: wiki/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
