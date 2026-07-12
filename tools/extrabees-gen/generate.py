@@ -18,8 +18,24 @@ sys.path.insert(0, os.path.dirname(__file__))
 from mappings import (  # noqa: E402
     NS, CHROMOSOME, SPEED, LIFESPAN, FERTILITY, FLOWERING, TOLERANCE, TERRITORY,
     FLOWERS_BASE, BOOL, BASE_EFFECTS, TEMPERATURE, HUMIDITY, BASE_FAMILY_TAXON, DEFAULT_TEMPLATE,
-    OUTPUT_MAP,
+    OUTPUT_MAP, ALLOY_BEES, COMB_METAL_SECONDARY, DYE_COMBS, BASE_BRANCH_TEMPLATES,
 )
+
+# Item namespaces that ship with the base game / Forestry / common tags — never gated by mod_loaded.
+VANILLA_NS = {"minecraft", "forestry", "c", "neoforge"}
+
+
+def mod_conditions(item_ids):
+    """neoforge:conditions gating a recipe on every non-vanilla mod its output items come from, so the
+    recipe cleanly no-ops when that mod is absent instead of erroring on an unknown item."""
+    mods = sorted({i.split(":", 1)[0] for i in item_ids if ":" in i and i.split(":", 1)[0] not in VANILLA_NS})
+    return [{"type": "neoforge:mod_loaded", "modid": m} for m in mods]
+
+
+# Species whose products the Binnie source copies programmatically (unresolvable by text parse) -> hand-supplied.
+SPECIES_PRODUCTS = {
+    "mystical": [{"item": "forestry:bee_comb_dripping", "chance": 0.2}],  # copies base NOBLE's products (DRIPPING @0.20)
+}
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 BINNIE = os.path.join(REPO, "..", "Binnie", "extrabees", "src", "main", "java", "binnie", "extrabees")
@@ -260,6 +276,8 @@ def product_item(expr):
     m = re.match(r"ItemHoneyComb\.VanillaComb\.(\w+)\.get", expr)
     if m:
         v = m.group(1).lower()
+        if v == "quartz":   # no base ForestryCE quartz comb -> our own extrabees datapack comb (see emit_quartz_comb)
+            return {"item": "forestry:comb", "tag": {"forestry:comb_type": f"{NS}:quartz"}}
         if v not in BASE_COMB_VARIANTS:
             warn(f"VanillaComb.{m.group(1)} has no base comb; falling back to bee_comb_honey")
             v = "honey"
@@ -275,7 +293,8 @@ def product_item(expr):
         iid = f"{NS}:" + m.group(1).lower()
         items_needed.add(iid)
         return {"item": iid}
-    warn("unresolved product item: " + expr[:50])
+    if "entry.getKey()" not in expr:   # MYSTICAL copies NOBLE's products in a loop -> supplied via SPECIES_PRODUCTS
+        warn("unresolved product item: " + expr[:50])
     return None
 
 
@@ -366,7 +385,9 @@ def parse_mutations(block, result_default):
                 mut["conditions"] = [{"type": "forestry:biome", "biomes": tag}]
             else:
                 warn("unmapped biome type: " + bm.group(1))
-        if "addMutationCondition" in trailer:
+        if "addMutationCondition" in trailer and "ConditionPerson" not in trailer:
+            # ConditionPerson (e.g. JADED requires the player be named "jadedcat") is a Binnie easter egg,
+            # not real gameplay gating — intentionally dropped, leaving the mutation ungated. Warn on any other.
             warn(f"unhandled addMutationCondition on {result}: {trailer.strip()[:80]}")
         out.append(mut)
     return out
@@ -387,12 +408,20 @@ def flatten_genome(sp, branch_templates):
 
     if sp["branch_type"] == "ExtraBeeBranchDefinition":
         apply(branch_templates.get(sp["branch"], []))
+    elif sp["branch"] in BASE_BRANCH_TEMPLATES:
+        tmpl.update(BASE_BRANCH_TEMPLATES[sp["branch"]])   # base Forestry branch defaults (BeeTaxonomy.java)
     else:
         warn(f"{sp['name']}: base branch {sp['branch']} defaults not flattened (base Forestry branch)")
     apply(parse_set_lines(extract_block(sp["chunk"], "setAlleles")))
 
-    activity = "cathemeral" if never_sleeps else ("nocturnal" if nocturnal else "diurnal")
-    tmpl["forestry:activity"] = "forestry:activity_" + activity
+    # activity: species flags (never_sleeps/nocturnal) win; else a base-branch template activity (AUSTERE);
+    # else diurnal. (EB templates/DEFAULT_TEMPLATE never set forestry:activity, so this is a no-op for them.)
+    if never_sleeps:
+        tmpl["forestry:activity"] = "forestry:activity_cathemeral"
+    elif nocturnal:
+        tmpl["forestry:activity"] = "forestry:activity_nocturnal"
+    elif "forestry:activity" not in tmpl:
+        tmpl["forestry:activity"] = "forestry:activity_diurnal"
     eff = tmpl.get("forestry:bee_effect", "")
     if eff.startswith(NS + ":effect_"):
         referenced_effects.add(eff[len(NS + ":effect_"):])
@@ -419,6 +448,7 @@ def emit_species_and_mutations():
         result_id = f"{NS}:{sid}"
         props = extract_block(sp["chunk"], "setSpeciesProperties")
         prods, specs = parse_products(props)
+        prods += SPECIES_PRODUCTS.get(sid, [])   # products the source copies programmatically
         temp = re.search(r"setTemperature\(EnumTemperature\.(\w+)\)", props)
         humid = re.search(r"setHumidity\(EnumHumidity\.(\w+)\)", props)
 
@@ -499,11 +529,9 @@ def parse_combs():
     # header: NAME(sec, prim) { body } | NAME { } | NAME,
     for m in re.finditer(r"\n\t([A-Z][A-Z0-9_]*)(?:\((\d+),\s*(\d+)\))?", body):
         name = m.group(1)
-        if name in ("BRONZE", "MINT", "CITRUS", "PEAT", "BRASS", "ELECTRUM", "STEEL",
-                    "IRIDIUM", "OLIVINE", "INVAR", "PULP", "MULCH"):
-            # inactive combs (no color / products) — emit a plain comb_type, no recipe
-            combs.append({"name": name, "primary": None, "secondary": None, "chunk": ""})
-            continue
+        # Bare enum constants (no `(secondary, primary)` color ctor) are inactive placeholder combs
+        # in old Extra Bees: never colored, never given products, never referenced by any species.
+        # Skip them entirely — emitting a stub comb_type just litters JEI with undefined white combs.
         if m.group(2) is None:
             continue
         rest = body[m.end():]
@@ -552,6 +580,69 @@ HONEYDROP = "forestry:honey_drop"
 BEESWAX = "forestry:beeswax"
 
 
+def emit_alloy_bees():
+    """Resurrect the alloy combs Binnie left inactive (see mappings.ALLOY_BEES). Self-contained: for each
+    alloy we emit a comb_type, a centrifuge recipe, a species (cloned from its first metal parent), and a
+    mutation from the two constituent metal bees. Depends on the metal parents already being on disk."""
+    for cid, (primary, name, output, p1, p2, epithet) in ALLOY_BEES.items():
+        # comb_type — metal-comb look (shared dark secondary), alloy-tinted primary
+        write_json(os.path.join(DATA, "comb_type", cid + ".json"),
+                   {"primary_color": primary, "secondary_color": COMB_METAL_SECONDARY, "name": name})
+
+        # centrifuge — same byproducts as the metal combs (STONE template) + the alloy dust/ingot
+        recipe = {
+            "type": "forestry:centrifuge",
+            "id": f"{NS}:centrifuge/{cid}",
+            "time": 20,
+            "input": {"type": "neoforge:components", "items": "forestry:comb",
+                      "components": {"forestry:comb_type": f"{NS}:{cid}"}},
+            "products": [
+                {"item": BEESWAX, "chance": 0.5},
+                {"item": HONEYDROP, "chance": 0.25},
+                {"item": output, "chance": 1.0},
+            ],
+        }
+        conds = mod_conditions([output])   # gate create/MI outputs; bronze (forestry ingot) stays ungated
+        if conds:
+            recipe["neoforge:conditions"] = conds
+        write_json(os.path.join(RECIPE, cid + ".json"), recipe)
+
+        # species — clone the first parent's genome/genus/base products, retag identity + specialty comb
+        with open(os.path.join(DATA, "bee_species", p1 + ".json")) as f:
+            sp = json.load(f)
+        sp["species"] = epithet
+        sp["dominant"] = False
+        sp["authority"] = "ForestryCE"
+        sp["outline"] = primary   # keep parent body colour; recolour the outline to the alloy
+        sp["specialties"] = [{"item": "forestry:comb",
+                              "tag": {"forestry:comb_type": f"{NS}:{cid}"}, "chance": 0.08}]
+        write_json(os.path.join(DATA, "bee_species", cid + ".json"), sp)
+
+        # mutation — metal x metal -> alloy
+        write_json(os.path.join(DATA, "bee_mutation", f"{cid}__{p1}_x_{p2}.json"),
+                   {"first_parent": f"{NS}:{p1}", "second_parent": f"{NS}:{p2}",
+                    "result": f"{NS}:{cid}", "chance": 0.08})
+
+
+def emit_quartz_comb():
+    """VanillaComb.QUARTZ has no base ForestryCE comb (3 species referenced it). Provide it as an extrabees
+    datapack comb that centrifuges to vanilla nether quartz, instead of falling back to the honey comb."""
+    write_json(os.path.join(DATA, "comb_type", "quartz.json"),
+               {"primary_color": "#f0ece2", "secondary_color": "#d9cfc0", "name": "Quartz Comb"})
+    write_json(os.path.join(RECIPE, "quartz.json"), {
+        "type": "forestry:centrifuge",
+        "id": f"{NS}:centrifuge/quartz",
+        "time": 20,
+        "input": {"type": "neoforge:components", "items": "forestry:comb",
+                  "components": {"forestry:comb_type": f"{NS}:quartz"}},
+        "products": [
+            {"item": BEESWAX, "chance": 0.5},
+            {"item": HONEYDROP, "chance": 0.25},
+            {"item": "minecraft:quartz", "chance": 1.0},
+        ],
+    })
+
+
 # EnumPropolis / EnumHoneyDrop that Binnie squeezed to a fluid -> (fluid_id, amount, flavor). These become
 # the one generic forestry:comb_extract item carrying a CombExtract component, which a squeezer turns back
 # into the fluid (the "implicit propolis" mechanism — no per-fluid item, registry, or squeezer recipe).
@@ -563,6 +654,12 @@ FLUID_INTERMEDIARIES = {   # EnumPropolis.<NAME>
 }
 DROP_FLUIDS = {   # EnumHoneyDrop.<NAME> that map to a real pack fluid (others stay module items)
     "SEED": ("forestry:seed_oil", 200, "honey_drop"),
+    "MILK": ("neoforge:milk", 200, "honey_drop"),                            # milk comb
+    "APPLE": ("forestry:juice", 200, "honey_drop"),                          # fruit comb -> Fruit Juice
+    "ALCOHOL": ("forestry:short_mead", 200, "honey_drop"),                   # alcohol comb -> mead
+    "ICE": ("forestry:ice", 200, "honey_drop"),                             # glacial comb -> Crushed Ice
+    "ACID": ("modern_industrialization:sulfuric_acid", 200, "honey_drop"),   # acidic comb
+    # Residual drops with no clean fluid stay module items: ENERGY (ic2energy), POISON (venomous) + dustobsidian.
 }
 
 
@@ -599,6 +696,8 @@ def resolve_output(expr):
         return {"item": BEESWAX}
     if "honeyDrop" in expr:
         return {"item": HONEYDROP}
+    if expr == "compost":   # COMPOST comb: local `compost` var = Mods.Forestry.stack("fertilizer_bio")
+        return {"item": "forestry:fertilizer_bio"}
     m = re.match(r"ExtraBeeItems\.(\w+)", expr)
     if m:
         return module_item(f"{NS}:" + m.group(1).lower())
@@ -644,8 +743,11 @@ def emit_centrifuge(c):
     outputs = []
     if "copyProducts(EnumHoneyComb.STONE)" in c["chunk"]:   # STONE = beeswax 0.5, honeydrop 0.25
         outputs += [{"item": BEESWAX, "chance": 0.5}, {"item": HONEYDROP, "chance": 0.25}]
-    if "addDyeSubtypes(" in c["chunk"]:   # shared dye method: honeydrop + beeswax (colored drop needs module)
+    if "addDyeSubtypes(" in c["chunk"]:   # dye comb: honeydrop + beeswax + the matching vanilla dye
         outputs += [{"item": HONEYDROP, "chance": 0.8}, {"item": BEESWAX, "chance": 0.8}]
+        dye = DYE_COMBS.get(c["name"])
+        if dye:
+            outputs.append({"item": f"minecraft:{dye}_dye", "chance": 1.0})
     for inner in find_calls_any(c["chunk"], ("addProduct", "tryAddProduct")):
         args = split_top_commas(inner)
         if len(args) < 2:
@@ -666,6 +768,9 @@ def emit_centrifuge(c):
                   "components": {"forestry:comb_type": f"{NS}:{cid}"}},
         "products": outputs,
     }
+    conds = mod_conditions(o["item"] for o in outputs)
+    if conds:   # gate recipes whose outputs come from an optional mod (MI/AE2/IE/Create/BigReactors)
+        recipe["neoforge:conditions"] = conds
     write_json(os.path.join(RECIPE, c["name"].lower() + ".json"), recipe)
 
 
@@ -764,6 +869,8 @@ def main():
     species, genera, mut_count = emit_species_and_mutations()
     branches = emit_taxa(genera)
     combs = emit_combs()
+    emit_alloy_bees()   # resurrected alloy combs/bees (not from Binnie) — depends on metal parents on disk
+    emit_quartz_comb()  # extrabees quartz comb for VanillaComb.QUARTZ refs (no base comb)
     emit_flowers()
     emit_effects(referenced_effects)
 

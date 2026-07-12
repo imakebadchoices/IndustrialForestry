@@ -132,6 +132,16 @@ OUTPUT_MAP = {
     #   dustobsidian
 }
 
+# Dye combs: each colored comb centrifuges directly to its matching vanilla dye. Binnie routed this
+# through a colored honey-drop whose *remnant* was the dye; we skip that intermediary (and its 16 would-be
+# drop items) and emit the dye straight from the comb. The Binnie dyeMetas array maps each comb to its own
+# colour, so the mapping is just comb-name -> same-colour dye (with lime/light_blue/light_gray renames).
+DYE_COMBS = {
+    "RED": "red", "YELLOW": "yellow", "BLUE": "blue", "GREEN": "green", "BLACK": "black", "WHITE": "white",
+    "BROWN": "brown", "ORANGE": "orange", "CYAN": "cyan", "PURPLE": "purple", "GRAY": "gray",
+    "LIGHTBLUE": "light_blue", "PINK": "pink", "LIMEGREEN": "lime", "MAGENTA": "magenta", "LIGHTGRAY": "light_gray",
+}
+
 # --- AlleleEffects.<field> (base Forestry effects referenced directly by branches) -----------
 BASE_EFFECTS = {
     "effectNone": "forestry:bee_effect_none",
@@ -145,6 +155,23 @@ HUMIDITY = {"ARID": "arid", "NORMAL": "normal", "DAMP": "damp"}
 
 # --- Base bee genus (branch scientific names live in taxa; the genus id is the branch name) --
 BASE_FAMILY_TAXON = "forestry:apidae"   # ForestryTaxa.FAMILY_BEES parent for datapack genera
+
+# --- Alloy bees (NOT from Binnie) -----------------------------------------------------------
+# Binnie stubbed these combs as bare enum constants (no color / products / recipe) because alloys
+# have no ore to mine. We resurrect them as mutation-bred alloy bees: each is a mutation of its two
+# constituent metal bees (already in the pack), clones the first parent's genome, and produces the
+# base "stone" comb + a specialty alloy comb that centrifuges into the alloy (dust where a mod ships
+# one, else the ingot). Emitted by generate.py:emit_alloy_bees(), fully self-contained.
+COMB_METAL_SECONDARY = "#363534"   # shared metal-comb base color (int 3552564), matches iron/gold/etc.
+# id: (comb primary color, display name, centrifuge output, first parent, second parent, species epithet)
+ALLOY_BEES = {
+    "bronze":   ("#cd7f32", "Bronze Comb",   "forestry:ingot_bronze",                   "copper",   "tin",     "aeneus"),
+    "brass":    ("#b5a642", "Brass Comb",     "create:brass_ingot",                     "copper",   "zinc",    "orichalcum"),
+    "steel":    ("#8a8f99", "Steel Comb",     f"{MI}:steel_dust",                       "iron",     "coal",    "chalybs"),
+    "invar":    ("#b8bcc4", "Invar Comb",     f"{MI}:invar_dust",                       "iron",     "nickel",  "invar"),
+    "electrum": ("#f0e18a", "Electrum Comb",  f"{MI}:electrum_dust",                    "gold",     "silver",  "electri"),
+    "iridium":  ("#dfe8ee", "Iridium Comb",   f"{MI}:iridium_dust",                     "platinum", "diamond", "iridis"),
+}
 
 # The default bee template (ExtraBeeBranchDefinition.getDefaultTemplate), pre-resolved.
 DEFAULT_TEMPLATE = {
@@ -160,4 +187,40 @@ DEFAULT_TEMPLATE = {
     "forestry:territory": TERRITORY["AVERAGE"],
     "forestry:bee_effect": BASE_EFFECTS["effectNone"],
     # activity resolved separately from NEVER_SLEEPS(false) + nocturnal -> forestry:activity_diurnal
+}
+
+# Base *Forestry* branch templates (for the ~11 EB species on BeeBranchDefinition.<X> branches, which the
+# generator can't parse from the EB source). Transcribed from this repo's BeeTaxonomy.java genus
+# setDefaultChromosome() calls — the authoritative ForestryCE branch defaults. Flattened into those species
+# ahead of their own setAlleles, exactly like the EB branch templates.
+BASE_BRANCH_TEMPLATES = {
+    "AGRARIAN": {   # GENUS_AGRARIAN (rustapis)
+        "forestry:speed": SPEED["SLOWER"],
+        "forestry:lifespan": LIFESPAN["SHORTER"],
+        "forestry:flower_type": FLOWERS_BASE["WHEAT"],
+        "forestry:pollination": FLOWERING["FASTER"],
+    },
+    "BOGGY": {   # GENUS_BOGGY (paludapis)
+        "forestry:flower_type": FLOWERS_BASE["MUSHROOMS"],
+        "forestry:pollination": FLOWERING["SLOWER"],
+        "forestry:temperature_tolerance": TOLERANCE["BOTH_1"],
+    },
+    "FROZEN": {   # GENUS_FROZEN (coagapis)
+        "forestry:temperature_tolerance": TOLERANCE["UP_1"],
+        "forestry:humidity_tolerance": TOLERANCE["BOTH_1"],
+        "forestry:flower_type": FLOWERS_BASE["SNOW"],
+        "forestry:bee_effect": "forestry:bee_effect_glacial",
+    },
+    "FESTIVE": {   # GENUS_FESTIVE (festapis)
+        "forestry:speed": SPEED["SLOWER"],
+        "forestry:temperature_tolerance": TOLERANCE["BOTH_2"],
+        "forestry:humidity_tolerance": TOLERANCE["BOTH_1"],
+        "forestry:lifespan": LIFESPAN["NORMAL"],
+    },
+    "AUSTERE": {   # GENUS_AUSTERE (modapis)
+        "forestry:temperature_tolerance": TOLERANCE["BOTH_1"],
+        "forestry:humidity_tolerance": TOLERANCE["DOWN_1"],
+        "forestry:flower_type": FLOWERS_BASE["CACTI"],
+        "forestry:activity": "forestry:activity_nocturnal",
+    },
 }

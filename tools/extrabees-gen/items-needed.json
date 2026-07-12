@@ -1,11 +1,6 @@
 {
   "items": [
-    "extrabees:drop_acid",
-    "extrabees:drop_alcohol",
-    "extrabees:drop_apple",
     "extrabees:drop_energy",
-    "extrabees:drop_ice",
-    "extrabees:drop_milk",
     "extrabees:drop_poison",
     "extrabees:dustobsidian"
   ]
