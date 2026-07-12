@@ -1,4 +1,4 @@
-// 1.21.1	2026-06-16T16:08:37.774789	Tags for minecraft:item mod id forestry
+// 1.21.1	2026-07-12T13:34:00.61068416	Tags for minecraft:item mod id forestry
 e736c96d74e1d9b8799f108ba1e8b1e2173926fb data/c/tags/item/chests.json
 997ede0ad811c9479aabe6bd63d0a5b90a75c3e6 data/c/tags/item/dusts/ash.json
 d96521ed9e35f1dd037c67f6374622063d9657ac data/c/tags/item/fence_gates.json
@@ -62,7 +62,7 @@ feccd800314ac054d3b904de8bb3398221fc29c9 data/forestry/tags/item/balsa_logs.json
 aabf22e400a3909e316b0f004cfd21e59a80c1e1 data/forestry/tags/item/citrus_logs.json
 bc7896f819c64d7001e44ae623800293d1e776d3 data/forestry/tags/item/cocobolo_logs.json
 f48573065b4783237bdb7cdcdc0e10fde2f7bf7e data/forestry/tags/item/coconut_logs.json
-77e6e82cbd197e941029a9371b7cb6b9bc96a818 data/forestry/tags/item/combs.json
+45cacb95926af7841c458402f19fad0b1ef06ca8 data/forestry/tags/item/combs.json
 9f5d66e4017fbcabe22c6702e93310cf271fe042 data/forestry/tags/item/crafting_tables.json
 2201a23f223685df5dbae31b07632311c1bd7194 data/forestry/tags/item/dogwood_logs.json
 0065fbab36f74fb846e11c84e9d0bfd535b7c25e data/forestry/tags/item/drop_honey.json
