@@ -59,6 +59,9 @@ public class Data {
 		generator.addProvider(event.includeClient(), new ForestryAtlasProvider(output, lookup, existingFileHelper));
 		generator.addProvider(event.includeServer(), new ForestryFeaturesProvider(output, lookup));
 		generator.addProvider(event.includeServer(), new ForestryDataMapProvider(output, lookup));
+		// Machine-readable dump of every registered species + mutation, consumed by the wiki generator.
+		// Writes to build/wiki-data/, outside src/generated/resources, so it is not bundled or committed.
+		generator.addProvider(event.includeServer(), new ForestrySpeciesDumpProvider(output, lookup));
 		// NOTE: base bee breeds are intentionally NOT datagen'd into the forestry:bee_species registry yet.
 		// Datagen can't faithfully serialize dynamic products (e.g. the Patriotic bee's FireworkProduct)
 		// until Phase 2 adds product dispatch codecs, and shipping lossy base JSON would regress those bees
