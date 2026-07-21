@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "beegistics:block/bee_analyzer_top",
+    "side": "beegistics:block/bee_analyzer_side"
+  }
+}

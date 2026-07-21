@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "beegistics:block/bee_analyzer" }
+  }
+}

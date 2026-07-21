@@ -1,0 +1,20 @@
+{
+	"neoforge:conditions": [
+		{ "type": "neoforge:mod_loaded", "modid": "ae2" }
+	],
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"PCP",
+		"CAC",
+		"PCP"
+	],
+	"key": {
+		"A": { "item": "forestry:analyzer" },
+		"C": { "item": "ae2:fluix_glass_cable" },
+		"P": { "item": "ae2:calculation_processor" }
+	},
+	"result": {
+		"id": "beegistics:bee_analyzer",
+		"count": 1
+	}
+}

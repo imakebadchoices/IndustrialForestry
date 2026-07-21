@@ -1,0 +1,14 @@
+{
+	"neoforge:conditions": [
+		{ "type": "neoforge:mod_loaded", "modid": "ae2" }
+	],
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "ae2:basic_card" },
+		{ "item": "forestry:honey_drop" }
+	],
+	"result": {
+		"id": "beegistics:bee_filter_card",
+		"count": 1
+	}
+}

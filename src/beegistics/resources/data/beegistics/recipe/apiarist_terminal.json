@@ -1,0 +1,14 @@
+{
+	"neoforge:conditions": [
+		{ "type": "neoforge:mod_loaded", "modid": "ae2" }
+	],
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "ae2:terminal" },
+		{ "item": "forestry:portable_analyzer" }
+	],
+	"result": {
+		"id": "beegistics:apiarist_terminal",
+		"count": 1
+	}
+}

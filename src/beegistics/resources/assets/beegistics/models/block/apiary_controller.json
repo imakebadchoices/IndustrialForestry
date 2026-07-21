@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "beegistics:block/apiary_controller_top",
+    "side": "beegistics:block/apiary_controller_side"
+  }
+}

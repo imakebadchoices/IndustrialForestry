@@ -1,0 +1,41 @@
+modLoader = "javafml"
+loaderVersion = "{fmlVersionRange}"
+issueTrackerURL = "https://github.com/thedarkcolour/ForestryCE/issues"
+
+license = "GNU Lesser Public License v3"
+
+# ApiaristTerminalScreen writes Slot.x/y directly; the transformer is shipped in this add-on jar (not core Forestry).
+[[accessTransformers]]
+file = "META-INF/accesstransformer.cfg"
+
+[[mods]]
+modId = "beegistics"
+version = "${version}"
+displayName = "Forestry: Beegistics"
+displayURL = "https://github.com/thedarkcolour/ForestryCE"
+credits = "the ForestryCE contributors"
+authors = "SirSengir, mezz, Nedelosk, thedarkcolour"
+description = '''
+	Applied Energistics 2 integration for Forestry: store, browse, and automate bees on your ME network.
+	'''
+
+[[dependencies.beegistics]]
+modId = "neoforge"
+type = "required"
+versionRange = "${forgeVersionRange}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.beegistics]]
+modId = "forestry"
+type = "required"
+versionRange = "[1.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.beegistics]]
+modId = "ae2"
+type = "required"
+versionRange = "${ae2VersionRange}"
+ordering = "AFTER"
+side = "BOTH"
