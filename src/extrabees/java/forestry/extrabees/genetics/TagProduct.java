@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -65,15 +64,14 @@ public record TagProduct(TagKey<Item> tag, int count, float chance) implements I
 	@Override
 	public ItemStack createRandomStack(RandomSource random) {
 		return BuiltInRegistries.ITEM.getTag(this.tag)
-			.flatMap(set -> set.getRandomElement(random))
+			.flatMap(set -> PreferredMember.random(set, random))
 			.map(holder -> new ItemStack(holder.value(), this.count))
 			.orElse(ItemStack.EMPTY);
 	}
 
 	private java.util.Optional<Item> firstItem() {
 		return BuiltInRegistries.ITEM.getTag(this.tag)
-			.map(HolderSet.Named::stream)
-			.flatMap(java.util.stream.Stream::findFirst)
+			.flatMap(PreferredMember::first)
 			.map(Holder::value);
 	}
 }

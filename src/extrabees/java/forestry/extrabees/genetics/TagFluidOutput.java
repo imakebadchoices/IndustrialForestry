@@ -40,7 +40,7 @@ public record TagFluidOutput(TagKey<Fluid> tag, int amount) implements IFluidPro
 	@Override
 	public FluidStack createFluidStack() {
 		return BuiltInRegistries.FLUID.getTag(this.tag)
-			.flatMap(set -> set.stream().findFirst())
+			.flatMap(PreferredMember::first)
 			.map(holder -> new FluidStack(holder.value(), this.amount))
 			.orElse(FluidStack.EMPTY);
 	}
