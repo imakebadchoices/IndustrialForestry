@@ -20,8 +20,8 @@ public enum ControllerMode {
 	STANDALONE,
 	AUTOCRAFT;
 
-	/** The mode a freshly placed controller starts in. */
-	public static final ControllerMode DEFAULT = REQUESTER;
+	/** The mode a freshly placed controller starts in - the self-sustaining perpetual breeder, which needs no ME crafting setup to do something useful. */
+	public static final ControllerMode DEFAULT = STANDALONE;
 
 	private static final ControllerMode[] VALUES = values();
 

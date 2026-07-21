@@ -73,6 +73,7 @@
   "gui.beegistics.apiary_controller.crafting": "Breeding: %s",
   "gui.beegistics.apiary_controller.perpetual.active": "Breeding",
   "gui.beegistics.apiary_controller.perpetual.idle": "Idle",
+  "gui.beegistics.apiary_controller.perpetual.no_bees": "No bees match filters",
   "gui.beegistics.apiary_controller.idle": "Idle",
   "gui.beegistics.apiary_controller.climate": "Climate: %s / %s",
   "gui.beegistics.apiary_controller.time": "Time: %s",

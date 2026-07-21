@@ -378,6 +378,29 @@ public class ApiaryControllerTest {
 		// One princess pulled to stock the queen (2 -> 1); drones: 2 seeded + 1 harvested product - 1 pulled to mate = 2.
 		helper.assertTrue(network.count(beeKey(forest, BeeLifeStage.PRINCESS)) == 1, "one princess should have been pulled to stock the queen slot");
 		helper.assertTrue(network.count(beeKey(forest, BeeLifeStage.DRONE)) == 2, "a drone was pulled to mate while the harvested product drone was returned");
+		// A stocked queen is active breeding, so the GUI shows the green "Breeding" line.
+		helper.assertTrue(rig.controller().isPerpetualBreeding(), "stocking a queen counts as active breeding for the GUI status");
+
+		helper.succeed();
+	}
+
+	/**
+	 * A linked apiary with no bee in the network matching a loaded card (and an empty apiary) has nothing to breed:
+	 * {@link ApiaryControllerBlockEntity#isPerpetualBreeding()} reports false so the GUI warns that no bees match the
+	 * filters instead of showing a green "Breeding" just because an apiary is attached.
+	 */
+	@GameTest(template = "empty")
+	public static void perpetualReportsNoBeesWhenNetworkEmpty(GameTestHelper helper) {
+		Rig rig = place(helper);
+		loadSpeciesCard(rig.controller(), species(ForestryBeeSpecies.FOREST));
+		rig.controller().setMode(ControllerMode.STANDALONE);
+
+		TestNetwork network = new TestNetwork(); // no bees seeded
+
+		rig.controller().runPerpetual(network);
+
+		helper.assertTrue(rig.bees().getQueen().isEmpty(), "the apiary stays empty with no matching bees to stock");
+		helper.assertTrue(!rig.controller().isPerpetualBreeding(), "no matching bees means the breeder reports no-bees, not breeding");
 
 		helper.succeed();
 	}

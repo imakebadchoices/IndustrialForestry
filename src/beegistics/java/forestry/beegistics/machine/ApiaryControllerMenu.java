@@ -47,6 +47,9 @@ public class ApiaryControllerMenu extends AEBaseMenu {
 	public int apiaryHumidity = -1;
 	@GuiSync(10)
 	public boolean apiaryDay = true;
+	/** Standalone mode only: whether an apiary is occupied or a matching bee is available to stock, vs. no matching bees. */
+	@GuiSync(12)
+	public boolean perpetualBreeding = false;
 
 	public ApiaryControllerMenu(MenuType<?> menuType, int id, Inventory ip, ApiaryControllerBlockEntity controller) {
 		super(menuType, id, ip, controller);
@@ -109,6 +112,7 @@ public class ApiaryControllerMenu extends AEBaseMenu {
 			this.apiaryTemperature = this.controller.getApiaryTemperature() == null ? -1 : this.controller.getApiaryTemperature().ordinal();
 			this.apiaryHumidity = this.controller.getApiaryHumidity() == null ? -1 : this.controller.getApiaryHumidity().ordinal();
 			this.apiaryDay = this.controller.isApiaryDay();
+			this.perpetualBreeding = this.controller.isPerpetualBreeding();
 		}
 		super.broadcastChanges();
 	}

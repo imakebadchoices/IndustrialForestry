@@ -8,6 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 
+import java.util.function.Supplier;
+
 import appeng.client.gui.AEBaseScreen;
 import appeng.client.gui.style.ScreenStyle;
 
@@ -30,15 +32,17 @@ import forestry.beegistics.machine.ControllerMode;
 public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 	private static final int MARGIN = 6;
 
-	// The double-row card region: the panel behind the two rows of nine slots the style JSON places.
+	// The double-row card region: the panel behind the two rows of nine slots the style JSON places. ZONE_Y/ZONE_H are
+	// tuned so the 36px-tall well block (two 18px rows, tops at slot y=30 in the style JSON) sits vertically centred with
+	// even ~4px margins - matching the horizontal margins - rather than kissing the bottom border.
 	private static final int ZONE_X = 13;
-	private static final int ZONE_Y = 20;
+	private static final int ZONE_Y = 24;
 	private static final int ZONE_W = 174;
-	private static final int ZONE_H = 40;
+	private static final int ZONE_H = 46;
 
 	// Full-width status panel with a single stacked column of readout lines.
 	private static final int STATUS_X = MARGIN;
-	private static final int STATUS_Y = 66;
+	private static final int STATUS_Y = 76;
 	private static final int STATUS_W = 188;
 	private static final int STATUS_H = 50;
 	private static final int STATUS_LINE_X = 15;
@@ -79,9 +83,14 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 		this.thresholdField.setFilter(s -> s.isEmpty() || s.chars().allMatch(Character::isDigit));
 		addRenderableWidget(this.thresholdField);
 
-		this.modeButton = Button.builder(modeLabel(), b -> this.menu.cycleMode())
-				.bounds(this.leftPos + MODE_BTN_X, this.topPos + MODE_BTN_Y, MODE_BTN_W, MODE_BTN_H)
-				.build();
+		// A plain Button keeps the "focused" highlight after a click until focus moves elsewhere, so the button stays lit
+		// once the mouse leaves it. Report never-focused so it lights on hover only (isHoveredOrFocused collapses to hover).
+		this.modeButton = new Button(this.leftPos + MODE_BTN_X, this.topPos + MODE_BTN_Y, MODE_BTN_W, MODE_BTN_H, modeLabel(), b -> this.menu.cycleMode(), Supplier::get) {
+			@Override
+			public boolean isFocused() {
+				return false;
+			}
+		};
 		addRenderableWidget(this.modeButton);
 	}
 
@@ -162,11 +171,20 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 		statusLine(guiGraphics, Component.translatable("gui.beegistics.apiary_controller.threshold"), 3, offsetX, offsetY);
 	}
 
-	/** Standalone (perpetual) mode: whether it is actively breeding (an apiary is driven), then the apiary climate + time. */
+	/**
+	 * Standalone (perpetual) mode: idle (no apiary), actively breeding (an apiary is occupied or a matching bee was
+	 * stocked), or - a linked apiary with nothing to feed it - a red warning that no bees match the loaded filters. The
+	 * old readout showed a green "Breeding" whenever an apiary was merely linked, even with an empty apiary and no stock.
+	 */
 	private void drawStandaloneStatus(GuiGraphics guiGraphics, int offsetX, int offsetY) {
-		Component state = this.menu.usableApiaries > 0
-				? Component.translatable("gui.beegistics.apiary_controller.perpetual.active").withStyle(ChatFormatting.GREEN)
-				: Component.translatable("gui.beegistics.apiary_controller.perpetual.idle").withStyle(ChatFormatting.GRAY);
+		Component state;
+		if (this.menu.usableApiaries <= 0) {
+			state = Component.translatable("gui.beegistics.apiary_controller.perpetual.idle").withStyle(ChatFormatting.GRAY);
+		} else if (this.menu.perpetualBreeding) {
+			state = Component.translatable("gui.beegistics.apiary_controller.perpetual.active").withStyle(ChatFormatting.GREEN);
+		} else {
+			state = Component.translatable("gui.beegistics.apiary_controller.perpetual.no_bees").withStyle(ChatFormatting.RED);
+		}
 		statusLine(guiGraphics, state, 1, offsetX, offsetY);
 		drawClimate(guiGraphics, 2, offsetX, offsetY);
 	}

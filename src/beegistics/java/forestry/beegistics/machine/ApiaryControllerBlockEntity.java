@@ -78,11 +78,11 @@ import forestry.core.utils.SpeciesUtil;
  * "species X with traits Y") and runs them in one of three {@link ControllerMode modes}:
  *
  * <ul>
- *     <li><b>{@link ControllerMode#REQUESTER Requester}</b> (the default): self-initiates a genome breeding job toward
+ *     <li><b>{@link ControllerMode#REQUESTER Requester}</b>: self-initiates a genome breeding job toward
  *     the first card whose target count in the network is below {@link #targetThreshold}, hill-climbing from the
  *     base/donor the player has stocked. Maintains N of each card's target. Does not autocraft prerequisites. See
  *     {@link #runStandalone}.</li>
- *     <li><b>{@link ControllerMode#STANDALONE Standalone}</b>: a dumb perpetual breeder. Keeps each driven apiary stocked
+ *     <li><b>{@link ControllerMode#STANDALONE Standalone}</b> (the default): a dumb perpetual breeder. Keeps each driven apiary stocked
  *     with a princess and a drone matching a loaded card (same species) and harvests every product back to the network,
  *     self-sustaining while replacements exist. No target count, no hill-climb, no autocraft. See {@link #runPerpetual}.</li>
  *     <li><b>{@link ControllerMode#AUTOCRAFT Autocraft}</b>: exposes each loaded card to AE2 as a
@@ -145,6 +145,12 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 	private boolean apiaryFastBreeding = false;
 	/** Cached for the GUI: how many target-matching bees were in the network on the last tick. */
 	private long matchingTargetCount = 0;
+	/**
+	 * Cached for the GUI (standalone mode): whether the perpetual breeder had work on the last tick - a driven apiary was
+	 * occupied, or a bee matching a loaded card was available to stock one with. False (with an apiary linked) means the
+	 * network holds no bees matching the loaded filters, which the status readout surfaces as a warning.
+	 */
+	private boolean perpetualBreeding = false;
 	/** Cached for the GUI: the adjacent apiary's climate on the last refresh (null when no apiary). */
 	@Nullable
 	private TemperatureType apiaryTemperature;
@@ -238,6 +244,11 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 	/** @return how many target-matching bees were in the network on the last tick (for the GUI status readout). */
 	public long getMatchingTargetCount() {
 		return this.matchingTargetCount;
+	}
+
+	/** @return whether standalone mode had work on the last tick (apiary occupied or a matching bee available to stock). */
+	public boolean isPerpetualBreeding() {
+		return this.perpetualBreeding;
 	}
 
 	/** @return the adjacent apiary's temperature (for the GUI), or {@code null} when no apiary is attached. */
@@ -460,6 +471,7 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 
 		List<BeeFilter> cards = loadedCardFilters();
 		if (cards.isEmpty() || apiaries.isEmpty()) {
+			this.perpetualBreeding = false;
 			return worked;
 		}
 		KeyCounter available = new KeyCounter();
@@ -467,7 +479,30 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 		for (int i = 0; i < apiaries.size(); i++) {
 			worked |= restockPerpetual(apiaries.get(i), storage, available, cards.get(i % cards.size()));
 		}
+		// After restocking, decide whether the breeder has work for the GUI: an occupied apiary (a queen we just stocked or
+		// one already breeding) or a still-available matching bee. Nothing on either front means the network has no bees
+		// matching the loaded filters - surfaced as a warning rather than a green "Breeding".
+		this.perpetualBreeding = perpetualHasWork(apiaries, cards, available);
 		return worked;
+	}
+
+	/**
+	 * @return whether standalone mode has anything to breed: a driven apiary already holding a queen, or a network bee
+	 * (in {@code available}, the post-restock snapshot) matching a loaded card that could stock one. Drives the GUI's
+	 * active/no-bees status.
+	 */
+	private boolean perpetualHasWork(List<Apiary> apiaries, List<BeeFilter> cards, KeyCounter available) {
+		for (Apiary apiary : apiaries) {
+			if (!apiary.housing().getBeeInventory().getQueen().isEmpty()) {
+				return true;
+			}
+		}
+		for (BeeFilter card : cards) {
+			if (findParent(available, card, BeeLifeStage.PRINCESS) != null || findParent(available, card, BeeLifeStage.DRONE) != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
