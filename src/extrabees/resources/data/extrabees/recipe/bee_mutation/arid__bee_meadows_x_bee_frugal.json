@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/arid__bee_meadows_x_bee_frugal",
+  "first": "forestry:meadows",
+  "second": "forestry:frugal",
+  "result": "extrabees:arid",
+  "chance": 0.1
+}

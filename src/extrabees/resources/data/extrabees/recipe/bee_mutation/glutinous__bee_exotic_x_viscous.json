@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/glutinous__bee_exotic_x_viscous",
+  "first": "forestry:exotic",
+  "second": "extrabees:viscous",
+  "result": "extrabees:glutinous",
+  "chance": 0.08
+}

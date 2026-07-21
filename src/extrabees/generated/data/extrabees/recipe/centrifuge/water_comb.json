@@ -1,0 +1,18 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/water_comb",
+  "input": {
+    "item": "extrabees:water_comb"
+  },
+  "products": [
+    {
+      "chance": 1.0,
+      "item": "extrabees:water_propolis"
+    },
+    {
+      "chance": 0.9,
+      "item": "forestry:honey_drop"
+    }
+  ],
+  "time": 20
+}

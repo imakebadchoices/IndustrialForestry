@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/creeper__bee_modest_x_desolate",
+  "first": "forestry:modest",
+  "second": "extrabees:desolate",
+  "result": "extrabees:creeper",
+  "chance": 0.15
+}

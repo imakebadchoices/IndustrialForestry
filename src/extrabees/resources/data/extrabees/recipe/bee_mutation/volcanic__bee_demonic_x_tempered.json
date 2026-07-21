@@ -1,0 +1,14 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/volcanic__bee_demonic_x_tempered",
+  "first": "forestry:demonic",
+  "second": "extrabees:tempered",
+  "result": "extrabees:volcanic",
+  "chance": 0.2,
+  "conditions": [
+    {
+      "type": "forestry:biome",
+      "biome": "minecraft:is_nether"
+    }
+  ]
+}

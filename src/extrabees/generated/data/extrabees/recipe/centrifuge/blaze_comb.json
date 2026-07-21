@@ -1,0 +1,18 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/blaze_comb",
+  "input": {
+    "item": "extrabees:blaze_comb"
+  },
+  "products": [
+    {
+      "chance": 0.75,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 1.0,
+      "item": "minecraft:blaze_powder"
+    }
+  ],
+  "time": 20
+}

@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/rotten_comb",
+  "input": {
+    "item": "extrabees:rotten_comb"
+  },
+  "products": [
+    {
+      "chance": 0.2,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.2,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "chance": 0.8,
+      "item": "minecraft:rotten_flesh"
+    }
+  ],
+  "time": 20
+}

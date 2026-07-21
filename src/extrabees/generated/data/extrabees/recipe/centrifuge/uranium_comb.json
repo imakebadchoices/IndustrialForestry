@@ -1,0 +1,23 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/uranium_comb",
+  "input": {
+    "item": "extrabees:uranium_comb"
+  },
+  "products": [
+    {
+      "chance": 0.5,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 0.5,
+      "tag": "c:dusts/uranium"
+    }
+  ],
+  "time": 20
+}

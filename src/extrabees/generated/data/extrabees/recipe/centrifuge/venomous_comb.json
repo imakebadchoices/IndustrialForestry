@@ -1,0 +1,18 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/venomous_comb",
+  "input": {
+    "item": "extrabees:venomous_comb"
+  },
+  "products": [
+    {
+      "chance": 0.8,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.8,
+      "item": "extrabees:poison_honey_drop"
+    }
+  ],
+  "time": 20
+}

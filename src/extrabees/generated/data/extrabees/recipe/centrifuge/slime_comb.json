@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/slime_comb",
+  "input": {
+    "item": "extrabees:slime_comb"
+  },
+  "products": [
+    {
+      "chance": 1.0,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.75,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "chance": 0.75,
+      "item": "minecraft:slime_ball"
+    }
+  ],
+  "time": 20
+}

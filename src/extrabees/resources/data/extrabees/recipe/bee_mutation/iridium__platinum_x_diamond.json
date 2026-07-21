@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/iridium__platinum_x_diamond",
+  "first": "extrabees:platinum",
+  "second": "extrabees:diamond",
+  "result": "extrabees:iridium",
+  "chance": 0.08
+}

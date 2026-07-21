@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/hazardous__bee_austere_x_desolate",
+  "first": "forestry:austere",
+  "second": "extrabees:desolate",
+  "result": "extrabees:hazardous",
+  "chance": 0.05
+}

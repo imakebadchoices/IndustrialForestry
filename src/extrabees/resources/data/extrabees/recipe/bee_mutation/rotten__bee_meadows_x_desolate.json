@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/rotten__bee_meadows_x_desolate",
+  "first": "forestry:meadows",
+  "second": "extrabees:desolate",
+  "result": "extrabees:rotten",
+  "chance": 0.15
+}

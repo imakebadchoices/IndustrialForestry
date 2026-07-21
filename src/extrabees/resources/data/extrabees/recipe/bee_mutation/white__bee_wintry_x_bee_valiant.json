@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/white__bee_wintry_x_bee_valiant",
+  "first": "forestry:wintry",
+  "second": "forestry:valiant",
+  "result": "extrabees:white",
+  "chance": 0.05
+}

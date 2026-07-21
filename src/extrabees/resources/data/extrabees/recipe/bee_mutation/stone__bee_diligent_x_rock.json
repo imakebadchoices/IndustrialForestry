@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/stone__bee_diligent_x_rock",
+  "first": "forestry:diligent",
+  "second": "extrabees:rock",
+  "result": "extrabees:stone",
+  "chance": 0.12
+}

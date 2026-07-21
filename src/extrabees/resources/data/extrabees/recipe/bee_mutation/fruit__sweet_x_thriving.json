@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/fruit__sweet_x_thriving",
+  "first": "extrabees:sweet",
+  "second": "extrabees:thriving",
+  "result": "extrabees:fruit",
+  "chance": 0.05
+}

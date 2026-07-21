@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/emerald__bee_forest_x_lapis",
+  "first": "forestry:forest",
+  "second": "extrabees:lapis",
+  "result": "extrabees:emerald",
+  "chance": 0.05
+}

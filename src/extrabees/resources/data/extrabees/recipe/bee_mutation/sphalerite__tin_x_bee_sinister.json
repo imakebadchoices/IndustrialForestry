@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/sphalerite__tin_x_bee_sinister",
+  "first": "extrabees:tin",
+  "second": "forestry:sinister",
+  "result": "extrabees:sphalerite",
+  "chance": 0.05
+}

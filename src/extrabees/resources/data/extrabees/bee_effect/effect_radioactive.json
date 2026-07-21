@@ -1,0 +1,7 @@
+{
+  "type": "forestry:damage_entities",
+  "damage": 4.0,
+  "armor_scaling": true,
+  "throttle": 40,
+  "chance": 1.0
+}

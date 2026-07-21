@@ -1,0 +1,17 @@
+{
+  "type": "forestry:squeezer",
+  "chance": 0.0,
+  "id": "extrabees:squeezer/ice_honey_drop",
+  "output": {
+    "stack": {
+      "amount": 200,
+      "id": "forestry:crushed_ice"
+    }
+  },
+  "resources": [
+    {
+      "item": "extrabees:ice_honey_drop"
+    }
+  ],
+  "time": 10
+}

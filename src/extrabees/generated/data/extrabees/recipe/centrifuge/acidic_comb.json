@@ -1,0 +1,23 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/acidic_comb",
+  "input": {
+    "item": "extrabees:acidic_comb"
+  },
+  "products": [
+    {
+      "chance": 0.8,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.5,
+      "item": "extrabees:acid_honey_drop"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 0.75,
+      "tag": "c:dusts/sulfur"
+    }
+  ],
+  "time": 20
+}

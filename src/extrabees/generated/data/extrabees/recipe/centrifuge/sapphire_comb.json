@@ -1,0 +1,23 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/sapphire_comb",
+  "input": {
+    "item": "extrabees:sapphire_comb"
+  },
+  "products": [
+    {
+      "chance": 0.5,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 1.0,
+      "tag": "c:gems/sapphire"
+    }
+  ],
+  "time": 20
+}

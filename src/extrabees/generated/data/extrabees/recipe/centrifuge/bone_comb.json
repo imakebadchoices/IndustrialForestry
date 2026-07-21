@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/bone_comb",
+  "input": {
+    "item": "extrabees:bone_comb"
+  },
+  "products": [
+    {
+      "chance": 0.2,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.2,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "chance": 0.8,
+      "item": "minecraft:bone_meal"
+    }
+  ],
+  "time": 20
+}

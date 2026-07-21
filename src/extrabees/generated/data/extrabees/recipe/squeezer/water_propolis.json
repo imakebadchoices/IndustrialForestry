@@ -1,0 +1,17 @@
+{
+  "type": "forestry:squeezer",
+  "chance": 0.0,
+  "id": "extrabees:squeezer/water_propolis",
+  "output": {
+    "stack": {
+      "amount": 500,
+      "id": "minecraft:water"
+    }
+  },
+  "resources": [
+    {
+      "item": "extrabees:water_propolis"
+    }
+  ],
+  "time": 20
+}

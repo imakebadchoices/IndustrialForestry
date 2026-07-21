@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/glowstone__tempered_x_excited",
+  "first": "extrabees:tempered",
+  "second": "extrabees:excited",
+  "result": "extrabees:glowstone",
+  "chance": 0.05
+}

@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/quantum__bee_spectral_x_spatial",
+  "first": "forestry:spectral",
+  "second": "extrabees:spatial",
+  "result": "extrabees:quantum",
+  "chance": 0.05
+}

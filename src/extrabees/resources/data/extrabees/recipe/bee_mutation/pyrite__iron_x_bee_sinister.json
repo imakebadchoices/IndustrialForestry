@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/pyrite__iron_x_bee_sinister",
+  "first": "extrabees:iron",
+  "second": "forestry:sinister",
+  "result": "extrabees:pyrite",
+  "chance": 0.05
+}

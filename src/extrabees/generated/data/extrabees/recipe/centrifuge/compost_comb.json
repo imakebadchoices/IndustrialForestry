@@ -1,0 +1,18 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/compost_comb",
+  "input": {
+    "item": "extrabees:compost_comb"
+  },
+  "products": [
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "chance": 1.0,
+      "item": "forestry:compost"
+    }
+  ],
+  "time": 20
+}

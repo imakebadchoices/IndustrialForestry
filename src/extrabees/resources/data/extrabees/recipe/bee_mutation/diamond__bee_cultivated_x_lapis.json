@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/diamond__bee_cultivated_x_lapis",
+  "first": "forestry:cultivated",
+  "second": "extrabees:lapis",
+  "result": "extrabees:diamond",
+  "chance": 0.05
+}

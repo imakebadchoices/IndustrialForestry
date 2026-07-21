@@ -1,0 +1,18 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/creosote_comb",
+  "input": {
+    "item": "extrabees:creosote_comb"
+  },
+  "products": [
+    {
+      "chance": 0.7,
+      "item": "extrabees:creosote_propolis"
+    },
+    {
+      "chance": 0.5,
+      "item": "forestry:honey_drop"
+    }
+  ],
+  "time": 20
+}

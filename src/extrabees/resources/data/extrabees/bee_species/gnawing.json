@@ -1,0 +1,73 @@
+{
+  "genus": "barren",
+  "species": "apica",
+  "dominant": true,
+  "authority": "Binnie",
+  "outline": 15234224,
+  "body": 13362036,
+  "temperature": "hot",
+  "humidity": "arid",
+  "products": [
+    {
+      "item": "extrabees:barren_comb",
+      "chance": 0.25
+    }
+  ],
+  "specialties": [
+    {
+      "item": "extrabees:sawdust_comb",
+      "chance": 0.25
+    }
+  ],
+  "genome": {
+    "forestry:speed": {
+      "value": 0.6,
+      "dominant": true
+    },
+    "forestry:lifespan": {
+      "value": 30,
+      "dominant": true
+    },
+    "forestry:fertility": {
+      "value": 2,
+      "dominant": true
+    },
+    "forestry:temperature_tolerance": {
+      "value": "UP_1",
+      "dominant": true
+    },
+    "forestry:humidity_tolerance": {
+      "value": "DOWN_1",
+      "dominant": true
+    },
+    "forestry:tolerates_rain": {
+      "value": false,
+      "dominant": true
+    },
+    "forestry:cave_dwelling": {
+      "value": false,
+      "dominant": true
+    },
+    "forestry:flower_type": {
+      "value": "extrabees:flower_wood"
+    },
+    "forestry:pollination": {
+      "value": 5,
+      "dominant": true
+    },
+    "forestry:territory": {
+      "value": [
+        9,
+        6,
+        9
+      ],
+      "dominant": false
+    },
+    "forestry:bee_effect": {
+      "value": "forestry:bee_effect_none"
+    },
+    "forestry:activity": {
+      "value": "forestry:activity_cathemeral"
+    }
+  }
+}

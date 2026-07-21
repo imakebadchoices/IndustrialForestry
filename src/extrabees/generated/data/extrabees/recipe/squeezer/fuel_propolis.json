@@ -1,0 +1,16 @@
+{
+  "type": "forestry:squeezer",
+  "chance": 0.0,
+  "id": "extrabees:squeezer/fuel_propolis",
+  "output": {
+    "type": "extrabees:tag",
+    "amount": 500,
+    "tag": "c:diesel"
+  },
+  "resources": [
+    {
+      "item": "extrabees:fuel_propolis"
+    }
+  ],
+  "time": 20
+}

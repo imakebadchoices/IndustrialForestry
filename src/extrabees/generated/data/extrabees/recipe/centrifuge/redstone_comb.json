@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/redstone_comb",
+  "input": {
+    "item": "extrabees:redstone_comb"
+  },
+  "products": [
+    {
+      "chance": 0.8,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 1.0,
+      "item": "minecraft:redstone"
+    },
+    {
+      "chance": 0.5,
+      "item": "forestry:honey_drop"
+    }
+  ],
+  "time": 20
+}

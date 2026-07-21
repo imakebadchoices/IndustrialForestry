@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/ruby__bee_modest_x_lapis",
+  "first": "forestry:modest",
+  "second": "extrabees:lapis",
+  "result": "extrabees:ruby",
+  "chance": 0.05
+}

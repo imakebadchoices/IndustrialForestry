@@ -1,0 +1,65 @@
+{
+  "genus": "paludapis",
+  "species": "lama",
+  "dominant": false,
+  "authority": "Binnie",
+  "outline": 7887913,
+  "body": 16768022,
+  "products": [
+    {
+      "item": "forestry:mossy_comb",
+      "chance": 0.3
+    }
+  ],
+  "genome": {
+    "forestry:speed": {
+      "value": 0.3,
+      "dominant": true
+    },
+    "forestry:lifespan": {
+      "value": 20,
+      "dominant": true
+    },
+    "forestry:fertility": {
+      "value": 3,
+      "dominant": false
+    },
+    "forestry:temperature_tolerance": {
+      "value": "BOTH_1",
+      "dominant": true
+    },
+    "forestry:humidity_tolerance": {
+      "value": "NONE",
+      "dominant": false
+    },
+    "forestry:tolerates_rain": {
+      "value": false,
+      "dominant": true
+    },
+    "forestry:cave_dwelling": {
+      "value": false,
+      "dominant": true
+    },
+    "forestry:flower_type": {
+      "value": "forestry:flower_type_mushrooms"
+    },
+    "forestry:pollination": {
+      "value": 10,
+      "dominant": false
+    },
+    "forestry:territory": {
+      "value": [
+        9,
+        6,
+        9
+      ],
+      "dominant": false
+    },
+    "forestry:bee_effect": {
+      "value": "extrabees:effect_slow"
+    },
+    "forestry:activity": {
+      "value": "forestry:activity_diurnal"
+    }
+  }
+}

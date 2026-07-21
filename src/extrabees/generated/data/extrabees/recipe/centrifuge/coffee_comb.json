@@ -1,0 +1,23 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/coffee_comb",
+  "input": {
+    "item": "extrabees:coffee_comb"
+  },
+  "products": [
+    {
+      "chance": 0.9,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.75,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 0.75,
+      "tag": "c:crops/coffee_beans"
+    }
+  ],
+  "time": 20
+}

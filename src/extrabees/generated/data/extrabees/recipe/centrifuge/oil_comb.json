@@ -1,0 +1,18 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/oil_comb",
+  "input": {
+    "item": "extrabees:oil_comb"
+  },
+  "products": [
+    {
+      "chance": 0.6,
+      "item": "extrabees:oil_propolis"
+    },
+    {
+      "chance": 0.75,
+      "item": "forestry:honey_drop"
+    }
+  ],
+  "time": 20
+}

@@ -1,0 +1,19 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/resin_comb",
+  "input": {
+    "item": "extrabees:resin_comb"
+  },
+  "products": [
+    {
+      "chance": 1.0,
+      "item": "forestry:beeswax"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 1.0,
+      "tag": "c:sticky_resin"
+    }
+  ],
+  "time": 20
+}

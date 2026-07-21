@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/alcohol__bee_farmerly_x_bee_meadows",
+  "first": "forestry:farmerly",
+  "second": "forestry:meadows",
+  "result": "extrabees:alcohol",
+  "chance": 0.1
+}

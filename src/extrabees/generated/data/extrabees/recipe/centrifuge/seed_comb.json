@@ -1,0 +1,18 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/seed_comb",
+  "input": {
+    "item": "extrabees:seed_comb"
+  },
+  "products": [
+    {
+      "chance": 1.0,
+      "item": "extrabees:seed_honey_drop"
+    },
+    {
+      "chance": 0.9,
+      "item": "forestry:honey_drop"
+    }
+  ],
+  "time": 20
+}

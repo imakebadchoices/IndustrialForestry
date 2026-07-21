@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/blutonium__cyanite_x_yellorium",
+  "first": "extrabees:cyanite",
+  "second": "extrabees:yellorium",
+  "result": "extrabees:blutonium",
+  "chance": 0.05
+}

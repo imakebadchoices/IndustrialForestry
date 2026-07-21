@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/coffee__bee_farmerly_x_bee_tropical",
+  "first": "forestry:farmerly",
+  "second": "forestry:tropical",
+  "result": "extrabees:coffee",
+  "chance": 0.1
+}

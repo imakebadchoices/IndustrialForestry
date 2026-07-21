@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/darkened__shadow_x_rock",
+  "first": "extrabees:shadow",
+  "second": "extrabees:rock",
+  "result": "extrabees:darkened",
+  "chance": 0.08
+}

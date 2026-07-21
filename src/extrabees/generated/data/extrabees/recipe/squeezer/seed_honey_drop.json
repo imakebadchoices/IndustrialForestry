@@ -1,0 +1,17 @@
+{
+  "type": "forestry:squeezer",
+  "chance": 0.0,
+  "id": "extrabees:squeezer/seed_honey_drop",
+  "output": {
+    "stack": {
+      "amount": 200,
+      "id": "forestry:seed_oil"
+    }
+  },
+  "resources": [
+    {
+      "item": "extrabees:seed_honey_drop"
+    }
+  ],
+  "time": 10
+}

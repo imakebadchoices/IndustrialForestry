@@ -1,0 +1,19 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/shadow_comb",
+  "input": {
+    "item": "extrabees:shadow_comb"
+  },
+  "products": [
+    {
+      "chance": 0.5,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 0.75,
+      "tag": "c:dusts/obsidian"
+    }
+  ],
+  "time": 20
+}

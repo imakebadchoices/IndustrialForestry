@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/ic2energy_comb",
+  "input": {
+    "item": "extrabees:ic2energy_comb"
+  },
+  "products": [
+    {
+      "chance": 0.8,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.75,
+      "item": "minecraft:redstone"
+    },
+    {
+      "chance": 1.0,
+      "item": "extrabees:energy_honey_drop"
+    }
+  ],
+  "time": 20
+}

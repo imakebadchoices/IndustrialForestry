@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/gold__bee_majestic_x_nickel",
+  "first": "forestry:majestic",
+  "second": "extrabees:nickel",
+  "result": "extrabees:gold",
+  "chance": 0.02
+}

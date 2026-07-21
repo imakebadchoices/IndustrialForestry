@@ -1,0 +1,28 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/sphalerite_comb",
+  "input": {
+    "item": "extrabees:sphalerite_comb"
+  },
+  "products": [
+    {
+      "type": "extrabees:tag",
+      "chance": 1.0,
+      "tag": "c:tiny_dusts/cadmium"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 1.0,
+      "tag": "c:nuggets/zinc"
+    },
+    {
+      "chance": 0.5,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    }
+  ],
+  "time": 20
+}

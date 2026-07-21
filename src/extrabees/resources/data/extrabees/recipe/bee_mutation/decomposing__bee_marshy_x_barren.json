@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/decomposing__bee_marshy_x_barren",
+  "first": "forestry:marshy",
+  "second": "extrabees:barren",
+  "result": "extrabees:decomposing",
+  "chance": 0.15
+}

@@ -1,0 +1,18 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/glowstone_comb",
+  "input": {
+    "item": "extrabees:glowstone_comb"
+  },
+  "products": [
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "chance": 1.0,
+      "item": "minecraft:glowstone_dust"
+    }
+  ],
+  "time": 20
+}

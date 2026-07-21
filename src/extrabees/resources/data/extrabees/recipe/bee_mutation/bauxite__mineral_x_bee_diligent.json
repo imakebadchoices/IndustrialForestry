@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/bauxite__mineral_x_bee_diligent",
+  "first": "extrabees:mineral",
+  "second": "forestry:diligent",
+  "result": "extrabees:bauxite",
+  "chance": 0.05
+}

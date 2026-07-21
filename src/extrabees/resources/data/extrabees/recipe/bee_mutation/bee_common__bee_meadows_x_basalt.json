@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/bee_common__bee_meadows_x_basalt",
+  "first": "forestry:meadows",
+  "second": "extrabees:basalt",
+  "result": "forestry:common",
+  "chance": 0.15
+}

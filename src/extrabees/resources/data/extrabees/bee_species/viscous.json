@@ -1,0 +1,67 @@
+{
+  "genus": "viscous",
+  "species": "liquidus",
+  "dominant": true,
+  "authority": "Binnie",
+  "outline": 608014,
+  "body": 431972,
+  "temperature": "warm",
+  "humidity": "damp",
+  "products": [
+    {
+      "item": "forestry:silky_comb",
+      "chance": 0.25
+    }
+  ],
+  "genome": {
+    "forestry:speed": {
+      "value": 0.8,
+      "dominant": true
+    },
+    "forestry:lifespan": {
+      "value": 20,
+      "dominant": true
+    },
+    "forestry:fertility": {
+      "value": 3,
+      "dominant": false
+    },
+    "forestry:temperature_tolerance": {
+      "value": "UP_1",
+      "dominant": true
+    },
+    "forestry:humidity_tolerance": {
+      "value": "UP_1",
+      "dominant": true
+    },
+    "forestry:tolerates_rain": {
+      "value": false,
+      "dominant": true
+    },
+    "forestry:cave_dwelling": {
+      "value": false,
+      "dominant": true
+    },
+    "forestry:flower_type": {
+      "value": "forestry:flower_type_jungle"
+    },
+    "forestry:pollination": {
+      "value": 5,
+      "dominant": true
+    },
+    "forestry:territory": {
+      "value": [
+        9,
+        6,
+        9
+      ],
+      "dominant": false
+    },
+    "forestry:bee_effect": {
+      "value": "extrabees:effect_ectoplasm"
+    },
+    "forestry:activity": {
+      "value": "forestry:activity_diurnal"
+    }
+  }
+}

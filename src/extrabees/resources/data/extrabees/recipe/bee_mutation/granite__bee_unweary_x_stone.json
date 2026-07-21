@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/granite__bee_unweary_x_stone",
+  "first": "forestry:unweary",
+  "second": "extrabees:stone",
+  "result": "extrabees:granite",
+  "chance": 0.1
+}

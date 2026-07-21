@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/freezing__ocean_x_artic",
+  "first": "extrabees:ocean",
+  "second": "extrabees:artic",
+  "result": "extrabees:freezing",
+  "chance": 0.1
+}

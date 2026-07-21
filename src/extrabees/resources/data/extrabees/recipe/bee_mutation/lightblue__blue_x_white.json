@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/lightblue__blue_x_white",
+  "first": "extrabees:blue",
+  "second": "extrabees:white",
+  "result": "extrabees:lightblue",
+  "chance": 0.05
+}

@@ -1,0 +1,18 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/fruit_comb",
+  "input": {
+    "item": "extrabees:fruit_comb"
+  },
+  "products": [
+    {
+      "chance": 1.0,
+      "item": "extrabees:apple_honey_drop"
+    },
+    {
+      "chance": 0.9,
+      "item": "forestry:honey_drop"
+    }
+  ],
+  "time": 20
+}

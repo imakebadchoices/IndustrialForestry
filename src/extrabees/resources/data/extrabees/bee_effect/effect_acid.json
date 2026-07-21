@@ -1,0 +1,31 @@
+{
+  "type": "forestry:transform_block",
+  "throttle": 15,
+  "chance": 0.5,
+  "transforms": [
+    {
+      "from": "minecraft:cobblestone",
+      "to": {
+        "Name": "minecraft:gravel"
+      }
+    },
+    {
+      "from": "minecraft:stone",
+      "to": {
+        "Name": "minecraft:gravel"
+      }
+    },
+    {
+      "from": "minecraft:dirt",
+      "to": {
+        "Name": "minecraft:sand"
+      }
+    },
+    {
+      "from": "minecraft:grass_block",
+      "to": {
+        "Name": "minecraft:sand"
+      }
+    }
+  ]
+}

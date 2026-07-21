@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/fungal__bee_boggy_x_bee_miry",
+  "first": "forestry:boggy",
+  "second": "forestry:miry",
+  "result": "extrabees:fungal",
+  "chance": 0.08
+}

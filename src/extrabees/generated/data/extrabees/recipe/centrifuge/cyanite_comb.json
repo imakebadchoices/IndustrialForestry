@@ -1,0 +1,23 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/cyanite_comb",
+  "input": {
+    "item": "extrabees:cyanite_comb"
+  },
+  "products": [
+    {
+      "chance": 0.5,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 0.25,
+      "tag": "c:ingots/cyanite"
+    }
+  ],
+  "time": 20
+}

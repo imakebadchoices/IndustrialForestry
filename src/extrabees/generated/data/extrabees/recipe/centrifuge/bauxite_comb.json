@@ -1,0 +1,28 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/bauxite_comb",
+  "input": {
+    "item": "extrabees:bauxite_comb"
+  },
+  "products": [
+    {
+      "type": "extrabees:tag",
+      "chance": 1.0,
+      "tag": "c:tiny_dusts/bauxite"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 1.0,
+      "tag": "c:tiny_dusts/aluminum"
+    },
+    {
+      "chance": 0.5,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    }
+  ],
+  "time": 20
+}

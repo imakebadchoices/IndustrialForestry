@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/cyan_comb",
+  "input": {
+    "item": "extrabees:cyan_comb"
+  },
+  "products": [
+    {
+      "chance": 0.8,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.8,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "chance": 1.0,
+      "item": "minecraft:cyan_dye"
+    }
+  ],
+  "time": 20
+}

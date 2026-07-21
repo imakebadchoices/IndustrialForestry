@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/tungstate__bee_common_x_mineral",
+  "first": "forestry:common",
+  "second": "extrabees:mineral",
+  "result": "extrabees:tungstate",
+  "chance": 0.03
+}

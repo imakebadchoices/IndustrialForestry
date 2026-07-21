@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/desolate__arid_x_barren",
+  "first": "extrabees:arid",
+  "second": "extrabees:barren",
+  "result": "extrabees:desolate",
+  "chance": 0.1
+}

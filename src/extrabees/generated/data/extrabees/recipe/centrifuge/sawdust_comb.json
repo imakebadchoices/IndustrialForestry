@@ -1,0 +1,19 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/sawdust_comb",
+  "input": {
+    "item": "extrabees:sawdust_comb"
+  },
+  "products": [
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 1.0,
+      "tag": "c:sawdust"
+    }
+  ],
+  "time": 20
+}

@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/yellorium__bee_frugal_x_nuclear",
+  "first": "forestry:frugal",
+  "second": "extrabees:nuclear",
+  "result": "extrabees:yellorium",
+  "chance": 0.05
+}

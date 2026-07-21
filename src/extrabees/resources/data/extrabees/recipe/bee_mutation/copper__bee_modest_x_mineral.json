@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/copper__bee_modest_x_mineral",
+  "first": "forestry:modest",
+  "second": "extrabees:mineral",
+  "result": "extrabees:copper",
+  "chance": 0.05
+}

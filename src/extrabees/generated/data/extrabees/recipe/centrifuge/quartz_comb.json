@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/quartz_comb",
+  "input": {
+    "item": "extrabees:quartz_comb"
+  },
+  "products": [
+    {
+      "chance": 0.5,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "chance": 1.0,
+      "item": "minecraft:quartz"
+    }
+  ],
+  "time": 20
+}

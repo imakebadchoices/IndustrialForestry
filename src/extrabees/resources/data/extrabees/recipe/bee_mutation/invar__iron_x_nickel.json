@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/invar__iron_x_nickel",
+  "first": "extrabees:iron",
+  "second": "extrabees:nickel",
+  "result": "extrabees:invar",
+  "chance": 0.08
+}

@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/cinnabar__mineral_x_bee_sinister",
+  "first": "extrabees:mineral",
+  "second": "forestry:sinister",
+  "result": "extrabees:cinnabar",
+  "chance": 0.05
+}

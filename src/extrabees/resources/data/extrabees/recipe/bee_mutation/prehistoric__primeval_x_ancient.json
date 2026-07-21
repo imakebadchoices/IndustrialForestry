@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/prehistoric__primeval_x_ancient",
+  "first": "extrabees:primeval",
+  "second": "extrabees:ancient",
+  "result": "extrabees:prehistoric",
+  "chance": 0.08
+}

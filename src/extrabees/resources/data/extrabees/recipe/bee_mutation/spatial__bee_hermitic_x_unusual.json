@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/spatial__bee_hermitic_x_unusual",
+  "first": "forestry:hermitic",
+  "second": "extrabees:unusual",
+  "result": "extrabees:spatial",
+  "chance": 0.05
+}

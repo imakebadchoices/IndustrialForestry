@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/classical__greek_x_roman",
+  "first": "extrabees:greek",
+  "second": "extrabees:roman",
+  "result": "extrabees:classical",
+  "chance": 0.08
+}

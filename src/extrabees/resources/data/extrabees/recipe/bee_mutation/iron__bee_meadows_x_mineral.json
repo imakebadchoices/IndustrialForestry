@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/iron__bee_meadows_x_mineral",
+  "first": "forestry:meadows",
+  "second": "extrabees:mineral",
+  "result": "extrabees:iron",
+  "chance": 0.05
+}

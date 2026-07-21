@@ -1,0 +1,19 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/enderpearl_comb",
+  "input": {
+    "item": "extrabees:enderpearl_comb"
+  },
+  "products": [
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 0.25,
+      "tag": "c:dusts/ender_pearl"
+    }
+  ],
+  "time": 20
+}

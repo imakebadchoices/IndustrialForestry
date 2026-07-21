@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/sodalite__lapis_x_bee_diligent",
+  "first": "extrabees:lapis",
+  "second": "forestry:diligent",
+  "result": "extrabees:sodalite",
+  "chance": 0.05
+}

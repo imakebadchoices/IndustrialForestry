@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/roman__marble_x_bee_heroic",
+  "first": "extrabees:marble",
+  "second": "forestry:heroic",
+  "result": "extrabees:roman",
+  "chance": 0.1
+}

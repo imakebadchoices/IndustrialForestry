@@ -1,0 +1,17 @@
+{
+  "type": "forestry:squeezer",
+  "chance": 0.0,
+  "id": "extrabees:squeezer/apple_honey_drop",
+  "output": {
+    "stack": {
+      "amount": 200,
+      "id": "forestry:fruit_juice"
+    }
+  },
+  "resources": [
+    {
+      "item": "extrabees:apple_honey_drop"
+    }
+  ],
+  "time": 10
+}

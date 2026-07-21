@@ -1,0 +1,65 @@
+{
+  "genus": "energetic",
+  "species": "excita",
+  "dominant": true,
+  "authority": "Binnie",
+  "outline": 16729413,
+  "body": 16768022,
+  "products": [
+    {
+      "item": "extrabees:redstone_comb",
+      "chance": 0.1
+    }
+  ],
+  "genome": {
+    "forestry:speed": {
+      "value": 0.3,
+      "dominant": true
+    },
+    "forestry:lifespan": {
+      "value": 20,
+      "dominant": true
+    },
+    "forestry:fertility": {
+      "value": 3,
+      "dominant": false
+    },
+    "forestry:temperature_tolerance": {
+      "value": "NONE",
+      "dominant": false
+    },
+    "forestry:humidity_tolerance": {
+      "value": "NONE",
+      "dominant": false
+    },
+    "forestry:tolerates_rain": {
+      "value": false,
+      "dominant": true
+    },
+    "forestry:cave_dwelling": {
+      "value": true,
+      "dominant": true
+    },
+    "forestry:flower_type": {
+      "value": "extrabees:flower_redstone"
+    },
+    "forestry:pollination": {
+      "value": 5,
+      "dominant": true
+    },
+    "forestry:territory": {
+      "value": [
+        9,
+        6,
+        9
+      ],
+      "dominant": false
+    },
+    "forestry:bee_effect": {
+      "value": "extrabees:effect_lightning"
+    },
+    "forestry:activity": {
+      "value": "forestry:activity_diurnal"
+    }
+  }
+}

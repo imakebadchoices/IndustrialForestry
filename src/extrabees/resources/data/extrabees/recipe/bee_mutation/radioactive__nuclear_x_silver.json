@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/radioactive__nuclear_x_silver",
+  "first": "extrabees:nuclear",
+  "second": "extrabees:silver",
+  "result": "extrabees:radioactive",
+  "chance": 0.05
+}

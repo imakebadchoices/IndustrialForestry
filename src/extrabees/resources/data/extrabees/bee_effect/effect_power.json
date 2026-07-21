@@ -1,0 +1,5 @@
+{
+  "type": "extrabees:inject_energy",
+  "amount": 20,
+  "throttle": 5
+}

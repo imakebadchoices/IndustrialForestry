@@ -1,0 +1,16 @@
+{
+  "type": "forestry:squeezer",
+  "chance": 0.0,
+  "id": "extrabees:squeezer/oil_propolis",
+  "output": {
+    "type": "extrabees:tag",
+    "amount": 500,
+    "tag": "c:crude_oil"
+  },
+  "resources": [
+    {
+      "item": "extrabees:oil_propolis"
+    }
+  ],
+  "time": 20
+}

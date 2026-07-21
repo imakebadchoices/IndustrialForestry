@@ -1,0 +1,18 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/glacial_comb",
+  "input": {
+    "item": "extrabees:glacial_comb"
+  },
+  "products": [
+    {
+      "chance": 0.8,
+      "item": "extrabees:ice_honey_drop"
+    },
+    {
+      "chance": 0.75,
+      "item": "forestry:honey_drop"
+    }
+  ],
+  "time": 20
+}

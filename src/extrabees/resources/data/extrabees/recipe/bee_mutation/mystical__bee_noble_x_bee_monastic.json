@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/mystical__bee_noble_x_bee_monastic",
+  "first": "forestry:noble",
+  "second": "forestry:monastic",
+  "result": "extrabees:mystical",
+  "chance": 0.05
+}

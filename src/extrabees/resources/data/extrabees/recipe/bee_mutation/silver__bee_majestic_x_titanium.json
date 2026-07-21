@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/silver__bee_majestic_x_titanium",
+  "first": "forestry:majestic",
+  "second": "extrabees:titanium",
+  "result": "extrabees:silver",
+  "chance": 0.02
+}

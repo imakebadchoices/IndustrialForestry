@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/sugar__bee_rural_x_sweet",
+  "first": "forestry:rural",
+  "second": "extrabees:sweet",
+  "result": "extrabees:sugar",
+  "chance": 0.15
+}

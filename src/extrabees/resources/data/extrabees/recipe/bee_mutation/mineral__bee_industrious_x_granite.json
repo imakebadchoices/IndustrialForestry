@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/mineral__bee_industrious_x_granite",
+  "first": "forestry:industrious",
+  "second": "extrabees:granite",
+  "result": "extrabees:mineral",
+  "chance": 0.06
+}

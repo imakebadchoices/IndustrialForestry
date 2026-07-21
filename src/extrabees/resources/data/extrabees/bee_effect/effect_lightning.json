@@ -1,0 +1,5 @@
+{
+  "type": "extrabees:strike_lightning",
+  "throttle": 30,
+  "chance": 0.34
+}

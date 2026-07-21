@@ -1,0 +1,16 @@
+{
+  "type": "forestry:squeezer",
+  "chance": 0.0,
+  "id": "extrabees:squeezer/acid_honey_drop",
+  "output": {
+    "type": "extrabees:tag",
+    "amount": 200,
+    "tag": "c:sulfuric_acid"
+  },
+  "resources": [
+    {
+      "item": "extrabees:acid_honey_drop"
+    }
+  ],
+  "time": 10
+}

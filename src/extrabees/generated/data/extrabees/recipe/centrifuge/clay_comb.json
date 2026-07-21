@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/clay_comb",
+  "input": {
+    "item": "extrabees:clay_comb"
+  },
+  "products": [
+    {
+      "chance": 0.25,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.8,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "chance": 0.8,
+      "item": "minecraft:clay_ball"
+    }
+  ],
+  "time": 20
+}

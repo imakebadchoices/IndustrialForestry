@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/steel__iron_x_coal",
+  "first": "extrabees:iron",
+  "second": "extrabees:coal",
+  "result": "extrabees:steel",
+  "chance": 0.08
+}

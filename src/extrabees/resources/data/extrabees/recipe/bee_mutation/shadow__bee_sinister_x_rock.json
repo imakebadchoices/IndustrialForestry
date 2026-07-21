@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/shadow__bee_sinister_x_rock",
+  "first": "forestry:sinister",
+  "second": "extrabees:rock",
+  "result": "extrabees:shadow",
+  "chance": 0.1
+}

@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/sapphire__water_x_lapis",
+  "first": "extrabees:water",
+  "second": "extrabees:lapis",
+  "result": "extrabees:sapphire",
+  "chance": 0.05
+}

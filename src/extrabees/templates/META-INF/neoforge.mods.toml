@@ -1,0 +1,30 @@
+modLoader = "javafml"
+loaderVersion = "{fmlVersionRange}"
+issueTrackerURL = "https://github.com/thedarkcolour/ForestryCE/issues"
+
+license = "GNU Lesser Public License v3"
+
+[[mods]]
+modId = "extrabees"
+version = "${version}"
+displayName = "Forestry: Extra Bees"
+displayURL = "https://github.com/thedarkcolour/ForestryCE"
+credits = "Binnie, and the ForestryCE contributors"
+authors = "SirSengir, mezz, Nedelosk, thedarkcolour"
+description = '''
+	Extra Bees for Forestry: dozens of industrial and mineral bees, combs, and flavored drops.
+	'''
+
+[[dependencies.extrabees]]
+modId = "neoforge"
+type = "required"
+versionRange = "${forgeVersionRange}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.extrabees]]
+modId = "forestry"
+type = "required"
+versionRange = "[1.0,)"
+ordering = "AFTER"
+side = "BOTH"

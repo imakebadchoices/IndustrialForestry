@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/zinc__bee_wintry_x_mineral",
+  "first": "forestry:wintry",
+  "second": "extrabees:mineral",
+  "result": "extrabees:zinc",
+  "chance": 0.05
+}

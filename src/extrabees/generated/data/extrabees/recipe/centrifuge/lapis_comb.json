@@ -1,0 +1,23 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/lapis_comb",
+  "input": {
+    "item": "extrabees:lapis_comb"
+  },
+  "products": [
+    {
+      "chance": 0.5,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "chance": 1.0,
+      "count": 6,
+      "item": "minecraft:lapis_lazuli"
+    }
+  ],
+  "time": 20
+}

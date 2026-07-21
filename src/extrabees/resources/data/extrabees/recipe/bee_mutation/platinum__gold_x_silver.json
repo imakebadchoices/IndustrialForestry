@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/platinum__gold_x_silver",
+  "first": "extrabees:gold",
+  "second": "extrabees:silver",
+  "result": "extrabees:platinum",
+  "chance": 0.02
+}

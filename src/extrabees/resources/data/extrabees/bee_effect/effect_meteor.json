@@ -1,0 +1,8 @@
+{
+  "type": "extrabees:spawn_projectile",
+  "entity": "minecraft:small_fireball",
+  "height": 20,
+  "speed": 0.8,
+  "throttle": 40,
+  "chance": 0.5
+}

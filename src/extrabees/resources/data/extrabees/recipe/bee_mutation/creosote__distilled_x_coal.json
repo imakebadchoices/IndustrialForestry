@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/creosote__distilled_x_coal",
+  "first": "extrabees:distilled",
+  "second": "extrabees:coal",
+  "result": "extrabees:creosote",
+  "chance": 0.08
+}

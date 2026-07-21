@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/bee_common__bee_forest_x_water",
+  "first": "forestry:forest",
+  "second": "extrabees:water",
+  "result": "forestry:common",
+  "chance": 0.15
+}

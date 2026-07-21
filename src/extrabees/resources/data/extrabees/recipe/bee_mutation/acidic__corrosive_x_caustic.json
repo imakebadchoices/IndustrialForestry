@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/acidic__corrosive_x_caustic",
+  "first": "extrabees:corrosive",
+  "second": "extrabees:caustic",
+  "result": "extrabees:acidic",
+  "chance": 0.04
+}

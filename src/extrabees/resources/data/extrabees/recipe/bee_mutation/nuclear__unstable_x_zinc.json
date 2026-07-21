@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/nuclear__unstable_x_zinc",
+  "first": "extrabees:unstable",
+  "second": "extrabees:zinc",
+  "result": "extrabees:nuclear",
+  "chance": 0.05
+}

@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/artic__bee_wintry_x_bee_diligent",
+  "first": "forestry:wintry",
+  "second": "forestry:diligent",
+  "result": "extrabees:artic",
+  "chance": 0.1
+}

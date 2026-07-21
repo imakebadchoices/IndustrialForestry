@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/infectious__bee_tropical_x_malicious",
+  "first": "forestry:tropical",
+  "second": "extrabees:malicious",
+  "result": "extrabees:infectious",
+  "chance": 0.08
+}

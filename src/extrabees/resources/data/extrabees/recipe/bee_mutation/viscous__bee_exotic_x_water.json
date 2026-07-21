@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/viscous__bee_exotic_x_water",
+  "first": "forestry:exotic",
+  "second": "extrabees:water",
+  "result": "extrabees:viscous",
+  "chance": 0.1
+}

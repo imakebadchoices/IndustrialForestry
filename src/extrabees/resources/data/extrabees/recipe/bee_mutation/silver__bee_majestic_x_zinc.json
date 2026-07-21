@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/silver__bee_majestic_x_zinc",
+  "first": "forestry:majestic",
+  "second": "extrabees:zinc",
+  "result": "extrabees:silver",
+  "chance": 0.02
+}

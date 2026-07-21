@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/bronze__copper_x_tin",
+  "first": "extrabees:copper",
+  "second": "extrabees:tin",
+  "result": "extrabees:bronze",
+  "chance": 0.08
+}

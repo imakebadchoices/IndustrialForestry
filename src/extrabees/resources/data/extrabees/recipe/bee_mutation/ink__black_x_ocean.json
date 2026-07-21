@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/ink__black_x_ocean",
+  "first": "extrabees:black",
+  "second": "extrabees:ocean",
+  "result": "extrabees:ink",
+  "chance": 0.08
+}

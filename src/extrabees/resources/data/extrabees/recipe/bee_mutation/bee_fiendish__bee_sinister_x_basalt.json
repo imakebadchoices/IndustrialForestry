@@ -1,0 +1,14 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/bee_fiendish__bee_sinister_x_basalt",
+  "first": "forestry:sinister",
+  "second": "extrabees:basalt",
+  "result": "forestry:fiendish",
+  "chance": 0.4,
+  "conditions": [
+    {
+      "type": "forestry:biome",
+      "biome": "minecraft:is_nether"
+    }
+  ]
+}

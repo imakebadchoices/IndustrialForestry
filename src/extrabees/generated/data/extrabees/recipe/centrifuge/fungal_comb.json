@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/fungal_comb",
+  "input": {
+    "item": "extrabees:fungal_comb"
+  },
+  "products": [
+    {
+      "chance": 0.9,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 1.0,
+      "item": "minecraft:brown_mushroom_block"
+    },
+    {
+      "chance": 0.75,
+      "item": "minecraft:red_mushroom_block"
+    }
+  ],
+  "time": 20
+}

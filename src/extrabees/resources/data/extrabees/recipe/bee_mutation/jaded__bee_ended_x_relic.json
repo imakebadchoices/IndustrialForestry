@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/jaded__bee_ended_x_relic",
+  "first": "forestry:ended",
+  "second": "extrabees:relic",
+  "result": "extrabees:jaded",
+  "chance": 0.02
+}

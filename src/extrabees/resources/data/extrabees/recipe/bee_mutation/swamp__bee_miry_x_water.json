@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/swamp__bee_miry_x_water",
+  "first": "forestry:miry",
+  "second": "extrabees:water",
+  "result": "extrabees:swamp",
+  "chance": 0.1
+}

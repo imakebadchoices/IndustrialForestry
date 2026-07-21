@@ -1,0 +1,23 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/certus_comb",
+  "input": {
+    "item": "extrabees:certus_comb"
+  },
+  "products": [
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    },
+    {
+      "chance": 0.25,
+      "item": "minecraft:quartz"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 0.2,
+      "tag": "c:dusts/certus_quartz"
+    }
+  ],
+  "time": 20
+}

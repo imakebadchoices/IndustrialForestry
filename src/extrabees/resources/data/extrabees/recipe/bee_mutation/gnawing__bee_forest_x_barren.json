@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/gnawing__bee_forest_x_barren",
+  "first": "forestry:forest",
+  "second": "extrabees:barren",
+  "result": "extrabees:gnawing",
+  "chance": 0.15
+}

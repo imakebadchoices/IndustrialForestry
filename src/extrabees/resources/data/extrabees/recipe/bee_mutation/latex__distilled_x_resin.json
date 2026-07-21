@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/latex__distilled_x_resin",
+  "first": "extrabees:distilled",
+  "second": "extrabees:resin",
+  "result": "extrabees:latex",
+  "chance": 0.08
+}

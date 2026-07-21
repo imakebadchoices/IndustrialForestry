@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/celebratory__bee_austere_x_excited",
+  "first": "forestry:austere",
+  "second": "extrabees:excited",
+  "result": "extrabees:celebratory",
+  "chance": 0.05
+}

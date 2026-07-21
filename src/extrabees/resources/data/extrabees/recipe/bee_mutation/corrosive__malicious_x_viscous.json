@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/corrosive__malicious_x_viscous",
+  "first": "extrabees:malicious",
+  "second": "extrabees:viscous",
+  "result": "extrabees:corrosive",
+  "chance": 0.1
+}

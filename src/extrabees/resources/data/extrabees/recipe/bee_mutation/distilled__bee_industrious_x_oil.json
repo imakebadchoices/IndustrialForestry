@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/distilled__bee_industrious_x_oil",
+  "first": "forestry:industrious",
+  "second": "extrabees:oil",
+  "result": "extrabees:distilled",
+  "chance": 0.08
+}

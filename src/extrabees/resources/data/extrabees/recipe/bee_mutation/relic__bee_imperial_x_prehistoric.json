@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/relic__bee_imperial_x_prehistoric",
+  "first": "forestry:imperial",
+  "second": "extrabees:prehistoric",
+  "result": "extrabees:relic",
+  "chance": 0.08
+}

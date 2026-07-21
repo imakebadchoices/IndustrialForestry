@@ -1,0 +1,17 @@
+{
+  "type": "forestry:squeezer",
+  "chance": 0.0,
+  "id": "extrabees:squeezer/alcohol_honey_drop",
+  "output": {
+    "stack": {
+      "amount": 200,
+      "id": "forestry:short_mead"
+    }
+  },
+  "resources": [
+    {
+      "item": "extrabees:alcohol_honey_drop"
+    }
+  ],
+  "time": 10
+}

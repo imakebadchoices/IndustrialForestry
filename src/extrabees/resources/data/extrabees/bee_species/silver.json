@@ -1,0 +1,71 @@
+{
+  "genus": "precious",
+  "species": "argentus",
+  "dominant": false,
+  "authority": "Binnie",
+  "outline": 4408667,
+  "body": 10066329,
+  "products": [
+    {
+      "item": "extrabees:stone_comb",
+      "chance": 0.2
+    }
+  ],
+  "specialties": [
+    {
+      "item": "extrabees:silver_comb",
+      "chance": 0.02
+    }
+  ],
+  "genome": {
+    "forestry:speed": {
+      "value": 0.3,
+      "dominant": true
+    },
+    "forestry:lifespan": {
+      "value": 30,
+      "dominant": true
+    },
+    "forestry:fertility": {
+      "value": 2,
+      "dominant": true
+    },
+    "forestry:temperature_tolerance": {
+      "value": "BOTH_2",
+      "dominant": false
+    },
+    "forestry:humidity_tolerance": {
+      "value": "BOTH_2",
+      "dominant": false
+    },
+    "forestry:tolerates_rain": {
+      "value": true,
+      "dominant": true
+    },
+    "forestry:cave_dwelling": {
+      "value": true,
+      "dominant": true
+    },
+    "forestry:flower_type": {
+      "value": "extrabees:flower_rock"
+    },
+    "forestry:pollination": {
+      "value": 5,
+      "dominant": true
+    },
+    "forestry:territory": {
+      "value": [
+        9,
+        6,
+        9
+      ],
+      "dominant": false
+    },
+    "forestry:bee_effect": {
+      "value": "forestry:bee_effect_none"
+    },
+    "forestry:activity": {
+      "value": "forestry:activity_cathemeral"
+    }
+  }
+}

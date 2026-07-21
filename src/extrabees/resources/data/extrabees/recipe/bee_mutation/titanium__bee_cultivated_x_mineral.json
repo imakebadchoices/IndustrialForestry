@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/titanium__bee_cultivated_x_mineral",
+  "first": "forestry:cultivated",
+  "second": "extrabees:mineral",
+  "result": "extrabees:titanium",
+  "chance": 0.03
+}

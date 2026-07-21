@@ -1,0 +1,6 @@
+{
+  "type": "extrabees:entity_force",
+  "attract": true,
+  "strength": 0.6,
+  "throttle": 10
+}

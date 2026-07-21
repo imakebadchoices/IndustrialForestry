@@ -1,0 +1,28 @@
+{
+  "type": "forestry:centrifuge",
+  "id": "extrabees:centrifuge/pyrite_comb",
+  "input": {
+    "item": "extrabees:pyrite_comb"
+  },
+  "products": [
+    {
+      "type": "extrabees:tag",
+      "chance": 1.0,
+      "tag": "c:tiny_dusts/manganese"
+    },
+    {
+      "type": "extrabees:tag",
+      "chance": 1.0,
+      "tag": "c:tiny_dusts/iron"
+    },
+    {
+      "chance": 0.5,
+      "item": "forestry:beeswax"
+    },
+    {
+      "chance": 0.25,
+      "item": "forestry:honey_drop"
+    }
+  ],
+  "time": 20
+}

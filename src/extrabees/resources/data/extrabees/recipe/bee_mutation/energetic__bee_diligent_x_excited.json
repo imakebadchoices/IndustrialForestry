@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/energetic__bee_diligent_x_excited",
+  "first": "forestry:diligent",
+  "second": "extrabees:excited",
+  "result": "extrabees:energetic",
+  "chance": 0.08
+}

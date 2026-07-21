@@ -1,0 +1,8 @@
+{
+  "type": "extrabees:place_block",
+  "block": {
+    "Name": "minecraft:cobweb"
+  },
+  "throttle": 20,
+  "chance": 0.4
+}
