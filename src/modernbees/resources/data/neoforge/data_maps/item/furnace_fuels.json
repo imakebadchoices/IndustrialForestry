@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": {
+    "forestry:bucket_biomass": {
+      "burn_time": 4000
+    },
+    "forestry:bucket_ethanol": {
+      "burn_time": 12800
+    },
+    "forestry:bucket_seed_oil": {
+      "burn_time": 2400
+    }
+  }
+}

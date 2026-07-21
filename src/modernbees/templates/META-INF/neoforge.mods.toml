@@ -1,0 +1,45 @@
+modLoader = "javafml"
+loaderVersion = "{fmlVersionRange}"
+issueTrackerURL = "https://github.com/thedarkcolour/ForestryCE/issues"
+
+license = "GNU Lesser Public License v3"
+
+[[mods]]
+modId = "modernbees"
+version = "${version}"
+displayName = "Forestry: Modern Bees"
+displayURL = "https://github.com/thedarkcolour/ForestryCE"
+credits = "the ForestryCE contributors"
+authors = "SirSengir, mezz, Nedelosk, thedarkcolour"
+description = '''
+	Modern Industrialization integration for Forestry: the tin drill, forestry fluids as MI fuel, and
+	flammable fuel buckets. Also lets the flammable fluids burn in Create Addition's liquid blaze burner.
+	'''
+
+[[dependencies.modernbees]]
+modId = "neoforge"
+type = "required"
+versionRange = "${forgeVersionRange}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.modernbees]]
+modId = "forestry"
+type = "required"
+versionRange = "[1.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.modernbees]]
+modId = "modern_industrialization"
+type = "optional"
+versionRange = "[0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.modernbees]]
+modId = "createaddition"
+type = "optional"
+versionRange = "[0,)"
+ordering = "AFTER"
+side = "BOTH"

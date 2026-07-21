@@ -1,0 +1,23 @@
+{
+	"replace": false,
+	"values": {
+		"forestry:ethanol": {
+			"eu_per_mb": 400
+		},
+		"forestry:biomass": {
+			"eu_per_mb": 125
+		},
+		"forestry:seed_oil": {
+			"eu_per_mb": 75
+		},
+		"forestry:short_mead": {
+			"eu_per_mb": 100
+		},
+		"forestry:honey": {
+			"eu_per_mb": 50
+		},
+		"forestry:fruit_juice": {
+			"eu_per_mb": 25
+		}
+	}
+}

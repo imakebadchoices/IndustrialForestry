@@ -1,0 +1,21 @@
+{
+	"neoforge:conditions": [
+		{ "type": "neoforge:mod_loaded", "modid": "modern_industrialization" }
+	],
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"  d",
+		"gp ",
+		"fg "
+	],
+	"key": {
+		"d": { "item": "modern_industrialization:tin_curved_plate" },
+		"g": { "item": "modern_industrialization:tin_gear" },
+		"p": { "tag": "modern_industrialization:item_pipes" },
+		"f": { "tag": "modern_industrialization:fluid_pipes" }
+	},
+	"result": {
+		"id": "modernbees:tin_drill",
+		"count": 4
+	}
+}

@@ -1,0 +1,26 @@
+{
+	"neoforge:conditions": [
+		{ "type": "neoforge:mod_loaded", "modid": "modern_industrialization" }
+	],
+	"type": "modern_industrialization:quarry",
+	"eu": 4,
+	"duration": 600,
+	"item_inputs": {
+		"item": "modernbees:tin_drill",
+		"amount": 1,
+		"probability": 0.06
+	},
+	"item_outputs": [
+		{ "item": "minecraft:sand", "amount": 4, "probability": 0.35 },
+		{ "item": "minecraft:clay", "amount": 2, "probability": 0.25 },
+		{ "item": "forestry:bog_earth", "amount": 1, "probability": 0.25 },
+		{ "item": "minecraft:coarse_dirt", "amount": 2, "probability": 0.2 },
+		{ "item": "minecraft:mud", "amount": 2, "probability": 0.2 },
+		{ "item": "minecraft:rooted_dirt", "amount": 1, "probability": 0.15 },
+		{ "item": "forestry:apatite_ore", "amount": 1, "probability": 0.15 },
+		{ "item": "minecraft:grass_block", "amount": 1, "probability": 0.15 },
+		{ "item": "minecraft:podzol", "amount": 1, "probability": 0.12 },
+		{ "item": "minecraft:moss_block", "amount": 1, "probability": 0.12 },
+		{ "item": "minecraft:mycelium", "amount": 1, "probability": 0.1 }
+	]
+}
