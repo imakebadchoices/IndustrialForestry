@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import forestry.beegistics.machine.ApiaryControllerBlockEntity;
 import forestry.beegistics.machine.BeeAnalyzerBlockEntity;
+import forestry.beegistics.machine.BeeRequesterBlockEntity;
 
 /**
  * Registers Beegistics block-entity types under the {@code beegistics} namespace through a plain NeoForge
@@ -23,6 +24,10 @@ public class BeegisticsBlockEntities {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ApiaryControllerBlockEntity>> APIARY_CONTROLLER = BLOCK_ENTITIES.register(
 			"apiary_controller",
 			() -> BlockEntityType.Builder.of(ApiaryControllerBlockEntity::new, BeegisticsBlocks.APIARY_CONTROLLER.get()).build(null));
+
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BeeRequesterBlockEntity>> BEE_REQUESTER = BLOCK_ENTITIES.register(
+			"bee_requester",
+			() -> BlockEntityType.Builder.of(BeeRequesterBlockEntity::new, BeegisticsBlocks.BEE_REQUESTER.get()).build(null));
 
 	public static void register(IEventBus modBus) {
 		BLOCK_ENTITIES.register(modBus);

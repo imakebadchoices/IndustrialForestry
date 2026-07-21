@@ -6,6 +6,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import appeng.init.client.InitScreens;
 
 import forestry.beegistics.machine.ApiaryControllerMenu;
+import forestry.beegistics.machine.BeeRequesterMenu;
 import forestry.beegistics.terminal.ApiaristTerminalMenu;
 import forestry.beegistics.terminal.BeegisticsMenus;
 
@@ -36,5 +37,10 @@ public final class BeegisticsClientHandler {
 				BeegisticsMenus.APIARY_CONTROLLER.get(),
 				ApiaryControllerScreen::new,
 				"/screens/beegistics_apiary_controller.json");
+		InitScreens.<BeeRequesterMenu, BeeRequesterScreen>register(
+				event,
+				BeegisticsMenus.BEE_REQUESTER.get(),
+				BeeRequesterScreen::new,
+				"/screens/beegistics_bee_requester.json");
 	}
 }

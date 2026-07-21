@@ -79,6 +79,15 @@
   "gui.beegistics.apiary_controller.time": "Time: %s",
   "gui.beegistics.apiary_controller.time.day": "Day",
   "gui.beegistics.apiary_controller.time.night": "Night",
+  "gui.beegistics.bee_requester.count": "In network: %s",
+  "gui.beegistics.bee_requester.threshold": "Maintain",
+  "gui.beegistics.bee_requester.status.idle": "Idle",
+  "gui.beegistics.bee_requester.status.scheduled": "Requesting...",
+  "gui.beegistics.bee_requester.status.crafting": "Crafting: waiting",
+  "gui.beegistics.bee_requester.status.missing": "Missing ingredients",
+  "gui.beegistics.bee_requester.status.no_cpu": "No crafting CPU",
+  "block.beegistics.bee_requester": "Bee Requester",
+  "info.beegistics.bee_requester": "A grid-connected block that keeps a target bee stocked in the ME network by requesting real autocrafting jobs - it never breeds anything itself. Load it with a single Bee Pattern - a species with the pure traits you want - and set a maintain level. Whenever the network holds fewer than that, it submits a crafting job for the bee and hands the result back to storage. Because it only generates demand, it needs an Apiary Controller in Autocraft mode (or any provider of the pattern) on the same network to actually breed the tree.",
   "block.beegistics.apiary_controller": "Apiary Controller",
   "info.beegistics.apiary_controller": "A grid-connected block that automates Forestry breeding without bypassing its mutation chance or time. Place it against an apiary and load it with Bee Patterns - each authored as a species with the pure traits you want. It runs in one of three modes. In Requester mode it keeps breeding toward the first pattern whose count in the ME network is below the maintain level, hill-climbing from the base and donor bees you have stocked. In Standalone mode it is a simple perpetual breeder: it keeps each apiary stocked with a princess and drone matching a pattern and harvests everything back to the network, self-sustaining while replacements exist. In Autocraft mode it offers each pattern to the network's autocrafting system, so you can request the target in a crafting terminal and it schedules the whole breeding tree. Place it against several apiaries and it drives all of them at once to breed in parallel. An apiary touching two controllers is contended and driven by neither, so the two never race over its workload."
 }

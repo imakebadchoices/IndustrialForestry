@@ -10,6 +10,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import forestry.beegistics.machine.ApiaryControllerBlock;
 import forestry.beegistics.machine.BeeAnalyzerBlock;
+import forestry.beegistics.machine.BeeRequesterBlock;
 
 /**
  * Registers Beegistics blocks under the {@code beegistics} namespace through a plain NeoForge {@link DeferredRegister},
@@ -30,12 +31,22 @@ public class BeegisticsBlocks {
 			"apiary_controller",
 			() -> new BlockItem(APIARY_CONTROLLER.get(), new Item.Properties()));
 
+	public static final DeferredBlock<BeeRequesterBlock> BEE_REQUESTER = BLOCKS.register("bee_requester", BeeRequesterBlock::new);
+
+	public static final DeferredHolder<Item, BlockItem> BEE_REQUESTER_ITEM = BeegisticsItems.ITEMS.register(
+			"bee_requester",
+			() -> new BlockItem(BEE_REQUESTER.get(), new Item.Properties()));
+
 	public static BlockItem beeAnalyzerItem() {
 		return BEE_ANALYZER_ITEM.get();
 	}
 
 	public static BlockItem apiaryControllerItem() {
 		return APIARY_CONTROLLER_ITEM.get();
+	}
+
+	public static BlockItem beeRequesterItem() {
+		return BEE_REQUESTER_ITEM.get();
 	}
 
 	public static void register(IEventBus modBus) {

@@ -1,0 +1,23 @@
+{
+  "$schema": "schema.json",
+  "includes": [
+    "common/common.json"
+  ],
+  "background": {
+    "texture": "beegistics:textures/guis/apiary_controller.png",
+    "textureWidth": 200,
+    "textureHeight": 232,
+    "srcRect": [0, 0, 200, 232]
+  },
+  "slots": {
+    "BEEGISTICS_REQUEST_TARGET": { "left": 92, "top": 30 },
+    "PLAYER_INVENTORY": { "left": 19, "top": 145, "grid": "BREAK_AFTER_9COLS" },
+    "PLAYER_HOTBAR": { "left": 19, "top": 203, "grid": "HORIZONTAL" }
+  },
+  "text": {
+    "player_inventory_title": {
+      "text": { "translate": "container.inventory", "color": "#E0C080" },
+      "position": { "left": 19, "top": 128 }
+    }
+  }
+}

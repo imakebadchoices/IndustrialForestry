@@ -19,6 +19,7 @@ import forestry.beegistics.client.BeegisticsClientHandler;
 import forestry.beegistics.crafting.BeeMutationPatternDecoder;
 import forestry.beegistics.machine.ApiaryControllerBlockEntity;
 import forestry.beegistics.machine.BeeAnalyzerBlockEntity;
+import forestry.beegistics.machine.BeeRequesterBlockEntity;
 import forestry.beegistics.network.BeegisticsNetwork;
 import forestry.beegistics.terminal.ApiaristTerminalPart;
 import forestry.beegistics.terminal.BeegisticsMenus;
@@ -63,6 +64,8 @@ public final class Beegistics {
 					BeeAnalyzerBlockEntity.class, BeegisticsBlockEntities.BEE_ANALYZER.get(), null, null);
 			BeegisticsBlocks.APIARY_CONTROLLER.get().setBlockEntity(
 					ApiaryControllerBlockEntity.class, BeegisticsBlockEntities.APIARY_CONTROLLER.get(), null, null);
+			BeegisticsBlocks.BEE_REQUESTER.get().setBlockEntity(
+					BeeRequesterBlockEntity.class, BeegisticsBlockEntities.BEE_REQUESTER.get(), null, null);
 		});
 	}
 
@@ -75,6 +78,9 @@ public final class Beegistics {
 		// Let adjacent cables discover the controller's grid node.
 		event.registerBlockEntity(AECapabilities.IN_WORLD_GRID_NODE_HOST, BeegisticsBlockEntities.APIARY_CONTROLLER.get(),
 				(be, context) -> be);
+		// Let adjacent cables discover the requester's grid node.
+		event.registerBlockEntity(AECapabilities.IN_WORLD_GRID_NODE_HOST, BeegisticsBlockEntities.BEE_REQUESTER.get(),
+				(be, context) -> be);
 	}
 
 	private static void onBuildCreativeTab(BuildCreativeModeTabContentsEvent event) {
@@ -86,6 +92,7 @@ public final class Beegistics {
 			event.accept(BeegisticsItems.apiaristTerminal());
 			event.accept(BeegisticsBlocks.beeAnalyzerItem());
 			event.accept(BeegisticsBlocks.apiaryControllerItem());
+			event.accept(BeegisticsBlocks.beeRequesterItem());
 		}
 	}
 }

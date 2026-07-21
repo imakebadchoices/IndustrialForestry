@@ -13,6 +13,8 @@ import appeng.menu.implementations.MenuTypeBuilder;
 import forestry.beegistics.Beegistics;
 import forestry.beegistics.machine.ApiaryControllerBlockEntity;
 import forestry.beegistics.machine.ApiaryControllerMenu;
+import forestry.beegistics.machine.BeeRequesterBlockEntity;
+import forestry.beegistics.machine.BeeRequesterMenu;
 
 /**
  * Registers the add-on's menu types. AE2's own menu types register through its internal {@code InitMenuTypes}; since we
@@ -32,6 +34,11 @@ public final class BeegisticsMenus {
 			"apiary_controller",
 			() -> MenuTypeBuilder.<ApiaryControllerMenu, ApiaryControllerBlockEntity>create(ApiaryControllerMenu::new, ApiaryControllerBlockEntity.class)
 					.buildUnregistered(ResourceLocation.fromNamespaceAndPath(Beegistics.NAMESPACE, "apiary_controller")));
+
+	public static final DeferredHolder<MenuType<?>, MenuType<BeeRequesterMenu>> BEE_REQUESTER = MENUS.register(
+			"bee_requester",
+			() -> MenuTypeBuilder.<BeeRequesterMenu, BeeRequesterBlockEntity>create(BeeRequesterMenu::new, BeeRequesterBlockEntity.class)
+					.buildUnregistered(ResourceLocation.fromNamespaceAndPath(Beegistics.NAMESPACE, "bee_requester")));
 
 	private BeegisticsMenus() {
 	}
