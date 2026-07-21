@@ -1,0 +1,37 @@
+modLoader = "javafml"
+loaderVersion = "{fmlVersionRange}"
+issueTrackerURL = "https://github.com/thedarkcolour/ForestryCE/issues"
+
+license = "GNU Lesser Public License v3"
+
+[[mods]]
+modId = "beeripherals"
+version = "${version}"
+displayName = "Forestry: Beeripherals"
+displayURL = "https://github.com/thedarkcolour/ForestryCE"
+credits = "the ForestryCE contributors"
+authors = "SirSengir, mezz, Nedelosk, thedarkcolour"
+description = '''
+	CC: Tweaked integration for Forestry: read and automate naturalist chests from a computer.
+	'''
+
+[[dependencies.beeripherals]]
+modId = "neoforge"
+type = "required"
+versionRange = "${forgeVersionRange}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.beeripherals]]
+modId = "forestry"
+type = "required"
+versionRange = "[1.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.beeripherals]]
+modId = "computercraft"
+type = "required"
+versionRange = "${ccVersionRange}"
+ordering = "AFTER"
+side = "BOTH"
