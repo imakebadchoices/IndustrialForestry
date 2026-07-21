@@ -11,6 +11,7 @@
   },
   "slots": {
     "BEEGISTICS_PATTERN": { "left": 19, "top": 30, "grid": "BREAK_AFTER_9COLS" },
+    "BEEGISTICS_BREEDING": { "left": 83, "top": 44, "grid": "HORIZONTAL" },
     "PLAYER_INVENTORY": { "left": 19, "top": 145, "grid": "BREAK_AFTER_9COLS" },
     "PLAYER_HOTBAR": { "left": 19, "top": 203, "grid": "HORIZONTAL" }
   },

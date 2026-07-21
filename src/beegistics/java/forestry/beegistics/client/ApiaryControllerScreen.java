@@ -31,13 +31,22 @@ import forestry.beegistics.machine.ControllerMode;
 public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 	private static final int MARGIN = 6;
 
-	// The double-row card region: the panel behind the two rows of nine slots the style JSON places. ZONE_Y/ZONE_H are
-	// tuned so the 36px-tall well block (two 18px rows, tops at slot y=30 in the style JSON) sits vertically centred with
+	// The Autocraft double-row card region: the panel behind the two rows of nine slots the style JSON places. ZONE_Y/ZONE_H
+	// are tuned so the 36px-tall well block (two 18px rows, tops at slot y=30 in the style JSON) sits vertically centred with
 	// even ~4px margins - matching the horizontal margins - rather than kissing the bottom border.
 	private static final int ZONE_X = 13;
 	private static final int ZONE_Y = 24;
 	private static final int ZONE_W = 174;
 	private static final int ZONE_H = 46;
+
+	// The Standalone breeding-card region: a narrower panel centred in the same vertical band, behind the two card wells
+	// (princess + drone, placed by the style JSON at top 44) with a caption above them.
+	private static final int BREED_ZONE_X = 72;
+	private static final int BREED_ZONE_Y = 24;
+	private static final int BREED_ZONE_W = 56;
+	private static final int BREED_ZONE_H = 46;
+	private static final int BREED_CAPTION_CX = 100;
+	private static final int BREED_CAPTION_Y = 33;
 
 	// Full-width status panel with a single stacked column of readout lines.
 	private static final int STATUS_X = MARGIN;
@@ -99,19 +108,36 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 
 		this.modeButton.setMessage(modeLabel());
 
-		// The card region panel, the status panel, and a backdrop behind the player inventory.
-		BeegisticsGuiStyle.panel(guiGraphics, offsetX + ZONE_X, offsetY + ZONE_Y, ZONE_W, ZONE_H);
+		// Show only the current mode's slot group: Standalone shows the two breeding cards, Autocraft the pattern grid. The
+		// server keeps the hidden group's slots disabled too, so nothing can be placed into an off-screen slot.
+		boolean standalone = this.menu.mode() == ControllerMode.STANDALONE;
+		setSlotsHidden(ApiaryControllerMenu.PATTERN, standalone);
+		setSlotsHidden(ApiaryControllerMenu.BREEDING, !standalone);
+
+		// The card region panel (wide grid in Autocraft, narrow breeding pair in Standalone), the status panel, and a
+		// backdrop behind the player inventory.
+		if (standalone) {
+			BeegisticsGuiStyle.panel(guiGraphics, offsetX + BREED_ZONE_X, offsetY + BREED_ZONE_Y, BREED_ZONE_W, BREED_ZONE_H);
+		} else {
+			BeegisticsGuiStyle.panel(guiGraphics, offsetX + ZONE_X, offsetY + ZONE_Y, ZONE_W, ZONE_H);
+		}
 		BeegisticsGuiStyle.panel(guiGraphics, offsetX + STATUS_X, offsetY + STATUS_Y, STATUS_W, STATUS_H);
 		drawPlayerInventoryPanel(guiGraphics, offsetX, offsetY);
 
-		// A warm slot well behind every slot (machine slots and player inventory alike).
+		// A warm slot well behind every slot (machine slots and player inventory alike). Slots of the hidden group sit at
+		// the off-screen position AE2 parks them at, so their wells fall harmlessly outside the panel.
 		for (Slot slot : this.menu.slots) {
 			BeegisticsGuiStyle.slot(guiGraphics, offsetX + slot.x - 1, offsetY + slot.y - 1);
 		}
 
-		// One top-left title only (the block name); the double row of card slots below is self-evidently the patterns, so a
-		// separate "Bee Patterns" sub-header here would just overlap the title in the same corner.
+		// One top-left title only (the block name); the card slots below are self-evidently the patterns, so a separate
+		// sub-header here would just overlap the title in the same corner.
 		guiGraphics.drawString(this.font, Component.translatable("block.beegistics.apiary_controller"), offsetX + TITLE_X, offsetY + TITLE_Y, BeegisticsGuiStyle.TEXT_TITLE, false);
+
+		// Standalone: caption the breeding pair so the two wells read as "the princess card and the drone card".
+		if (standalone) {
+			guiGraphics.drawCenteredString(this.font, Component.translatable("gui.beegistics.apiary_controller.breeding"), offsetX + BREED_CAPTION_CX, offsetY + BREED_CAPTION_Y, BeegisticsGuiStyle.TEXT_LABEL);
+		}
 
 		// Status, line 0 (shared by every mode): the apiary link (count linked, contention warning, or none).
 		statusLine(guiGraphics, apiaryStatus(), 0, offsetX, offsetY);

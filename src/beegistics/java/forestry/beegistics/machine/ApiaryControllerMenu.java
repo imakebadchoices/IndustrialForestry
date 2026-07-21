@@ -1,5 +1,8 @@
 package forestry.beegistics.machine;
 
+import java.util.List;
+
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 
@@ -11,17 +14,24 @@ import appeng.menu.guisync.GuiSync;
 import appeng.menu.slot.AppEngSlot;
 
 /**
- * Menu for the {@link ApiaryControllerBlockEntity}. Exposes the single double row of Bee Pattern card slots and mirrors
- * the controller's live status - whether an apiary is attached, which mode it runs in, and the active job - to the
- * client via {@link GuiSync} fields. The mode toggle is edited client-side and pushed back through a client action.
+ * Menu for the {@link ApiaryControllerBlockEntity}. Exposes both slot groups - the Autocraft double row of Bee Pattern
+ * cards and the two Standalone breeding-card slots (princess + drone) - and mirrors the controller's live status
+ * (whether an apiary is attached, which mode it runs in, and the active job) to the client via {@link GuiSync} fields.
+ * Only the group belonging to the current mode is kept enabled (the {@link ApiaryControllerScreen} hides the other), so
+ * a card is only ever placed or shift-clicked into the active mode's slots. The mode toggle is edited client-side and
+ * pushed back through a client action.
  */
 public class ApiaryControllerMenu extends AEBaseMenu {
 	private static final String ACTION_SET_MODE = "setMode";
 
 	// Machine-side semantics positioned by the style JSON (assets/ae2/screens/beegistics_apiary_controller.json).
 	public static final SlotSemantic PATTERN = SlotSemantics.register("BEEGISTICS_PATTERN", false);
+	public static final SlotSemantic BREEDING = SlotSemantics.register("BEEGISTICS_BREEDING", false);
 
 	private final ApiaryControllerBlockEntity controller;
+	/** The Autocraft grid slots and the two Standalone breeding-card slots; only the active mode's group stays enabled. */
+	private final AppEngSlot[] patternSlots;
+	private final AppEngSlot[] breedingSlots;
 
 	@GuiSync(1)
 	public int usableApiaries = 0;
@@ -49,10 +59,22 @@ public class ApiaryControllerMenu extends AEBaseMenu {
 		super(menuType, id, ip, controller);
 		this.controller = controller;
 
-		InternalInventory patterns = controller.getInternalInventory();
+		InternalInventory patterns = controller.getPatternInventory();
+		this.patternSlots = new AppEngSlot[patterns.size()];
 		for (int slot = 0; slot < patterns.size(); slot++) {
-			addSlot(new AppEngSlot(patterns, slot), PATTERN);
+			AppEngSlot s = new AppEngSlot(patterns, slot);
+			addSlot(s, PATTERN);
+			this.patternSlots[slot] = s;
 		}
+
+		// The princess slot is added first so a stage-agnostic card shift-clicks into it before the drone slot.
+		AppEngSlot princess = new AppEngSlot(controller.getPrincessCardInventory(), 0);
+		princess.setEmptyTooltip(() -> List.of(Component.translatable("gui.beegistics.apiary_controller.slot.princess")));
+		AppEngSlot drone = new AppEngSlot(controller.getDroneCardInventory(), 0);
+		drone.setEmptyTooltip(() -> List.of(Component.translatable("gui.beegistics.apiary_controller.slot.drone")));
+		addSlot(princess, BREEDING);
+		addSlot(drone, BREEDING);
+		this.breedingSlots = new AppEngSlot[]{princess, drone};
 
 		createPlayerInventorySlots(ip);
 
@@ -95,6 +117,15 @@ public class ApiaryControllerMenu extends AEBaseMenu {
 			this.apiaryHumidity = this.controller.getApiaryHumidity() == null ? -1 : this.controller.getApiaryHumidity().ordinal();
 			this.apiaryDay = this.controller.isApiaryDay();
 			this.perpetualBreeding = this.controller.isPerpetualBreeding();
+			// Only the current mode's slot group accepts cards: disabling the other rejects placement and shift-click
+			// (mayPlace) server-side, so a card can never land in a hidden slot. The screen mirrors this visually.
+			boolean autocraft = this.controller.getMode() == ControllerMode.AUTOCRAFT;
+			for (AppEngSlot slot : this.patternSlots) {
+				slot.setSlotEnabled(autocraft);
+			}
+			for (AppEngSlot slot : this.breedingSlots) {
+				slot.setSlotEnabled(!autocraft);
+			}
 		}
 		super.broadcastChanges();
 	}

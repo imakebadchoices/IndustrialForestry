@@ -43,6 +43,7 @@ import appeng.api.stacks.KeyCounter;
 import appeng.api.storage.MEStorage;
 import appeng.blockentity.grid.AENetworkedInvBlockEntity;
 import appeng.util.inv.AppEngInternalInventory;
+import appeng.util.inv.CombinedInternalInventory;
 import appeng.util.inv.filter.IAEItemFilter;
 
 import forestry.api.apiculture.IBeeHousing;
@@ -80,8 +81,10 @@ import forestry.core.utils.SpeciesUtil;
  * patterns):
  *
  * <ul>
- *     <li><b>{@link ControllerMode#STANDALONE Standalone}</b> (the default): a dumb perpetual breeder. Keeps each driven apiary stocked
- *     with a princess and a drone matching a loaded card (same species) and harvests every product back to the network,
+ *     <li><b>{@link ControllerMode#STANDALONE Standalone}</b> (the default): a dumb perpetual breeder. Holds just two
+ *     Bee Pattern cards - a princess card and a drone card - and keeps each driven apiary stocked with a princess
+ *     matching the first and a drone matching the second, pulled from the network, harvesting every product back. The two
+ *     cards are independent (usually the same species, but a deliberate cross is allowed); a same-species pair is
  *     self-sustaining while replacements exist. No target count, no hill-climb, no autocraft. See {@link #runPerpetual}.</li>
  *     <li><b>{@link ControllerMode#AUTOCRAFT Autocraft}</b>: exposes each loaded card to AE2 as a
  *     {@link ICraftingProvider crafting pattern}, so the target can be requested in the standard crafting terminal and AE2
@@ -94,12 +97,25 @@ import forestry.core.utils.SpeciesUtil;
  * unit-testable and reused by the crafting engine.
  */
 public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity implements IGridTickable, ICraftingProvider {
-	/** How many Bee Pattern cards the controller holds (a 2x9 double row). */
+	/** How many Bee Pattern cards the Autocraft grid holds (a 2x9 double row). */
 	public static final int PATTERN_SLOTS = 18;
 	/** Scratch space holding parent bees extracted for an in-flight craft job. */
 	private static final int CRAFT_BUFFER_SLOTS = 8;
 
+	/** The Autocraft pattern grid: 18 Bee Pattern cards exposed to the network in {@link ControllerMode#AUTOCRAFT}. */
 	private final AppEngInternalInventory patterns = new AppEngInternalInventory(this, PATTERN_SLOTS, 1, patternFilter());
+	/**
+	 * Standalone mode's two Bee Pattern card slots: a princess-selecting card and a drone-selecting card, held as two
+	 * single-slot inventories so each can carry its own stage restriction ({@link #breedingFilter}). The perpetual breeder
+	 * pulls a princess matching the first and a drone matching the second.
+	 */
+	private final AppEngInternalInventory princessCardInv = new AppEngInternalInventory(this, 1, 1, breedingFilter(BeeLifeStage.PRINCESS));
+	private final AppEngInternalInventory droneCardInv = new AppEngInternalInventory(this, 1, 1, breedingFilter(BeeLifeStage.DRONE));
+	/**
+	 * The block's single AE2-facing inventory (persistence, drops, side I/O): the Autocraft grid followed by the two
+	 * Standalone breeding-card slots, so both persist and drop for free via {@link #getInternalInventory}.
+	 */
+	private final InternalInventory allInventories = new CombinedInternalInventory(this.patterns, this.princessCardInv, this.droneCardInv);
 	private final AppEngInternalInventory craftBuffer = new AppEngInternalInventory(this, CRAFT_BUFFER_SLOTS, 64);
 	private final IActionSource actionSource = IActionSource.ofMachine(this);
 
@@ -186,7 +202,7 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 				.addService(ICraftingProvider.class, this);
 	}
 
-	/** The single Bee Pattern inventory accepts only Bee Pattern cards (their filter is the maintain/autocraft target). */
+	/** The Autocraft pattern grid accepts only Bee Pattern cards (their filter is the autocraft target). */
 	private IAEItemFilter patternFilter() {
 		return new IAEItemFilter() {
 			@Override
@@ -196,9 +212,43 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 		};
 	}
 
+	/**
+	 * A Standalone breeding-card slot accepts only a Bee Pattern card whose target life stage suits the slot: a
+	 * stage-agnostic card (empty {@link BeeFilter#stages()}) goes in either, but a card that pins a stage must include the
+	 * slot's stage. This is what makes shift-click routing stage-based - a drone card is rejected by the princess slot's
+	 * {@code mayPlace}, so it lands in the drone slot instead.
+	 */
+	private IAEItemFilter breedingFilter(BeeLifeStage slotStage) {
+		return new IAEItemFilter() {
+			@Override
+			public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {
+				if (!(stack.getItem() instanceof ItemBeeFilterCard)) {
+					return false;
+				}
+				Set<BeeLifeStage> stages = ItemBeeFilterCard.getFilter(stack).stages();
+				return stages.isEmpty() || stages.contains(slotStage);
+			}
+		};
+	}
+
 	@Override
 	public InternalInventory getInternalInventory() {
+		return this.allInventories;
+	}
+
+	/** @return the Autocraft pattern grid (the 18 card slots exposed to the network in {@link ControllerMode#AUTOCRAFT}). */
+	public InternalInventory getPatternInventory() {
 		return this.patterns;
+	}
+
+	/** @return the Standalone princess-card slot (one slot; the perpetual breeder's princess selector). */
+	public InternalInventory getPrincessCardInventory() {
+		return this.princessCardInv;
+	}
+
+	/** @return the Standalone drone-card slot (one slot; the perpetual breeder's drone selector). */
+	public InternalInventory getDroneCardInventory() {
+		return this.droneCardInv;
 	}
 
 	@Override
@@ -383,11 +433,11 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 
 	/**
 	 * Runs one perpetual-breeder step: drain every driven apiary's products to the network, then keep each apiary stocked
-	 * with a princess and a drone matching a loaded card (same species). Cards are assigned to apiaries round-robin by
-	 * index, so several apiaries behind one controller can each maintain a different bee line. There is no target count,
-	 * no genome hill-climb and no autocraft - it simply feeds the card's bee in and harvests
-	 * everything out, self-sustaining while the network holds replacements. Package-visible so tests can drive it against
-	 * an arbitrary {@link MEStorage}.
+	 * with a princess matching the loaded princess card and a drone matching the loaded drone card, both pulled from the
+	 * network. The same two cards drive every apiary behind the controller. There is no target count, no genome hill-climb
+	 * and no autocraft - it simply feeds the two cards' bees in and harvests everything out, self-sustaining (for a
+	 * same-species pair) while the network holds replacements. Package-visible so tests can drive it against an arbitrary
+	 * {@link MEStorage}.
 	 *
 	 * @param storage the network to pull parents from and push products into
 	 * @return whether any bee was moved this step
@@ -400,61 +450,64 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 			worked |= drainProducts(apiary, storage);
 		}
 
-		List<BeeFilter> cards = loadedCardFilters();
-		if (cards.isEmpty() || apiaries.isEmpty()) {
+		BeeFilter princessCard = breedingCard(this.princessCardInv);
+		BeeFilter droneCard = breedingCard(this.droneCardInv);
+		if (apiaries.isEmpty() || (princessCard == null && droneCard == null)) {
 			this.perpetualBreeding = false;
 			return worked;
 		}
 		KeyCounter available = new KeyCounter();
 		storage.getAvailableStacks(available);
-		for (int i = 0; i < apiaries.size(); i++) {
-			worked |= restockPerpetual(apiaries.get(i), storage, available, cards.get(i % cards.size()));
+		for (Apiary apiary : apiaries) {
+			worked |= restockPerpetual(apiary, storage, available, princessCard, droneCard);
 		}
 		// After restocking, decide whether the breeder has work for the GUI: an occupied apiary (a queen we just stocked or
 		// one already breeding) or a still-available matching bee. Nothing on either front means the network has no bees
-		// matching the loaded filters - surfaced as a warning rather than a green "Breeding".
-		this.perpetualBreeding = perpetualHasWork(apiaries, cards, available);
+		// matching the loaded cards - surfaced as a warning rather than a green "Breeding".
+		this.perpetualBreeding = perpetualHasWork(apiaries, princessCard, droneCard, available);
 		return worked;
 	}
 
 	/**
 	 * @return whether standalone mode has anything to breed: a driven apiary already holding a queen, or a network bee
-	 * (in {@code available}, the post-restock snapshot) matching a loaded card that could stock one. Drives the GUI's
-	 * active/no-bees status.
+	 * (in {@code available}, the post-restock snapshot) matching either loaded card that could stock a parent. Drives the
+	 * GUI's active/no-bees status.
 	 */
-	private boolean perpetualHasWork(List<Apiary> apiaries, List<BeeFilter> cards, KeyCounter available) {
+	private boolean perpetualHasWork(List<Apiary> apiaries, @Nullable BeeFilter princessCard, @Nullable BeeFilter droneCard, KeyCounter available) {
 		for (Apiary apiary : apiaries) {
 			if (!apiary.housing().getBeeInventory().getQueen().isEmpty()) {
 				return true;
 			}
 		}
-		for (BeeFilter card : cards) {
-			if (findParent(available, card, BeeLifeStage.PRINCESS) != null || findParent(available, card, BeeLifeStage.DRONE) != null) {
-				return true;
-			}
+		if (princessCard != null && findParent(available, princessCard, BeeLifeStage.PRINCESS) != null) {
+			return true;
+		}
+		if (droneCard != null && findParent(available, droneCard, BeeLifeStage.DRONE) != null) {
+			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Keeps one apiary stocked for perpetual breeding: a princess matching {@code card} in the queen slot and, once she is
-	 * an unmated princess, a drone matching the same card in the drone slot. Both come from the network; the shared
-	 * {@code available} snapshot is kept honest so a later apiary this tick does not claim the same bee.
+	 * Keeps one apiary stocked for perpetual breeding: a princess matching {@code princessCard} in the queen slot and,
+	 * once she is an unmated princess, a drone matching {@code droneCard} in the drone slot. Either card may be absent (its
+	 * slot is then simply not stocked). Both bees come from the network; the shared {@code available} snapshot is kept
+	 * honest so a later apiary this tick does not claim the same bee.
 	 */
-	private boolean restockPerpetual(Apiary apiary, MEStorage storage, KeyCounter available, BeeFilter card) {
+	private boolean restockPerpetual(Apiary apiary, MEStorage storage, KeyCounter available, @Nullable BeeFilter princessCard, @Nullable BeeFilter droneCard) {
 		boolean worked = false;
 		IBeeHousingInventory inv = apiary.housing().getBeeInventory();
 
-		if (inv.getQueen().isEmpty()) {
-			ItemStack princess = pullParent(storage, available, card, BeeLifeStage.PRINCESS);
+		if (princessCard != null && inv.getQueen().isEmpty()) {
+			ItemStack princess = pullParent(storage, available, princessCard, BeeLifeStage.PRINCESS);
 			if (!princess.isEmpty()) {
 				inv.setQueen(princess);
 				worked = true;
 			}
 		}
 
-		if (inv.getDrone().isEmpty() && queenNeedsMate(inv)) {
-			ItemStack drone = pullParent(storage, available, card, BeeLifeStage.DRONE);
+		if (droneCard != null && inv.getDrone().isEmpty() && queenNeedsMate(inv)) {
+			ItemStack drone = pullParent(storage, available, droneCard, BeeLifeStage.DRONE);
 			if (!drone.isEmpty()) {
 				inv.setDrone(drone);
 				worked = true;
@@ -467,16 +520,11 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 		return worked;
 	}
 
-	/** @return the {@link BeeFilter} of every loaded Bee Pattern card, in slot order (the perpetual mode's round-robin targets). */
-	private List<BeeFilter> loadedCardFilters() {
-		List<BeeFilter> cards = new ArrayList<>();
-		for (int slot = 0; slot < this.patterns.size(); slot++) {
-			ItemStack stack = this.patterns.getStackInSlot(slot);
-			if (stack.getItem() instanceof ItemBeeFilterCard) {
-				cards.add(ItemBeeFilterCard.getFilter(stack));
-			}
-		}
-		return cards;
+	/** @return the {@link BeeFilter} of the Bee Pattern card in the given single-slot breeding inventory, or {@code null} if empty. */
+	@Nullable
+	private static BeeFilter breedingCard(InternalInventory inv) {
+		ItemStack stack = inv.getStackInSlot(0);
+		return stack.getItem() instanceof ItemBeeFilterCard ? ItemBeeFilterCard.getFilter(stack) : null;
 	}
 
 	/** @return whether the queen slot holds an unmated princess (which still needs a drone to mate into a queen). */

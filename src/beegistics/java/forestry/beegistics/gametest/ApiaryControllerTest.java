@@ -26,6 +26,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import appeng.api.AECapabilities;
 import appeng.api.config.Actionable;
+import appeng.api.inventories.InternalInventory;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.networking.security.IActionSource;
@@ -122,11 +123,32 @@ public class ApiaryControllerTest {
 		controller.getInternalInventory().setItemDirect(0, card);
 	}
 
-	/** Loads a plain species Bee Pattern card (species only, no trait pins) - the target of a perpetual standalone loop. */
-	private static void loadSpeciesCard(ApiaryControllerBlockEntity controller, IBeeSpecies species) {
+	/** @return a plain species Bee Pattern card (species only, no stage or trait pins) - the perpetual standalone target. */
+	private static ItemStack speciesCard(IBeeSpecies species) {
 		ItemStack card = new ItemStack(BeegisticsItems.beeFilterCard());
 		ItemBeeFilterCard.setFilter(card, speciesFilter(species));
-		controller.getInternalInventory().setItemDirect(0, card);
+		return card;
+	}
+
+	/** @return a Bee Pattern card pinned to one life stage (so the breeding slots' stage restriction applies to it). */
+	private static ItemStack stagedCard(IBeeSpecies species, BeeLifeStage stage) {
+		ItemStack card = new ItemStack(BeegisticsItems.beeFilterCard());
+		ItemBeeFilterCard.setFilter(card, new BeeFilter(EnumSet.of(stage), Optional.of(species.id()), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
+		return card;
+	}
+
+	/**
+	 * Loads the two Standalone breeding cards - a princess card and a drone card. A single-species perpetual loop uses the
+	 * same species for both; a deliberate cross passes different ones.
+	 */
+	private static void loadBreedingCards(ApiaryControllerBlockEntity controller, IBeeSpecies princessSpecies, IBeeSpecies droneSpecies) {
+		controller.getPrincessCardInventory().setItemDirect(0, speciesCard(princessSpecies));
+		controller.getDroneCardInventory().setItemDirect(0, speciesCard(droneSpecies));
+	}
+
+	/** Loads the same species into both Standalone breeding-card slots - a self-sustaining single-species perpetual loop. */
+	private static void loadSpeciesCard(ApiaryControllerBlockEntity controller, IBeeSpecies species) {
+		loadBreedingCards(controller, species, species);
 	}
 
 	/** Seeds the base princesses + auto-resolved donor drones a standalone genome job stages as parents. */
@@ -403,6 +425,58 @@ public class ApiaryControllerTest {
 
 		helper.assertTrue(rig.bees().getQueen().isEmpty(), "the apiary stays empty with no matching bees to stock");
 		helper.assertTrue(!rig.controller().isPerpetualBreeding(), "no matching bees means the breeder reports no-bees, not breeding");
+
+		helper.succeed();
+	}
+
+	/**
+	 * The two Standalone breeding slots are stage-restricted: a princess-pinned card is rejected by the drone slot and a
+	 * drone-pinned card by the princess slot, while a stage-agnostic card fits either. This is what makes shift-click
+	 * routing land each card in the slot that matches its stage.
+	 */
+	@GameTest(template = "empty")
+	public static void breedingSlotsRestrictByStage(GameTestHelper helper) {
+		Rig rig = place(helper);
+		IBeeSpecies forest = species(ForestryBeeSpecies.FOREST);
+		InternalInventory princessSlot = rig.controller().getPrincessCardInventory();
+		InternalInventory droneSlot = rig.controller().getDroneCardInventory();
+
+		ItemStack princessCard = stagedCard(forest, BeeLifeStage.PRINCESS);
+		ItemStack droneCard = stagedCard(forest, BeeLifeStage.DRONE);
+		ItemStack anyCard = speciesCard(forest); // stage-agnostic
+
+		helper.assertTrue(princessSlot.isItemValid(0, princessCard), "princess slot should accept a princess card");
+		helper.assertTrue(!princessSlot.isItemValid(0, droneCard), "princess slot should reject a drone card");
+		helper.assertTrue(droneSlot.isItemValid(0, droneCard), "drone slot should accept a drone card");
+		helper.assertTrue(!droneSlot.isItemValid(0, princessCard), "drone slot should reject a princess card");
+		helper.assertTrue(princessSlot.isItemValid(0, anyCard) && droneSlot.isItemValid(0, anyCard), "a stage-agnostic card fits either slot");
+		helper.assertTrue(!princessSlot.isItemValid(0, new ItemStack(BeegisticsItems.beeMutationPattern())), "a breeding slot rejects a non-card item");
+
+		helper.succeed();
+	}
+
+	/**
+	 * The princess and drone slots are independent: with different species in each, the perpetual breeder stocks a princess
+	 * of the first species and a drone of the second - a deliberate cross rather than a single-species loop.
+	 */
+	@GameTest(template = "empty")
+	public static void perpetualCrossStocksDistinctParents(GameTestHelper helper) {
+		Rig rig = place(helper);
+		IBeeSpecies forest = species(ForestryBeeSpecies.FOREST);
+		IBeeSpecies meadows = species(ForestryBeeSpecies.MEADOWS);
+		loadBreedingCards(rig.controller(), forest, meadows);
+		rig.controller().setMode(ControllerMode.STANDALONE);
+
+		TestNetwork network = new TestNetwork();
+		network.seed(beeKey(forest, BeeLifeStage.PRINCESS), 1);
+		network.seed(beeKey(meadows, BeeLifeStage.DRONE), 1);
+
+		rig.controller().runPerpetual(network);
+
+		assertBee(helper, rig.bees().getQueen(), forest, BeeLifeStage.PRINCESS, "queen slot (princess card species)");
+		assertBee(helper, rig.bees().getDrone(), meadows, BeeLifeStage.DRONE, "drone slot (drone card species)");
+		helper.assertTrue(network.count(beeKey(forest, BeeLifeStage.PRINCESS)) == 0, "the Forest princess should have been pulled");
+		helper.assertTrue(network.count(beeKey(meadows, BeeLifeStage.DRONE)) == 0, "the Meadows drone should have been pulled");
 
 		helper.succeed();
 	}
