@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Breeding Tree Explorer [Forestry: CE]</title>
+<style>
+:root{--green:#008800;--green-dark:#006600;--border:#8cacbb;--bg:#fff;--panel:#f7f9fa;--text:#333;--link:#4881cf;}
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;}
+body{font:14px/1.5 "Lucida Grande","DejaVu Sans",Verdana,Arial,sans-serif;color:var(--text);background:#e9ebe4;display:flex;flex-direction:column;height:100vh;}
+header{background:var(--bg);border-bottom:1px solid var(--border);padding:.7em 1.2em;display:flex;align-items:center;gap:1em;flex-wrap:wrap;}
+header h1{margin:0;font-size:1.25em;color:var(--green);}
+.tabs{display:flex;gap:.3em;}
+.tabs button,.filterbar select,.filterbar button,#reset{font:inherit;padding:.35em .8em;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;border-radius:3px;}
+.tabs button.active{background:var(--green);color:#fff;border-color:var(--green-dark);font-weight:bold;}
+.tabs button:hover:not(.active){background:#e4ecdd;}
+.filterbar{display:flex;gap:.5em;align-items:center;margin-left:auto;font-size:.9em;color:#666;flex-wrap:wrap;}
+.filterbar label{color:#666;}
+.stage{flex:1;position:relative;overflow:hidden;background:var(--bg);border:1px solid var(--border);margin:0 8px 8px;min-height:0;}
+#viewport{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none;}
+#viewport.dragging{cursor:grabbing;}
+#canvas{position:absolute;top:0;left:0;transform-origin:0 0;}
+#canvas svg{display:block;max-width:none!important;height:auto;}
+.msg{padding:2em;color:#778;font-size:1.05em;max-width:32em;}
+.hint{position:absolute;left:12px;bottom:10px;font-size:.8em;color:#889;background:rgba(255,255,255,.85);padding:.3em .6em;border:1px solid var(--border);border-radius:3px;pointer-events:none;}
+.zoomctl{position:absolute;right:12px;bottom:10px;display:flex;gap:.3em;}
+.zoomctl button{width:30px;height:30px;font-size:1.1em;border:1px solid var(--border);background:rgba(255,255,255,.95);cursor:pointer;border-radius:3px;}
+#detail{position:absolute;left:12px;top:12px;width:250px;background:rgba(255,255,255,.97);border:1px solid var(--border);border-radius:4px;font-size:.85em;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;}
+#detail.show{display:block;}
+#detail h3{margin:0;padding:.5em .8em;background:var(--green);color:#fff;font-size:1.05em;border-radius:4px 4px 0 0;}
+#detail .close{float:right;cursor:pointer;font-weight:bold;padding:0 .2em;}
+#detail .body{padding:.6em .8em;max-height:70vh;overflow:auto;}
+#detail .row{margin:.25em 0;}#detail .k{color:#777;}
+#detail .sec{margin-top:.6em;padding-top:.5em;border-top:1px dotted var(--border);}
+#detail .sec b{color:var(--green-dark);display:block;margin-bottom:.25em;}
+#detail .mut{margin:.25em 0;padding-left:.5em;border-left:2px solid #e4ecdd;font-size:.95em;}
+#detail a{color:var(--link);cursor:pointer;}#detail a:hover{text-decoration:underline;}
+#status{position:absolute;top:12px;right:12px;font-size:.8em;color:#889;background:rgba(255,255,255,.85);padding:.3em .6em;border:1px solid var(--border);border-radius:3px;}
+#resPanel{position:absolute;left:12px;top:12px;width:250px;background:rgba(255,255,255,.97);border:1px solid var(--border);border-radius:4px;font-size:.85em;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;}
+#resPanel.show{display:block;}
+#resPanel h3{margin:0;padding:.5em .8em;background:var(--green-dark);color:#fff;font-size:1.05em;border-radius:4px 4px 0 0;}
+#resPanel .body{padding:.6em .8em;max-height:70vh;overflow:auto;}
+#resPanel .beelink{display:block;margin:.3em 0;padding:.35em .5em;background:#f2f5f7;border:1px solid var(--border);border-radius:3px;cursor:pointer;color:var(--link);}
+#resPanel .beelink:hover{background:#e4ecdd;}
+#resPanel .note{color:#777;font-size:.9em;margin-bottom:.4em;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Breeding Tree Explorer</h1>
+  <div class="tabs" id="tabs">
+    <button data-cat="bees" class="active">Bees</button>
+    <button data-cat="trees">Trees</button>
+  </div>
+  <div class="filterbar">
+    <label>Focus:</label>
+    <select id="focusMode">
+      <option value="all">Everything</option>
+      <option value="genus">By genus</option>
+      <option value="lineage">Target species &rarr; full tree</option>
+      <option value="resource">By resource / output</option>
+    </select>
+    <select id="focusValue" style="display:none"></select>
+    <button id="reset">Reset view</button>
+  </div>
+</header>
+<div class="stage">
+  <div id="viewport">
+    <div id="canvas"></div>
+  </div>
+  <div id="status"></div>
+  <div class="hint">Drag to pan &middot; scroll or +/&ndash; to zoom &middot; click a species for details</div>
+  <div id="resPanel">
+    <h3><span id="resTitle">Resource</span></h3>
+    <div class="body" id="resBody"></div>
+  </div>
+  <div class="zoomctl">
+    <button id="zoomOut">–</button><button id="zoomFit">⤢</button><button id="zoomIn">+</button>
+  </div>
+  <div id="detail">
+    <h3><span class="close" id="dClose">×</span><span id="dTitle"></span></h3>
+    <div class="body" id="dBody"></div>
+  </div>
+</div>
+<!--SCRIPTS-->
+</body>
+</html>

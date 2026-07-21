@@ -1,0 +1,6 @@
+# Generated site output — rebuilt by build.py / CI, never committed.
+site/
+
+# Python build artifacts
+__pycache__/
+*.pyc
