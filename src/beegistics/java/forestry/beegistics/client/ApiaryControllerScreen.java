@@ -3,7 +3,6 @@ package forestry.beegistics.client;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
@@ -25,9 +24,9 @@ import forestry.beegistics.machine.ControllerMode;
  *
  * <p>The controller holds a single double row of Bee Pattern cards (positioned by the style JSON); their wells, the
  * panel frame, a mode cycle button and the status readout are drawn here in the background layer. The button cycles the
- * three {@link ControllerMode modes}; the status shows the apiary link plus a per-mode readout - the maintain
- * threshold + count (Requester), the perpetual-breeding state (Standalone), or the active craft job (Autocraft), each
- * with the apiary climate. The status is a single full-width column so no line ever overflows the panel.
+ * two {@link ControllerMode modes}; the status shows the apiary link plus a per-mode readout - the perpetual-breeding
+ * state (Standalone) or the active craft job (Autocraft), each with the apiary climate. The status is a single
+ * full-width column so no line ever overflows the panel.
  */
 public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 	private static final int MARGIN = 6;
@@ -58,7 +57,6 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 	private static final int MODE_BTN_X = 200 - MARGIN - MODE_BTN_W;
 	private static final int MODE_BTN_Y = 6;
 
-	private EditBox thresholdField;
 	private Button modeButton;
 
 	public ApiaryControllerScreen(ApiaryControllerMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
@@ -75,14 +73,6 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 	@Override
 	protected void init() {
 		super.init();
-		this.thresholdField = new EditBox(this.font, this.leftPos + STATUS_LINE_X + 46, this.topPos + statusLineY(3) - 2, 46, 12, Component.translatable("gui.beegistics.apiary_controller.threshold"));
-		this.thresholdField.setMaxLength(6);
-		this.thresholdField.setTextColor(BeegisticsGuiStyle.TEXT_LABEL);
-		this.thresholdField.setValue(Integer.toString(this.menu.threshold));
-		this.thresholdField.setResponder(this::onThresholdTyped);
-		this.thresholdField.setFilter(s -> s.isEmpty() || s.chars().allMatch(Character::isDigit));
-		addRenderableWidget(this.thresholdField);
-
 		// A plain Button keeps the "focused" highlight after a click until focus moves elsewhere, so the button stays lit
 		// once the mouse leaves it. Report never-focused so it lights on hover only (isHoveredOrFocused collapses to hover).
 		this.modeButton = new Button(this.leftPos + MODE_BTN_X, this.topPos + MODE_BTN_Y, MODE_BTN_W, MODE_BTN_H, modeLabel(), b -> this.menu.cycleMode(), Supplier::get) {
@@ -97,30 +87,16 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 	/** The single cycle button's caption: the name of the mode the controller is currently in. */
 	private Component modeLabel() {
 		String key = switch (this.menu.mode()) {
-			case REQUESTER -> "gui.beegistics.apiary_controller.mode.requester";
 			case STANDALONE -> "gui.beegistics.apiary_controller.mode.standalone";
 			case AUTOCRAFT -> "gui.beegistics.apiary_controller.mode.autocraft";
 		};
 		return Component.translatable(key);
 	}
 
-	private void onThresholdTyped(String value) {
-		if (value.isEmpty()) {
-			return;
-		}
-		try {
-			this.menu.setThreshold(Math.max(1, Integer.parseInt(value)));
-		} catch (NumberFormatException ignored) {
-			// Filtered to digits, but guard against overflow on very long input.
-		}
-	}
-
 	@Override
 	public void drawBG(GuiGraphics guiGraphics, int offsetX, int offsetY, int mouseX, int mouseY, float partialTick) {
 		super.drawBG(guiGraphics, offsetX, offsetY, mouseX, mouseY, partialTick);
 
-		// The editable maintain threshold only applies to Requester mode; the button caption mirrors the live mode.
-		this.thresholdField.visible = this.menu.mode() == ControllerMode.REQUESTER;
 		this.modeButton.setMessage(modeLabel());
 
 		// The card region panel, the status panel, and a backdrop behind the player inventory.
@@ -141,7 +117,6 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 		statusLine(guiGraphics, apiaryStatus(), 0, offsetX, offsetY);
 
 		switch (this.menu.mode()) {
-			case REQUESTER -> drawRequesterStatus(guiGraphics, offsetX, offsetY);
 			case STANDALONE -> drawStandaloneStatus(guiGraphics, offsetX, offsetY);
 			case AUTOCRAFT -> drawCraftStatus(guiGraphics, offsetX, offsetY);
 		}
@@ -159,16 +134,6 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 			return Component.translatable("gui.beegistics.apiary_controller.apiary.contended").withStyle(ChatFormatting.GOLD);
 		}
 		return Component.translatable("gui.beegistics.apiary_controller.apiary.none").withStyle(ChatFormatting.RED);
-	}
-
-	/** Requester mode: job state (breeding or idle), maintained count, then the editable threshold row. */
-	private void drawRequesterStatus(GuiGraphics guiGraphics, int offsetX, int offsetY) {
-		Component state = this.menu.crafting
-				? Component.translatable("gui.beegistics.apiary_controller.crafting", this.menu.craftRemaining).withStyle(ChatFormatting.GREEN)
-				: Component.translatable("gui.beegistics.apiary_controller.state.paused").withStyle(ChatFormatting.GRAY);
-		statusLine(guiGraphics, state, 1, offsetX, offsetY);
-		statusLine(guiGraphics, Component.translatable("gui.beegistics.apiary_controller.count", this.menu.targetCount), 2, offsetX, offsetY);
-		statusLine(guiGraphics, Component.translatable("gui.beegistics.apiary_controller.threshold"), 3, offsetX, offsetY);
 	}
 
 	/**

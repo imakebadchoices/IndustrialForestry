@@ -75,13 +75,11 @@ import forestry.core.utils.SpeciesUtil;
  * The Apiary Controller: a grid-connected block that automates the vanilla Forestry breeding loop <em>without</em>
  * bypassing its mutation chance or time - all breeding is done by a real adjacent apiary, and the controller only moves
  * bees in and out of it. It holds a single double row of {@link ItemBeeFilterCard Bee Pattern cards} (each authored as
- * "species X with traits Y") and runs them in one of three {@link ControllerMode modes}:
+ * "species X with traits Y") and runs them in one of two {@link ControllerMode modes} (maintaining a target count is the
+ * job of the separate {@link BeeRequesterBlockEntity Bee Requester} block, which drives this controller's Autocraft
+ * patterns):
  *
  * <ul>
- *     <li><b>{@link ControllerMode#REQUESTER Requester}</b>: self-initiates a genome breeding job toward
- *     the first card whose target count in the network is below {@link #targetThreshold}, hill-climbing from the
- *     base/donor the player has stocked. Maintains N of each card's target. Does not autocraft prerequisites. See
- *     {@link #runStandalone}.</li>
  *     <li><b>{@link ControllerMode#STANDALONE Standalone}</b> (the default): a dumb perpetual breeder. Keeps each driven apiary stocked
  *     with a princess and a drone matching a loaded card (same species) and harvests every product back to the network,
  *     self-sustaining while replacements exist. No target count, no hill-climb, no autocraft. See {@link #runPerpetual}.</li>
@@ -118,9 +116,7 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 	/** The subset actually offered to the crafting service: only mutations the adjacent apiary can currently breed. */
 	private List<IPatternDetails> offeredPatterns = List.of();
 
-	/** Requester mode: how many of each card's target to maintain in the network (one global threshold). */
-	private int targetThreshold = 1;
-	/** Which of the three {@link ControllerMode modes} the controller runs in; see the enum for the semantics of each. */
+	/** Which of the two {@link ControllerMode modes} the controller runs in; see the enum for the semantics of each. */
 	private ControllerMode mode = ControllerMode.DEFAULT;
 	/**
 	 * <b>TESTING-ONLY HACK (persisted NBT, off by default).</b> Makes the whole autocraft loop deterministic so a large
@@ -143,8 +139,6 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 	private int contendedApiaryCount = 0;
 	/** Whether any driven apiary holds a creative frame (breeds near-instantly) - gates fast crafting-poll cadence. */
 	private boolean apiaryFastBreeding = false;
-	/** Cached for the GUI: how many target-matching bees were in the network on the last tick. */
-	private long matchingTargetCount = 0;
 	/**
 	 * Cached for the GUI (standalone mode): whether the perpetual breeder had work on the last tick - a driven apiary was
 	 * occupied, or a bee matching a loaded card was available to stock one with. False (with an apiary linked) means the
@@ -222,10 +216,6 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 		return this.craftResult == null;
 	}
 
-	public int getTargetThreshold() {
-		return this.targetThreshold;
-	}
-
 	/** @return whether at least one usable (non-contended) apiary was found adjacent on the last tick. */
 	public boolean isApiaryConnected() {
 		return this.usableApiaryCount > 0;
@@ -239,11 +229,6 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 	/** @return how many adjacent apiaries were skipped last tick due to contention with another controller (for the GUI). */
 	public int getContendedApiaryCount() {
 		return this.contendedApiaryCount;
-	}
-
-	/** @return how many target-matching bees were in the network on the last tick (for the GUI status readout). */
-	public long getMatchingTargetCount() {
-		return this.matchingTargetCount;
 	}
 
 	/** @return whether standalone mode had work on the last tick (apiary occupied or a matching bee available to stock). */
@@ -268,12 +253,7 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 		return this.level != null && this.level.isDay();
 	}
 
-	public void setTargetThreshold(int threshold) {
-		this.targetThreshold = Math.max(1, threshold);
-		saveChanges();
-	}
-
-	/** @return which of the three {@link ControllerMode modes} the controller currently runs in. */
+	/** @return which of the two {@link ControllerMode modes} the controller currently runs in. */
 	public ControllerMode getMode() {
 		return this.mode;
 	}
@@ -357,70 +337,21 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 					findApiaries();
 					yield false;
 				}
-				case REQUESTER -> runStandalone(storage);
 				case STANDALONE -> runPerpetual(storage);
 			};
 		}
 		return worked ? TickRateModulation.URGENT : TickRateModulation.SLOWER;
 	}
 
-	// --- Standalone mode -------------------------------------------------------------------------------------------
+	// --- Genome job setup ------------------------------------------------------------------------------------------
 
 	/**
-	 * Runs one standalone step against the given network: flush any stray apiary products, then, if no job is in flight,
-	 * self-initiate a genome job toward the first loaded card whose target count in the network is below
-	 * {@link #targetThreshold}. Only cards that resolve to a concrete genome target with a reachable donor are actioned
-	 * (pure-species/blank cards are skipped); the player must have stocked the base and donor lines - standalone does not
-	 * autocraft prerequisites. Once a job is initiated {@link #runCraftTick} takes over on subsequent ticks. Package-visible
-	 * so tests can drive it against an arbitrary {@link MEStorage}.
-	 *
-	 * @param storage the network to pull parents from and push products into
-	 * @return whether any bee was moved (or a job initiated) this step
+	 * Sets up a genome craft job: the base parent is the result species (the chassis), the donor supplies the pinned
+	 * alleles, and {@link #runCraftTick} then hill-climbs toward the homozygous {@code target}. Used by
+	 * {@link #pushPattern}'s genome branch (an AE2 push toward a genome pattern) and exposed so tests can drive the
+	 * staging/drain machinery directly without a full crafting calculation.
 	 */
-	public boolean runStandalone(MEStorage storage) {
-		boolean worked = false;
-		List<Apiary> apiaries = findApiaries();
-		// Flush stray products (e.g. leftovers from a finished job) even while idle so nothing gets stuck in the apiary.
-		for (Apiary apiary : apiaries) {
-			worked |= drainProducts(apiary, storage);
-		}
-
-		KeyCounter available = new KeyCounter();
-		storage.getAvailableStacks(available);
-
-		for (int slot = 0; slot < this.patterns.size(); slot++) {
-			ItemStack stack = this.patterns.getStackInSlot(slot);
-			if (!(stack.getItem() instanceof ItemBeeFilterCard)) {
-				continue;
-			}
-			BeeFilter filter = ItemBeeFilterCard.getFilter(stack);
-			Optional<IGenome> target = BeeGenomeMutationPattern.targetFrom(filter);
-			if (target.isEmpty()) {
-				continue; // a pure-species or blank card is not a self-maintained genome target
-			}
-			long count = countMatching(available, filter);
-			if (count >= this.targetThreshold) {
-				continue; // already at the maintain level
-			}
-			Optional<IBeeSpecies> donor = BeeGenomeMutationPattern.resolveDonor(target.get());
-			IBeeSpecies result = target.get().getActiveSpecies();
-			if (donor.isEmpty() || result == null) {
-				continue; // unreachable target: no donor carries the pinned alleles
-			}
-			this.matchingTargetCount = count;
-			startGenomeJob(target.get(), result, donor.get(), this.targetThreshold - count);
-			return true;
-		}
-
-		return worked;
-	}
-
-	/**
-	 * Sets up a genome craft job in the same shape {@link #pushPattern}'s genome branch does, but self-initiated from a
-	 * standalone card rather than an AE2 push. The base parent is the result species (the chassis); the donor supplies the
-	 * pinned alleles; {@link #runCraftTick} then hill-climbs toward the homozygous target.
-	 */
-	private void startGenomeJob(IGenome target, IBeeSpecies result, IBeeSpecies donor, long remaining) {
+	public void startGenomeJob(IGenome target, IBeeSpecies result, IBeeSpecies donor, long remaining) {
 		this.craftFirstParent = result.id();
 		this.craftSecondParent = donor.id();
 		this.craftResult = result.id();
@@ -453,8 +384,8 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 	/**
 	 * Runs one perpetual-breeder step: drain every driven apiary's products to the network, then keep each apiary stocked
 	 * with a princess and a drone matching a loaded card (same species). Cards are assigned to apiaries round-robin by
-	 * index, so several apiaries behind one controller can each maintain a different bee line. Unlike {@link #runStandalone}
-	 * there is no target count, no genome hill-climb and no autocraft - it simply feeds the card's bee in and harvests
+	 * index, so several apiaries behind one controller can each maintain a different bee line. There is no target count,
+	 * no genome hill-climb and no autocraft - it simply feeds the card's bee in and harvests
 	 * everything out, self-sustaining while the network holds replacements. Package-visible so tests can drive it against
 	 * an arbitrary {@link MEStorage}.
 	 *
@@ -701,19 +632,16 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 			this.craftSecondParent = pattern.getSecondParent().id();
 			this.craftResult = pattern.getResult().id();
 			applyGenomeTarget(null);
+			this.craftRemaining = Math.max(1, patternDetails.getPrimaryOutput().amount());
+			this.craftBestScore = 0;
+			this.craftIdleCycles = 0;
 		} else if (patternDetails instanceof BeeGenomeMutationPattern pattern) {
 			// A genome job: the base parent is the result species itself (the chassis); the donor supplies the alleles the
 			// base default lacks. Breeding hill-climbs toward the pinned homozygous traits (scored by craftScoreFilter).
-			this.craftFirstParent = pattern.getResult().id();
-			this.craftSecondParent = pattern.getDonor().id();
-			this.craftResult = pattern.getResult().id();
-			applyGenomeTarget(pattern.getTarget());
+			startGenomeJob(pattern.getTarget(), pattern.getResult(), pattern.getDonor(), patternDetails.getPrimaryOutput().amount());
 		} else {
 			return false;
 		}
-		this.craftRemaining = Math.max(1, patternDetails.getPrimaryOutput().amount());
-		this.craftBestScore = 0;
-		this.craftIdleCycles = 0;
 
 		// Take ownership of the parent bees the crafting service extracted for us and stash them for staging.
 		for (KeyCounter inputList : inputHolder) {
@@ -1579,7 +1507,6 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 	@Override
 	public void saveAdditional(CompoundTag data, HolderLookup.Provider registries) {
 		super.saveAdditional(data, registries); // persists the Bee Pattern inventory (getInternalInventory)
-		data.putInt("targetThreshold", this.targetThreshold);
 		data.putString("mode", this.mode.name());
 		data.putBoolean("forceMutationHack", this.forceMutationHack);
 		this.craftBuffer.writeToNBT(data, "craftBuffer", registries);
@@ -1600,11 +1527,11 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 	@Override
 	public void loadTag(CompoundTag data, HolderLookup.Provider registries) {
 		super.loadTag(data, registries); // restores the Bee Pattern inventory (getInternalInventory)
-		this.targetThreshold = Math.max(1, data.getInt("targetThreshold"));
-		// Mode is stored as a string; also accept the boolean "craftingMode" (true -> AUTOCRAFT) so pre-existing saves load.
+		// Mode is stored as a string (an unknown/retired name - e.g. the old REQUESTER - falls back to DEFAULT via byName);
+		// also accept the legacy boolean "craftingMode" (true -> AUTOCRAFT) so pre-existing saves load.
 		this.mode = data.contains("mode")
 				? ControllerMode.byName(data.getString("mode"))
-				: (data.getBoolean("craftingMode") ? ControllerMode.AUTOCRAFT : ControllerMode.REQUESTER);
+				: (data.getBoolean("craftingMode") ? ControllerMode.AUTOCRAFT : ControllerMode.DEFAULT);
 		this.forceMutationHack = data.getBoolean("forceMutationHack");
 		this.craftBuffer.readFromNBT(data, "craftBuffer", registries);
 		this.cachedDecoded = null;

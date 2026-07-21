@@ -68,10 +68,12 @@ import forestry.core.utils.SpeciesUtil;
  *     hand-built network contents.</li>
  *     <li><b>AE2 wiring</b> - the placed block forms a grid node, and a mutation is offered/withheld by apiary climate
  *     (crafting mode).</li>
- *     <li><b>Live standalone loop</b> - a real Forestry apiary is placed next to the controller and a standalone genome
- *     job is driven ({@link ApiaryControllerBlockEntity#runStandalone} then {@link ApiaryControllerBlockEntity#runCraftTick})
- *     against an in-memory {@link MEStorage}. This exercises product draining, staging genome parents across every usable
- *     apiary in parallel, and the contention rule that leaves a shared apiary driven by neither controller.</li>
+ *     <li><b>Live genome loop</b> - a real Forestry apiary is placed next to the controller and a genome breeding job is
+ *     driven ({@link ApiaryControllerBlockEntity#startGenomeJob} then {@link ApiaryControllerBlockEntity#runCraftTick})
+ *     against an in-memory {@link MEStorage}. This exercises staging genome parents across every usable apiary in
+ *     parallel, and the contention rule that leaves a shared apiary driven by neither controller.</li>
+ *     <li><b>Perpetual (Standalone) loop</b> - {@link ApiaryControllerBlockEntity#runPerpetual} stocks and harvests a
+ *     species card, and flushes stray apiary products.</li>
  * </ul>
  */
 @GameTestHolder(Beegistics.NAMESPACE)
@@ -133,9 +135,9 @@ public class ApiaryControllerTest {
 		network.seed(beeKey(intro.donor(), BeeLifeStage.DRONE), count);
 	}
 
-	/** Drives one standalone step (initiate the genome job) then one craft tick (stage parents into every usable apiary). */
-	private static void driveStandaloneJob(ApiaryControllerBlockEntity controller, TestNetwork network) {
-		controller.runStandalone(network);
+	/** Initiates a genome job for the intro's target, then runs one craft tick (staging parents into every usable apiary). */
+	private static void driveGenomeJob(ApiaryControllerBlockEntity controller, TestNetwork network, GenomeIntro intro) {
+		controller.startGenomeJob(intro.target(), intro.base(), intro.donor(), 1);
 		controller.runCraftTick(network);
 	}
 
@@ -317,7 +319,7 @@ public class ApiaryControllerTest {
 		TestNetwork network = new TestNetwork();
 		seedGenomeParents(network, intro, 3);
 
-		driveStandaloneJob(rig.controller(), network);
+		driveGenomeJob(rig.controller(), network, intro);
 
 		assertBee(helper, rig.bees().getQueen(), intro.base(), BeeLifeStage.PRINCESS, "queen slot");
 		assertBee(helper, rig.bees().getDrone(), intro.donor(), BeeLifeStage.DRONE, "drone slot");
@@ -328,7 +330,7 @@ public class ApiaryControllerTest {
 		helper.succeed();
 	}
 
-	/** Offspring and produce sitting in the apiary's output slots are drained into the network by a standalone step. */
+	/** Offspring and produce sitting in the apiary's output slots are drained into the network by a perpetual step. */
 	@GameTest(template = "empty")
 	public static void drainMovesApiaryProductsIntoNetwork(GameTestHelper helper) {
 		Rig rig = place(helper);
@@ -340,7 +342,7 @@ public class ApiaryControllerTest {
 		rig.apiary().setItem(InventoryBeeHousing.SLOT_PRODUCT_1 + 1, offspringDrone);
 
 		TestNetwork network = new TestNetwork();
-		rig.controller().runStandalone(network); // idle (no cards), but still flushes stray products
+		rig.controller().runPerpetual(network); // idle (no cards), but still flushes stray products
 
 		helper.assertTrue(rig.apiary().getItem(InventoryBeeHousing.SLOT_PRODUCT_1).isEmpty(), "product slot 1 should be drained");
 		helper.assertTrue(rig.apiary().getItem(InventoryBeeHousing.SLOT_PRODUCT_1 + 1).isEmpty(), "product slot 2 should be drained");
@@ -428,7 +430,7 @@ public class ApiaryControllerTest {
 		TestNetwork network = new TestNetwork();
 		seedGenomeParents(network, intro, 4);
 
-		driveStandaloneJob(controller, network);
+		driveGenomeJob(controller, network, intro);
 
 		helper.assertTrue(controller.getUsableApiaryCount() == 2, "controller should drive both adjacent apiaries");
 		helper.assertTrue(controller.getContendedApiaryCount() == 0, "neither apiary is shared, so none is contended");
@@ -467,8 +469,8 @@ public class ApiaryControllerTest {
 		TestNetwork network = new TestNetwork();
 		seedGenomeParents(network, intro, 4);
 
-		driveStandaloneJob(a, network);
-		driveStandaloneJob(b, network);
+		driveGenomeJob(a, network, intro);
+		driveGenomeJob(b, network, intro);
 
 		IBeeHousing housing = (IBeeHousing) helper.getBlockEntity(sharedApiary);
 		helper.assertTrue(housing.getBeeInventory().getQueen().isEmpty(), "contended apiary's queen slot must stay empty");
@@ -537,7 +539,7 @@ public class ApiaryControllerTest {
 		helper.startSequence()
 				.thenWaitUntil(() -> helper.assertTrue(alvearyAssembled(helper, memberRel), "alveary should assemble"))
 				.thenExecute(() -> {
-					driveStandaloneJob(controller, network);
+					driveGenomeJob(controller, network, intro);
 
 					IBeeHousing alveary = (IBeeHousing) helper.getBlockEntity(memberRel);
 					assertBee(helper, alveary.getBeeInventory().getQueen(), intro.base(), BeeLifeStage.PRINCESS, "alveary queen slot");
@@ -569,7 +571,7 @@ public class ApiaryControllerTest {
 		TestNetwork network = new TestNetwork();
 		seedGenomeParents(network, intro, 3);
 
-		driveStandaloneJob(controller, network);
+		driveGenomeJob(controller, network, intro);
 
 		IBeeHousing lone = (IBeeHousing) helper.getBlockEntity(lonePlainRel);
 		helper.assertTrue(lone.getBeeInventory().getQueen().isEmpty(), "an unassembled alveary's queen slot must stay empty");
@@ -602,8 +604,8 @@ public class ApiaryControllerTest {
 		helper.startSequence()
 				.thenWaitUntil(() -> helper.assertTrue(alvearyAssembled(helper, memberRel), "alveary should assemble"))
 				.thenExecute(() -> {
-					driveStandaloneJob(a, network);
-					driveStandaloneJob(b, network);
+					driveGenomeJob(a, network, intro);
+					driveGenomeJob(b, network, intro);
 
 					IBeeHousing alveary = (IBeeHousing) helper.getBlockEntity(memberRel);
 					helper.assertTrue(alveary.getBeeInventory().getQueen().isEmpty(), "a contended alveary's queen slot must stay empty");

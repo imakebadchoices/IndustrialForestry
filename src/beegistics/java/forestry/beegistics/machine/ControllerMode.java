@@ -1,13 +1,12 @@
 package forestry.beegistics.machine;
 
 /**
- * The three modes an {@link ApiaryControllerBlockEntity} runs in. They differ only in <em>who decides what gets bred</em>;
- * the actual breeding is always done by a real adjacent apiary the controller feeds and drains.
+ * The two modes an {@link ApiaryControllerBlockEntity} runs in. They differ only in <em>who decides what gets bred</em>;
+ * the actual breeding is always done by a real adjacent apiary the controller feeds and drains. (Maintaining a target
+ * <em>count</em> in the network is the job of the separate {@link BeeRequesterBlockEntity Bee Requester} block, which
+ * submits AE2 crafting jobs against a controller's Autocraft patterns.)
  *
  * <ul>
- *     <li>{@link #REQUESTER}: self-maintaining. The controller keeps breeding toward each loaded card's genome target
- *     until the network holds the maintain threshold, hill-climbing from the base/donor bees the player stocked. It does
- *     not autocraft prerequisites.</li>
  *     <li>{@link #STANDALONE}: a dumb perpetual breeder. Each driven apiary is kept stocked with a princess and a drone
  *     matching a loaded card (same species), and every product is harvested back to the network - self-sustaining as
  *     long as replacements exist. No target count, no genome hill-climb, no autocraft.</li>
@@ -16,7 +15,6 @@ package forestry.beegistics.machine;
  * </ul>
  */
 public enum ControllerMode {
-	REQUESTER,
 	STANDALONE,
 	AUTOCRAFT;
 

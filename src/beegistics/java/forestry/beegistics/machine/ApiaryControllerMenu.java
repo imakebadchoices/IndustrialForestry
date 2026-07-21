@@ -12,12 +12,10 @@ import appeng.menu.slot.AppEngSlot;
 
 /**
  * Menu for the {@link ApiaryControllerBlockEntity}. Exposes the single double row of Bee Pattern card slots and mirrors
- * the controller's live status - whether an apiary is attached, which mode it runs in, and the active job / maintain
- * threshold - to the client via {@link GuiSync} fields. The mode toggle and the standalone threshold are edited
- * client-side and pushed back through client actions.
+ * the controller's live status - whether an apiary is attached, which mode it runs in, and the active job - to the
+ * client via {@link GuiSync} fields. The mode toggle is edited client-side and pushed back through a client action.
  */
 public class ApiaryControllerMenu extends AEBaseMenu {
-	private static final String ACTION_SET_THRESHOLD = "setThreshold";
 	private static final String ACTION_SET_MODE = "setMode";
 
 	// Machine-side semantics positioned by the style JSON (assets/ae2/screens/beegistics_apiary_controller.json).
@@ -29,10 +27,6 @@ public class ApiaryControllerMenu extends AEBaseMenu {
 	public int usableApiaries = 0;
 	@GuiSync(11)
 	public int contendedApiaries = 0;
-	@GuiSync(2)
-	public long targetCount = 0;
-	@GuiSync(3)
-	public int threshold = 1;
 	/** The controller's {@link ControllerMode} as an ordinal (GuiSync can't carry the enum directly). */
 	@GuiSync(5)
 	public int mode = ControllerMode.DEFAULT.ordinal();
@@ -62,22 +56,12 @@ public class ApiaryControllerMenu extends AEBaseMenu {
 
 		createPlayerInventorySlots(ip);
 
-		registerClientAction(ACTION_SET_THRESHOLD, Integer.class, this::setThreshold);
 		registerClientAction(ACTION_SET_MODE, Integer.class, this::setModeOrdinal);
 	}
 
 	/** @return the controller's current mode as reflected to the client (or the live value server-side). */
 	public ControllerMode mode() {
 		return ControllerMode.byOrdinal(this.mode);
-	}
-
-	/** Sets the stop-at threshold - routed to the server via a client action when called client-side. */
-	public void setThreshold(int value) {
-		if (isClientSide()) {
-			sendClientAction(ACTION_SET_THRESHOLD, value);
-			return;
-		}
-		this.controller.setTargetThreshold(value);
 	}
 
 	/** Advances to the next mode in the cycle (the GUI's single mode button) - routed to the server client-side. */
@@ -104,8 +88,6 @@ public class ApiaryControllerMenu extends AEBaseMenu {
 		if (isServerSide()) {
 			this.usableApiaries = this.controller.getUsableApiaryCount();
 			this.contendedApiaries = this.controller.getContendedApiaryCount();
-			this.targetCount = this.controller.getMatchingTargetCount();
-			this.threshold = this.controller.getTargetThreshold();
 			this.mode = this.controller.getMode().ordinal();
 			this.crafting = this.controller.isBusy();
 			this.craftRemaining = this.controller.getCraftRemaining();
