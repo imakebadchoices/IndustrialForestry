@@ -21,16 +21,60 @@ base.archivesName = "forestry-$minecraftVersion"
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 java.toolchain.vendor = JvmVendorSpec.JETBRAINS
 
+// Standalone Extra Bees add-on. A second source set (not a subproject) built into its own mod jar
+// (forestry-extrabees) that depends on the main forestry output and loads alongside it in dev runs.
+// Declared before the neoForge block so `mods` / `addModdingDependenciesTo` can reference it.
+sourceSets {
+	extrabees {}
+	// Standalone Beegistics add-on (Applied Energistics 2 integration): its own mod jar, depends on the main
+	// forestry output + AE2, loaded alongside forestry in dev runs.
+	beegistics {}
+	// Standalone Beeripherals add-on (CC: Tweaked integration): naturalist-chest peripheral, its own mod jar,
+	// depends on the main forestry output + the CC API, loaded alongside forestry in dev runs.
+	beeripherals {}
+	// Standalone Modern Bees add-on (Modern Industrialization integration): the tin drill + MI fuel/furnace
+	// mappings. Its own mod jar, depends on the main forestry output (all MI interop is data-driven), loaded
+	// alongside forestry in dev runs.
+	modernbees {}
+}
+
 neoForge {
 	version = "$forgeVersion"
 
-	accessTransformers = files('src/main/resources/META-INF/accesstransformer.cfg')
+	// Core Forestry's AT plus the Beegistics add-on's (which un-finals Slot.x/y). The add-on ships its own AT in its
+	// jar via [[accessTransformers]] in its mods.toml; it is listed here too so the shared dev run applies it.
+	accessTransformers = files('src/main/resources/META-INF/accesstransformer.cfg', 'src/beegistics/resources/META-INF/accesstransformer.cfg')
 	validateAccessTransformers = true
 
 	// Add Parchment parameter mappings
 	parchment {
 		mappingsVersion = project.mappingsVersion
 		minecraftVersion = project.minecraftVersion
+	}
+
+	mods {
+		forestry {
+			sourceSet sourceSets.main
+			// GameTest suite lives in src/test (forestry.gametest). It is part of the forestry mod so the
+			// gameTestServer run loads it, but stays out of the published jar (jar/apiJar use main only).
+			sourceSet sourceSets.test
+		}
+		// Separate mod at runtime: its own @Mod("extrabees") + neoforge.mods.toml, loaded alongside forestry.
+		extrabees {
+			sourceSet sourceSets.extrabees
+		}
+		// Separate mod at runtime: its own @Mod("beegistics") + neoforge.mods.toml, loaded alongside forestry.
+		beegistics {
+			sourceSet sourceSets.beegistics
+		}
+		// Separate mod at runtime: its own @Mod("beeripherals") + neoforge.mods.toml, loaded alongside forestry.
+		beeripherals {
+			sourceSet sourceSets.beeripherals
+		}
+		// Separate mod at runtime: its own @Mod("modernbees") + neoforge.mods.toml, loaded alongside forestry.
+		modernbees {
+			sourceSet sourceSets.modernbees
+		}
 	}
 
 	runs {
@@ -55,31 +99,49 @@ neoForge {
 			programArguments.addAll('--mod', 'forestry', '--all', '--output', file('src/generated/resources/').absolutePath, '--existing', file('src/main/resources/').absolutePath)
 		}
 
-		// Multiblock inventory-conservation GameTest suite. Runs ONLY via `gradlew runGameTestServer`; the
-		// enabled-namespaces property is what makes NeoForge execute the @GameTestHolder("forestry") classes, so the
-		// tests are completely inert in normal client/server play.
+		// Extra Bees add-on datagen (centrifuge / squeezer recipes). Run via `gradlew runDataExtrabees`.
+		dataExtrabees {
+			data()
+			programArguments.addAll('--mod', 'extrabees', '--all', '--output', file('src/extrabees/generated/').absolutePath, '--existing', file('src/main/resources/').absolutePath, '--existing', file('src/extrabees/resources/').absolutePath)
+		}
+
+		// Core Forestry GameTest suite (src/test): multiblock inventory conservation, genetics baseline, data-driven
+		// bee effect oracle, etc. Runs via `gradlew runGameTestServer`. Only the `forestry` mod is loaded and only the
+		// `forestry` namespace is enabled, so these keep upstream's core-only invariants intact (e.g. "exactly 5 bee
+		// effect primitive types") without the add-ons' extra species/effects/alleles/recipes tripping them. The
+		// add-on tests run separately via `runGameTestAddons`.
 		gameTestServer {
 			type = "gameTestServer"
+			loadedMods = [mods.forestry]
 			gameDirectory.set(project.layout.projectDirectory.dir('run/gametest'))
 			systemProperty 'neoforge.enabledGameTestNamespaces', 'forestry'
 			// Forwards `-Pforestry.genomeBaseline=generate` to the forked gametest JVM so GenomeBaselineTest
 			// can (re)generate its golden-master snapshot. Empty/absent => assert mode.
 			systemProperty 'forestry.genomeBaseline', providers.gradleProperty('forestry.genomeBaseline').getOrElse('')
 		}
-	}
 
-	mods {
-		forestry {
-			sourceSet sourceSets.main
-			// GameTest suite lives in src/test (forestry.gametest). It is part of the forestry mod so the
-			// gameTestServer run loads it, but stays out of the published jar (jar/apiJar use main only).
-			sourceSet sourceSets.test
+		// Add-on GameTest suite (beegistics autocrafting incl. many-genome + full-tree stress tests, Extra Bees effect
+		// behaviour + content, naturalist-chest peripheral, ...). Runs via `gradlew runGameTestAddons` with every mod
+		// loaded (add-ons need forestry) but only the add-on namespaces enabled, so the core-only invariant tests above
+		// are not executed in this add-on-contaminated world. The whole suite finishes in well under a minute.
+		gameTestAddons {
+			type = "gameTestServer"
+			gameDirectory.set(project.layout.projectDirectory.dir('run/gametest-addons'))
+			systemProperty 'neoforge.enabledGameTestNamespaces', 'extrabees,beegistics,beeripherals,modernbees'
 		}
 	}
 
 	// src/test has no Minecraft/NeoForge on its classpath by default — moddev only wires that into source sets
 	// it's told about. Without this the gametest sources won't compile.
 	addModdingDependenciesTo sourceSets.test
+	// The Extra Bees add-on source set likewise needs Minecraft/NeoForge on its classpath.
+	addModdingDependenciesTo sourceSets.extrabees
+	// The Beegistics add-on source set likewise needs Minecraft/NeoForge on its classpath.
+	addModdingDependenciesTo sourceSets.beegistics
+	// The Beeripherals add-on source set likewise needs Minecraft/NeoForge on its classpath.
+	addModdingDependenciesTo sourceSets.beeripherals
+	// The Modern Bees add-on source set likewise needs Minecraft/NeoForge on its classpath.
+	addModdingDependenciesTo sourceSets.modernbees
 }
 
 // The test source set holds GameTests (run via runGameTestServer), not JUnit tests, so the standard `test` task
@@ -136,6 +198,16 @@ repositories {
 			includeGroup 'com.github.rtyley'
 		}
 	}
+	maven {
+		name = 'CC: Tweaked'
+		url = 'https://squiddev.cc/maven/'
+		content { includeGroup 'cc.tweaked' }
+	}
+	maven {
+		name = 'Modrinth'
+		url = 'https://api.modrinth.com/maven'
+		content { includeGroup 'maven.modrinth' }
+	}
 }
 
 dependencies {
@@ -155,6 +227,31 @@ dependencies {
 	runtimeOnly "vazkii.patchouli:Patchouli:$patchouliVersion-NEOFORGE"
 	// ModKit DEV ONLY
 	implementation 'com.github.thedarkcolour:ModKit:51b8760'
+	// CC: Tweaked (used by the Beeripherals add-on, not core forestry). Kept as a runtime dep here so the dev runs
+	// load the real 1.21.1 build alongside the add-on - the peripheral can then be wrapped by a computer in-game
+	// (and in the gametest server).
+	runtimeOnly "maven.modrinth:cc-tweaked:$ccModrinthVersionId"
+	// Applied Energistics 2 (used by the Beegistics add-on, not core forestry). Kept as a runtime dep here so the
+	// dev runs load AE2 + its mandatory guideme dependency alongside the add-on.
+	runtimeOnly "maven.modrinth:ae2:$ae2Version"
+	runtimeOnly "maven.modrinth:guideme:$guidemeVersion"
+
+	// Extra Bees add-on compiles + runs against the full forestry output (its internal public classes) -
+	// the same coupling the original Binnie Extra Bees always had. No forestry.api changes required.
+	extrabeesImplementation sourceSets.main.output
+
+	// Beegistics add-on: full forestry output + AE2 (its whole reason to exist) + the JEI API for its plugin.
+	beegisticsImplementation sourceSets.main.output
+	beegisticsCompileOnly "maven.modrinth:ae2:$ae2Version"
+	beegisticsCompileOnly "mezz.jei:jei-$minecraftVersion-neoforge-api:$jeiVersion"
+
+	// Beeripherals add-on: full forestry output + the CC: Tweaked peripheral API (its whole reason to exist).
+	beeripheralsImplementation sourceSets.main.output
+	beeripheralsCompileOnly "cc.tweaked:cc-tweaked-$ccApiBranch-forge-api:$ccApiVersion"
+
+	// Modern Bees add-on: full forestry output only. All Modern Industrialization interop is data-driven
+	// (mod_loaded-gated recipes + MI-namespaced datamaps), so there is no MI compile dependency.
+	modernbeesImplementation sourceSets.main.output
 }
 
 var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
@@ -170,6 +267,60 @@ var generateModMetadata = tasks.register('generateModMetadata', ProcessResources
 
 	from 'src/main/templates'
 	into 'build/generated/sources/modMetadata'
+}
+
+var generateExtrabeesModMetadata = tasks.register('generateExtrabeesModMetadata', ProcessResources) {
+	var replaceProperties = [
+			'version'          : project.version,
+			'forgeVersionRange': forgeVersionRange,
+			'fmlVersionRange'  : fmlVersionRange,
+	]
+	inputs.properties replaceProperties
+	expand replaceProperties
+
+	from 'src/extrabees/templates'
+	into 'build/generated/sources/extrabeesModMetadata'
+}
+
+var generateBeegisticsModMetadata = tasks.register('generateBeegisticsModMetadata', ProcessResources) {
+	var replaceProperties = [
+			'version'          : project.version,
+			'forgeVersionRange': forgeVersionRange,
+			'fmlVersionRange'  : fmlVersionRange,
+			'ae2VersionRange'  : ae2VersionRange,
+	]
+	inputs.properties replaceProperties
+	expand replaceProperties
+
+	from 'src/beegistics/templates'
+	into 'build/generated/sources/beegisticsModMetadata'
+}
+
+var generateBeeripheralsModMetadata = tasks.register('generateBeeripheralsModMetadata', ProcessResources) {
+	var replaceProperties = [
+			'version'          : project.version,
+			'forgeVersionRange': forgeVersionRange,
+			'fmlVersionRange'  : fmlVersionRange,
+			'ccVersionRange'   : ccVersionRange,
+	]
+	inputs.properties replaceProperties
+	expand replaceProperties
+
+	from 'src/beeripherals/templates'
+	into 'build/generated/sources/beeripheralsModMetadata'
+}
+
+var generateModernBeesModMetadata = tasks.register('generateModernBeesModMetadata', ProcessResources) {
+	var replaceProperties = [
+			'version'          : project.version,
+			'forgeVersionRange': forgeVersionRange,
+			'fmlVersionRange'  : fmlVersionRange,
+	]
+	inputs.properties replaceProperties
+	expand replaceProperties
+
+	from 'src/modernbees/templates'
+	into 'build/generated/sources/modernbeesModMetadata'
 }
 
 // Helper function to extract JSON entries while preserving duplicate keys
@@ -281,7 +432,41 @@ sourceSets.main {
 	}
 }
 
+// Extra Bees resources: default src/extrabees/resources (authored content) + the datagen'd recipe JSON
+// under src/extrabees/generated + the processed neoforge.mods.toml.
+sourceSets.extrabees {
+	resources {
+		srcDir 'src/extrabees/generated'
+		srcDir generateExtrabeesModMetadata
+	}
+}
+
+// Beegistics resources: authored content under src/beegistics/resources + the processed neoforge.mods.toml.
+sourceSets.beegistics {
+	resources {
+		srcDir generateBeegisticsModMetadata
+	}
+}
+
+// Beeripherals resources: authored content under src/beeripherals/resources + the processed neoforge.mods.toml.
+sourceSets.beeripherals {
+	resources {
+		srcDir generateBeeripheralsModMetadata
+	}
+}
+
+// Modern Bees resources: authored content under src/modernbees/resources + the processed neoforge.mods.toml.
+sourceSets.modernbees {
+	resources {
+		srcDir generateModernBeesModMetadata
+	}
+}
+
 neoForge.ideSyncTask generateModMetadata
+neoForge.ideSyncTask generateExtrabeesModMetadata
+neoForge.ideSyncTask generateBeegisticsModMetadata
+neoForge.ideSyncTask generateBeeripheralsModMetadata
+neoForge.ideSyncTask generateModernBeesModMetadata
 
 jar {
 	from sourceSets.main.output.classesDirs
@@ -351,10 +536,100 @@ tasks.register('apiJar', Jar) {
 	include 'forestry/api/**'
 }
 
+tasks.register('forestryExtrabeesJar', Jar) {
+	archiveBaseName.set("forestry-extrabees-$minecraftVersion")
+	from sourceSets.extrabees.output
+
+	// Datagen + GameTests are dev-only (they use build/classes, not the jar). Keep them out of the shipped
+	// jar - mirrors the main jar's forestry/core/data exclusion and avoids FML scanning these classes.
+	exclude 'forestry/extrabees/data/**'
+	exclude 'forestry/extrabees/gametest/**'
+	exclude 'data/extrabees/structure/**'
+
+	manifest {
+		attributes([
+				'Specification-Title'     : 'Forestry: Extra Bees',
+				'Specification-Vendor'    : 'SirSengir',
+				'Specification-Version'   : "${project.version}",
+				'Implementation-Title'    : 'forestry-extrabees',
+				'Implementation-Version'  : "${project.version}",
+				'Implementation-Vendor'   : 'SirSengir',
+				'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
+	}
+}
+
+tasks.register('forestryBeegisticsJar', Jar) {
+	archiveBaseName.set("forestry-beegistics-$minecraftVersion")
+	from sourceSets.beegistics.output
+
+	// Datagen + GameTests are dev-only. Keep them out of the shipped jar.
+	exclude 'forestry/beegistics/data/**'
+	exclude 'forestry/beegistics/gametest/**'
+
+	manifest {
+		attributes([
+				'Specification-Title'     : 'Forestry: Beegistics',
+				'Specification-Vendor'    : 'SirSengir',
+				'Specification-Version'   : "${project.version}",
+				'Implementation-Title'    : 'forestry-beegistics',
+				'Implementation-Version'  : "${project.version}",
+				'Implementation-Vendor'   : 'SirSengir',
+				'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
+	}
+}
+
+tasks.register('forestryBeeripheralsJar', Jar) {
+	archiveBaseName.set("forestry-beeripherals-$minecraftVersion")
+	from sourceSets.beeripherals.output
+
+	// GameTests are dev-only. Keep them out of the shipped jar.
+	exclude 'forestry/beeripherals/gametest/**'
+	exclude 'data/beeripherals/structure/**'
+
+	manifest {
+		attributes([
+				'Specification-Title'     : 'Forestry: Beeripherals',
+				'Specification-Vendor'    : 'SirSengir',
+				'Specification-Version'   : "${project.version}",
+				'Implementation-Title'    : 'forestry-beeripherals',
+				'Implementation-Version'  : "${project.version}",
+				'Implementation-Vendor'   : 'SirSengir',
+				'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
+	}
+}
+
+tasks.register('forestryModernBeesJar', Jar) {
+	archiveBaseName.set("forestry-modernbees-$minecraftVersion")
+	from sourceSets.modernbees.output
+
+	// GameTests are dev-only. Keep them out of the shipped jar.
+	exclude 'forestry/modernbees/gametest/**'
+	exclude 'data/modernbees/structure/**'
+
+	manifest {
+		attributes([
+				'Specification-Title'     : 'Forestry: Modern Bees',
+				'Specification-Vendor'    : 'SirSengir',
+				'Specification-Version'   : "${project.version}",
+				'Implementation-Title'    : 'forestry-modernbees',
+				'Implementation-Version'  : "${project.version}",
+				'Implementation-Vendor'   : 'SirSengir',
+				'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
+	}
+}
+
 tasks.named('assemble') {
 	dependsOn javadocJar
 	dependsOn sourcesJar
 	dependsOn apiJar
+	dependsOn forestryExtrabeesJar
+	dependsOn forestryBeegisticsJar
+	dependsOn forestryBeeripheralsJar
+	dependsOn forestryModernBeesJar
 }
 
 publishing {

@@ -26,3 +26,4 @@ libs
 /.vscode
 
 **/src/generated/**/.cache/
+**/src/extrabees/generated/**/.cache/
