@@ -40,10 +40,12 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 	private static final int ZONE_H = 46;
 
 	// The Standalone breeding-card region: a narrower panel centred in the same vertical band, behind the two card wells
-	// (princess + drone, placed by the style JSON at top 44) with a caption above them.
-	private static final int BREED_ZONE_X = 72;
+	// (princess + drone, placed by the style JSON at top 44) with a caption above them. Width is driven by the caption
+	// (wider than the 36px card pair), sized so "Breeding pair" clears the border with an even margin, centred on x=100
+	// (the pair's centre).
+	private static final int BREED_ZONE_X = 62;
 	private static final int BREED_ZONE_Y = 24;
-	private static final int BREED_ZONE_W = 56;
+	private static final int BREED_ZONE_W = 76;
 	private static final int BREED_ZONE_H = 46;
 	private static final int BREED_CAPTION_CX = 100;
 	private static final int BREED_CAPTION_Y = 33;
