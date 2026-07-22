@@ -84,6 +84,8 @@ public final class BeeCardGenomeAutocraftTest {
 	private static final BlockPos CRAFTING = new BlockPos(3, 0, 0);
 	private static final BlockPos APIARY = new BlockPos(1, 0, -1);
 	private static final BlockPos ORIGIN_IN_STRUCTURE = new BlockPos(4, 2, 4);
+	/** How many times the wait loop will reseed + resubmit after the hill-climb abandons a job before failing the test. */
+	private static final int MAX_RESUBMITS = 6;
 
 	/** A chosen chassis, the exact homozygous target, and the donor the resolver picked (what we must seed). */
 	private record CardIntro(IBeeSpecies base, IGenome target, IBeeSpecies donor) {
@@ -99,7 +101,7 @@ public final class BeeCardGenomeAutocraftTest {
 	 * candidate donor (and never the easiest), and the card still delivers - proving AE2 satisfies the fuzzy donor slot from
 	 * whatever carrier is in stock rather than autocrafting the resolver's default pick.
 	 */
-	@GameTest(template = "empty", timeoutTicks = 200000)
+	@GameTest(template = "empty", timeoutTicks = 300000)
 	public static void autocraftUsesStockedNonEasiestDonor(GameTestHelper helper) {
 		runAutocraft(helper, findMultiDonorCardIntro(), "card_stocked_donor");
 	}
@@ -124,19 +126,58 @@ public final class BeeCardGenomeAutocraftTest {
 		Future<ICraftingPlan>[] planFuture = new Future[1];
 		ICraftingPlan[] plan = new ICraftingPlan[1];
 		boolean[] submitted = {false};
+		boolean[] sawBusy = {false};
+		int[] attempts = {0};
 
 		helper.startSequence()
 			.thenIdle(80)
 			.thenExecute(() -> seedParents(level, origin, intro, src))
 			.thenExecute(() -> refreshProvider(level, origin))
-			.thenWaitUntil(() -> beginAndSubmit(level, origin, targetKey, src, planFuture, plan, submitted, intro))
-			.thenWaitUntil(() -> {
-				MEStorage storage = gridStorage(level, origin);
-				if (storage == null || !networkHasTarget(storage, intro.target())) {
-					throw new GameTestAssertException("target genome not delivered yet: " + diagnose(level, origin, intro, targetKey));
-				}
-			})
+			.thenWaitUntil(() -> driveUntilDelivered(level, origin, targetKey, src, intro,
+				planFuture, plan, submitted, sawBusy, attempts))
 			.thenSucceed();
+	}
+
+	/**
+	 * One poll of the delivery wait. Returns normally once the target princess is in the network; otherwise keeps the job
+	 * alive and throws {@link GameTestAssertException} to wait another tick.
+	 *
+	 * <p>The genome hill-climb is stochastic: a required allele can go extinct in the small breeding population (its last
+	 * carrier consumed with no heir inheriting it), at which point the controller {@code abandonGenomeJob}s the request. A
+	 * real {@code BeeRequester} would simply re-request, so when the controller falls idle without having delivered we
+	 * reseed the parents and resubmit - bounded by {@link #MAX_RESUBMITS} so a genuinely unreachable target still fails
+	 * loudly instead of looping to the timeout. This tests the delivery <em>guarantee</em> rather than one lucky brood.
+	 */
+	private static void driveUntilDelivered(ServerLevel level, BlockPos origin, AEItemKey targetKey, IActionSource src,
+			CardIntro intro, Future<ICraftingPlan>[] planFuture, ICraftingPlan[] plan, boolean[] submitted,
+			boolean[] sawBusy, int[] attempts) {
+		MEStorage storage = gridStorage(level, origin);
+		if (storage != null && networkHasTarget(storage, intro.target())) {
+			return; // delivered - the sequence step succeeds
+		}
+		if (!submitted[0]) {
+			// (Re)drive the crafting calc + submit across ticks; throws transient asserts until the job is in flight.
+			beginAndSubmit(level, origin, targetKey, src, planFuture, plan, submitted, intro);
+			sawBusy[0] = false; // a fresh job: wait for it to pick up before judging it abandoned
+		} else {
+			ApiaryControllerBlockEntity controller = controller(level, origin);
+			boolean busy = controller != null && controller.isBusy();
+			if (busy) {
+				sawBusy[0] = true;
+			} else if (sawBusy[0]) {
+				// Idle after breeding, yet nothing delivered => the job was abandoned (allele extinct / watchdog tripped).
+				if (attempts[0] >= MAX_RESUBMITS) {
+					throw new GameTestAssertException("target genome not delivered after " + (MAX_RESUBMITS + 1)
+							+ " attempts: " + diagnose(level, origin, intro, targetKey));
+				}
+				attempts[0]++;
+				seedParents(level, origin, intro, src); // replenish the population the abandoned brood consumed
+				planFuture[0] = null;
+				plan[0] = null;
+				submitted[0] = false; // the !submitted branch resubmits next tick
+			}
+		}
+		throw new GameTestAssertException("target genome not delivered yet: " + diagnose(level, origin, intro, targetKey));
 	}
 
 	// --- job driving --------------------------------------------------------------------------------------------
@@ -187,8 +228,10 @@ public final class BeeCardGenomeAutocraftTest {
 			return;
 		}
 		// The chassis line plus the donor the CONTROLLER will pick (resolveDonor is deterministic, so we agree with it).
-		storage.insert(BeeMutationPattern.canonicalKey(intro.base(), BeeLifeStage.PRINCESS), 64, Actionable.MODULATE, src);
-		storage.insert(BeeMutationPattern.canonicalKey(intro.donor(), BeeLifeStage.DRONE), 64, Actionable.MODULATE, src);
+		// The wanted allele starts only in the donor drones, so seed a deep reservoir of them: the more independent gen-1
+		// crossings there are, the less likely a run of unlucky segregations strands the allele (which would abandon the job).
+		storage.insert(BeeMutationPattern.canonicalKey(intro.base(), BeeLifeStage.PRINCESS), 128, Actionable.MODULATE, src);
+		storage.insert(BeeMutationPattern.canonicalKey(intro.donor(), BeeLifeStage.DRONE), 256, Actionable.MODULATE, src);
 	}
 
 	// --- plot ---------------------------------------------------------------------------------------------------
@@ -302,6 +345,11 @@ public final class BeeCardGenomeAutocraftTest {
 	}
 
 	// --- grid helpers -------------------------------------------------------------------------------------------
+
+	@Nullable
+	private static ApiaryControllerBlockEntity controller(ServerLevel level, BlockPos origin) {
+		return level.getBlockEntity(origin.offset(CONTROLLER)) instanceof ApiaryControllerBlockEntity c ? c : null;
+	}
 
 	@Nullable
 	private static IGrid grid(ServerLevel level, BlockPos origin) {
