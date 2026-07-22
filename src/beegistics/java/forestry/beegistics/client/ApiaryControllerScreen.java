@@ -55,7 +55,6 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 	private static final int STATUS_H = 50;
 	private static final int STATUS_LINE_X = 15;
 	private static final int STATUS_LINE_DY = 11;
-	private static final int STATUS_LINES = 4;
 
 	private static final int TITLE_X = 10;
 	private static final int TITLE_Y = 7;
@@ -72,11 +71,21 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 		super(menu, playerInventory, title, style);
 	}
 
-	/** Y of status line {@code index}, with the whole {@link #STATUS_LINES}-line block vertically centred in the panel. */
+	/** Y of status line {@code index}, with the block of {@link #visibleStatusLines() actually-drawn} lines vertically centred in the panel. */
 	private int statusLineY(int index) {
-		int block = (STATUS_LINES - 1) * STATUS_LINE_DY + this.font.lineHeight;
+		int block = (visibleStatusLines() - 1) * STATUS_LINE_DY + this.font.lineHeight;
 		int line0 = STATUS_Y + (STATUS_H - block) / 2;
 		return line0 + index * STATUS_LINE_DY;
+	}
+
+	/**
+	 * How many status lines are drawn right now: the apiary link and the mode readout always show (2), plus the climate
+	 * and day/night pair only when an apiary is connected with a known climate (4). Kept in lockstep with the draw
+	 * condition in {@link #drawClimate} so the block centres on what is actually painted, not a fixed maximum.
+	 */
+	private int visibleStatusLines() {
+		boolean hasClimate = this.menu.usableApiaries > 0 && this.menu.apiaryTemperature >= 0 && this.menu.apiaryHumidity >= 0;
+		return hasClimate ? 4 : 2;
 	}
 
 	@Override
