@@ -285,6 +285,7 @@ public final class BeeFullTreeMinMaxTest {
 
 	private static void buildPlot(PlotBuilder plot, MinMax mm) {
 		plot.creativeEnergyCell(ENERGY);
+		BeegisticsGridTests.forceInfiniteChannels(plot, ENERGY);
 		for (int x = 0; x <= 4; x++) {
 			plot.cable(new BlockPos(x, 0, 1));
 		}

@@ -1,0 +1,14 @@
+{
+	"neoforge:conditions": [
+		{ "type": "neoforge:mod_loaded", "modid": "ae2" }
+	],
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "beegistics:apiary_controller" },
+		{ "item": "ae2:crafting_card" }
+	],
+	"result": {
+		"id": "beegistics:bee_requester",
+		"count": 1
+	}
+}

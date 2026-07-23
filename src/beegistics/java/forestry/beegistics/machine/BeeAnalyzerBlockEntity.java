@@ -13,6 +13,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
+import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.energy.IEnergyService;
@@ -60,6 +61,7 @@ public class BeeAnalyzerBlockEntity extends AENetworkedBlockEntity implements IG
 	public BeeAnalyzerBlockEntity(BlockPos pos, BlockState state) {
 		super(BeegisticsBlockEntities.BEE_ANALYZER.get(), pos, state);
 		getMainNode()
+				.setFlags(GridFlags.REQUIRE_CHANNEL)
 				.setIdlePowerUsage(0)
 				.addService(IGridTickable.class, this);
 	}

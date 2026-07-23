@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import appeng.api.config.Actionable;
 import appeng.api.inventories.InternalInventory;
+import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.crafting.CalculationStrategy;
@@ -88,6 +89,7 @@ public class BeeRequesterBlockEntity extends AENetworkedInvBlockEntity implement
 	public BeeRequesterBlockEntity(BlockPos pos, BlockState state) {
 		super(BeegisticsBlockEntities.BEE_REQUESTER.get(), pos, state);
 		getMainNode()
+				.setFlags(GridFlags.REQUIRE_CHANNEL)
 				.setIdlePowerUsage(2.0)
 				.addService(IGridTickable.class, this)
 				.addService(ICraftingRequester.class, this);

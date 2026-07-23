@@ -272,6 +272,7 @@ public final class BeeAutocraftTreeTest {
 		BlockPos crafting = craftingPos(steps);
 
 		plot.creativeEnergyCell(ENERGY);
+		BeegisticsGridTests.forceInfiniteChannels(plot, ENERGY);
 		for (int x = 0; x <= crafting.getX() + 1; x++) {
 			plot.cable(new BlockPos(x, 0, 1));
 		}

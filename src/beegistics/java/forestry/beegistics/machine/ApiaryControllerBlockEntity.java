@@ -197,6 +197,7 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 	public ApiaryControllerBlockEntity(BlockPos pos, BlockState state) {
 		super(BeegisticsBlockEntities.APIARY_CONTROLLER.get(), pos, state);
 		getMainNode()
+				.setFlags(GridFlags.REQUIRE_CHANNEL)
 				.setIdlePowerUsage(2.0)
 				.addService(IGridTickable.class, this)
 				.addService(ICraftingProvider.class, this);

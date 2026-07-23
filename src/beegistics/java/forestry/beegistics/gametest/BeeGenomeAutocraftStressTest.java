@@ -333,6 +333,7 @@ public final class BeeGenomeAutocraftStressTest {
 	private static void buildPlot(PlotBuilder plot, List<Intro> intros, int cpus) {
 		int n = intros.size();
 		plot.creativeEnergyCell(ENERGY);
+		BeegisticsGridTests.forceInfiniteChannels(plot, ENERGY);
 		// Cable backbone at z=1, spanning past the drive + primary CPU on the z=0 row. It also runs under the whole z=2 CPU
 		// row (each extra CPU at x=2j joins the grid via the cable at x=2j,z=1), which with 6 CPUs sits within this span.
 		for (int x = 0; x <= n + 2; x++) {

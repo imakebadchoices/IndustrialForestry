@@ -177,6 +177,7 @@ public final class BeeAutocraftTest {
 
 	private static void buildPlot(PlotBuilder plot, IMutation<IBeeSpecies> mutation) {
 		plot.creativeEnergyCell(ENERGY);
+		BeegisticsGridTests.forceInfiniteChannels(plot, ENERGY);
 		plot.cable(new BlockPos(0, 0, 1));
 		plot.cable(new BlockPos(1, 0, 1));
 		plot.cable(new BlockPos(2, 0, 1));
