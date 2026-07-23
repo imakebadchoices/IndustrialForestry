@@ -49,8 +49,6 @@ public class ApiaryControllerMenu extends AEBaseMenu {
 	public int apiaryTemperature = -1;
 	@GuiSync(9)
 	public int apiaryHumidity = -1;
-	@GuiSync(10)
-	public boolean apiaryDay = true;
 	/** Standalone mode only: whether an apiary is occupied or a matching bee is available to stock, vs. no matching bees. */
 	@GuiSync(12)
 	public boolean perpetualBreeding = false;
@@ -115,7 +113,6 @@ public class ApiaryControllerMenu extends AEBaseMenu {
 			this.craftRemaining = this.controller.getCraftRemaining();
 			this.apiaryTemperature = this.controller.getApiaryTemperature() == null ? -1 : this.controller.getApiaryTemperature().ordinal();
 			this.apiaryHumidity = this.controller.getApiaryHumidity() == null ? -1 : this.controller.getApiaryHumidity().ordinal();
-			this.apiaryDay = this.controller.isApiaryDay();
 			this.perpetualBreeding = this.controller.isPerpetualBreeding();
 			// Only the current mode's slot group accepts cards: disabling the other rejects placement and shift-click
 			// (mayPlace) server-side, so a card can never land in a hidden slot. The screen mirrors this visually.

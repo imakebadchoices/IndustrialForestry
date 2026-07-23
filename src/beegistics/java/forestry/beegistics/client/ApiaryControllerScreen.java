@@ -82,12 +82,12 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 
 	/**
 	 * How many status lines are drawn right now: the apiary link and the mode readout always show (2), plus the climate
-	 * and day/night pair only when an apiary is connected with a known climate (4). Kept in lockstep with the draw
-	 * condition in {@link #drawClimate} so the block centres on what is actually painted, not a fixed maximum.
+	 * line only when an apiary is connected with a known climate (3). Kept in lockstep with the draw condition in
+	 * {@link #drawClimate} so the block centres on what is actually painted, not a fixed maximum.
 	 */
 	private int visibleStatusLines() {
 		boolean hasClimate = this.menu.usableApiaries > 0 && this.menu.apiaryTemperature >= 0 && this.menu.apiaryHumidity >= 0;
-		return hasClimate ? 4 : 2;
+		return hasClimate ? 3 : 2;
 	}
 
 	@Override
@@ -191,7 +191,7 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 		drawClimate(guiGraphics, 2, offsetX, offsetY);
 	}
 
-	/** Autocraft mode: job state, then the apiary climate + day/night. */
+	/** Autocraft mode: job state, then the apiary climate. */
 	private void drawCraftStatus(GuiGraphics guiGraphics, int offsetX, int offsetY) {
 		Component job = this.menu.crafting
 				? Component.translatable("gui.beegistics.apiary_controller.crafting", this.menu.craftRemaining).withStyle(ChatFormatting.GREEN)
@@ -200,16 +200,12 @@ public class ApiaryControllerScreen extends AEBaseScreen<ApiaryControllerMenu> {
 		drawClimate(guiGraphics, 2, offsetX, offsetY);
 	}
 
-	/** Draws the driven apiary's climate on status line {@code index} and its day/night on {@code index + 1} (nothing if no apiary). */
+	/** Draws the driven apiary's climate on status line {@code index} (nothing if no apiary). */
 	private void drawClimate(GuiGraphics guiGraphics, int index, int offsetX, int offsetY) {
 		if (this.menu.usableApiaries > 0 && this.menu.apiaryTemperature >= 0 && this.menu.apiaryHumidity >= 0) {
 			String temp = TemperatureType.VALUES.get(this.menu.apiaryTemperature).name();
 			String humid = HumidityType.VALUES.get(this.menu.apiaryHumidity).name();
 			statusLine(guiGraphics, Component.translatable("gui.beegistics.apiary_controller.climate", temp, humid), index, offsetX, offsetY);
-			Component time = Component.translatable(this.menu.apiaryDay
-					? "gui.beegistics.apiary_controller.time.day"
-					: "gui.beegistics.apiary_controller.time.night");
-			statusLine(guiGraphics, Component.translatable("gui.beegistics.apiary_controller.time", time), index + 1, offsetX, offsetY);
 		}
 	}
 

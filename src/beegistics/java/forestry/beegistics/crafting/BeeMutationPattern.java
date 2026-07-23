@@ -19,9 +19,11 @@ import forestry.api.apiculture.genetics.IBeeSpecies;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutation;
+import forestry.api.genetics.IMutationCondition;
 import forestry.beegistics.BeegisticsComponents;
 import forestry.beegistics.ItemBeeMutationPattern;
 import forestry.core.genetics.mutations.Mutation;
+import forestry.core.genetics.mutations.MutationConditionDaytime;
 import forestry.core.utils.SpeciesUtil;
 
 /**
@@ -131,9 +133,27 @@ public final class BeeMutationPattern implements IPatternDetails {
 		return this.result;
 	}
 
-	/** @return {@code true} if this mutation has no breeding conditions (always breedable in any apiary). */
+	/**
+	 * @return {@code true} if this mutation has no <em>location-dependent</em> breeding conditions, so it is breedable in
+	 * any apiary. Day/night is excluded (see {@link #canBreedAt}): a purely time-gated mutation still breeds anywhere -
+	 * the job just waits for the right time of day - so it counts as unconditional for routing.
+	 */
 	public boolean isUnconditional() {
-		return this.mutation.getConditions().isEmpty();
+		for (IMutationCondition condition : this.mutation.getConditions()) {
+			if (isRoutingCondition(condition)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * @return {@code true} if this condition gates <em>where</em> a mutation can breed and so must be honored when routing
+	 * a job to an apiary. Day/night ({@link MutationConditionDaytime}) gates only <em>when</em>, not where; because an
+	 * autocrafting job can wait for the right time of day, it is deliberately ignored for routing.
+	 */
+	private static boolean isRoutingCondition(IMutationCondition condition) {
+		return !(condition instanceof MutationConditionDaytime);
 	}
 
 	/** @return localized, human-readable descriptions of this mutation's breeding conditions (empty if none). */
@@ -143,11 +163,24 @@ public final class BeeMutationPattern implements IPatternDetails {
 
 	/**
 	 * @return {@code true} if the mutation's conditions are currently satisfied at the given location and climate - i.e.
-	 * the apiary there could actually breed it. Uses the exact aggregation breeding uses ({@link Mutation#getChance}),
-	 * evaluated against the two parents' default genomes (the pure bees this pattern breeds).
+	 * the apiary there could actually breed it. Mirrors the aggregation breeding uses ({@link Mutation#getChance}),
+	 * evaluated against the two parents' default genomes (the pure bees this pattern breeds), <b>except that day/night is
+	 * ignored</b>: time of day gates only when a mutation breeds, and an autocrafting job can wait for the right time, so
+	 * a time-gated mutation is not withheld from an otherwise-suitable apiary (see {@link #isRoutingCondition}).
 	 */
 	public boolean canBreedAt(Level level, BlockPos pos, IClimateProvider climate) {
-		float chance = Mutation.getChance(this.mutation, level, pos, this.firstParent.getDefaultGenome(), this.secondParent.getDefaultGenome(), climate);
+		IGenome firstGenome = this.firstParent.getDefaultGenome();
+		IGenome secondGenome = this.secondParent.getDefaultGenome();
+		float chance = this.mutation.getChance();
+		for (IMutationCondition condition : this.mutation.getConditions()) {
+			if (!isRoutingCondition(condition)) {
+				continue;
+			}
+			chance = condition.modifyChance(level, pos, this.mutation, firstGenome, secondGenome, climate, chance);
+			if (chance == 0f) {
+				return false;
+			}
+		}
 		return chance > 0f;
 	}
 

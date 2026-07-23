@@ -298,11 +298,6 @@ public class ApiaryControllerBlockEntity extends AENetworkedInvBlockEntity imple
 		return this.apiaryHumidity;
 	}
 
-	/** @return whether it is currently daytime at the controller (for the GUI day/night-conditioned mutations). */
-	public boolean isApiaryDay() {
-		return this.level != null && this.level.isDay();
-	}
-
 	/** @return which of the two {@link ControllerMode modes} the controller currently runs in. */
 	public ControllerMode getMode() {
 		return this.mode;
