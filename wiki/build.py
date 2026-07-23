@@ -62,6 +62,9 @@ PAGE_TITLES = {
     "beegistics": "Beegistics", "beeripherals": "Beeripherals",
     "modern-bees": "Modern Bees", "downloads": "Downloads",
     "explorer": "Breeding Explorer",
+    # Generated but intentionally not in SIDEBAR: an overview of the core fork, kept
+    # for reference and reachable by direct link only.
+    "fork": "The Fork",
 }
 
 

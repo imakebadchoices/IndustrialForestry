@@ -72,8 +72,9 @@ jobs:
           set -euo pipefail
           mkdir -p wiki/site/downloads
           stage() { cp "$1" "wiki/site/downloads/$2"; echo "  $2 <- $1"; }
-          # Main mod jar only (exclude the sources/api/javadoc classifier jars, which aren't built here anyway).
-          stage "$(ls build/libs/forestry-1.21.1-*.jar | grep -vE '(-sources|-api|-javadoc)\.jar$')" forestry.jar
+          # The base fork jar is deliberately NOT hosted on the site (see the Downloads page): its core
+          # changes are merged upstream, so out of courtesy we don't distribute the fork. It is still built
+          # above and published as a CI artifact by build.yml for testing — just not linked from the site.
           stage build/libs/forestry-extrabees-1.21.1-*.jar   forestry-extrabees.jar
           stage build/libs/forestry-beegistics-1.21.1-*.jar  forestry-beegistics.jar
           stage build/libs/forestry-beeripherals-1.21.1-*.jar forestry-beeripherals.jar
