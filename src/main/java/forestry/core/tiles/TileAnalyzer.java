@@ -42,7 +42,7 @@ public class TileAnalyzer extends TilePowered implements WorldlyContainer, ILiqu
 	private static final int TIME_TO_ANALYZE = 125;
 	private static final int HONEY_REQUIRED = 100;
 	// Genetics
-	public static int analyzerEnergyPerWork = 203200;
+	public static int analyzerEnergyPerWork = 50800;
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;

@@ -44,7 +44,7 @@ import javax.annotation.Nullable;
 
 public class TileCarpenter extends TilePowered implements WorldlyContainer, ILiquidTankTile, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
-	private static final int ENERGY_PER_WORK_CYCLE = 20400;
+	private static final int ENERGY_PER_WORK_CYCLE = 5100;
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
 
 	private final FilteredTank resourceTank;

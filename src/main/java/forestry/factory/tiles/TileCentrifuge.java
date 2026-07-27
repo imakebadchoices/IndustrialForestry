@@ -41,7 +41,7 @@ import java.util.Collection;
 
 public class TileCentrifuge extends TilePowered implements ISocketable, WorldlyContainer, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
-	private static final int ENERGY_PER_WORK_CYCLE = 32000;
+	private static final int ENERGY_PER_WORK_CYCLE = 8000;
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 20;
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");

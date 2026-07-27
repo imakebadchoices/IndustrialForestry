@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class TileStill extends TilePowered implements WorldlyContainer, ILiquidTankTile {
-	private static final int ENERGY_PER_RECIPE_TIME = 2000;
+	private static final int ENERGY_PER_RECIPE_TIME = 500;
 
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;

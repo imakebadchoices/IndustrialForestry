@@ -42,7 +42,7 @@ import java.util.Optional;
 
 public class TileBottler extends TilePowered implements WorldlyContainer, ILiquidTankTile, ISlotPickupWatcher {
 	private static final int TICKS_PER_RECIPE_TIME = 5;
-	private static final int ENERGY_PER_RECIPE_TIME = 10000;
+	private static final int ENERGY_PER_RECIPE_TIME = 2500;
 
 	private final StandardTank resourceTank;
 	private final TankManager tankManager;

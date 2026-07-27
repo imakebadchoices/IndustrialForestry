@@ -45,7 +45,7 @@ import java.util.List;
 
 public class TileSqueezer extends TilePowered implements ISocketable, WorldlyContainer, ILiquidTankTile, IMachineUpgradable {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
-	private static final int ENERGY_PER_WORK_CYCLE = 20000;
+	private static final int ENERGY_PER_WORK_CYCLE = 5000;
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");

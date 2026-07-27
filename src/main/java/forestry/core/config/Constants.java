@@ -33,6 +33,12 @@ public class Constants {
 	// Fuel values are RF/tick generated while a work cycle burns. These are the
 	// modern-FE baseline (~10x the historical MJ-era values) and double as the
 	// default values for the per-fuel generation config in ForestryConfig.
+	//
+	// Calibrated against Modern Industrialization, whose default conversion is
+	// 10 FE per EU: this lineup spans 20..50 EU/t, which sits in MI's LV band
+	// (LV Steam Turbine 32 EU/t, LV Diesel Generator 64 EU/t). Forestry engines
+	// are early-game, so LV is the intended shelf. Machine consumption is scaled
+	// to match - see the note on MACHINE_MAX_ENERGY below.
 	public static final int ENGINE_FUEL_VALUE_WATER = 100;
 	public static final int ENGINE_FUEL_VALUE_JUICE = 100;
 	public static final int ENGINE_FUEL_VALUE_HONEY = 200;
@@ -55,6 +61,13 @@ public class Constants {
 	public static final int PROCESSOR_TANK_CAPACITY = 10 * FluidType.BUCKET_VOLUME;
 
 	public static final int MACHINE_MAX_ENERGY = 400000;
+
+	// Machines draw energyPerWorkCycle/ticksPerWorkCycle once every WORK_TICK_INTERVAL
+	// (5) game ticks, so sustained RF/t is energyPerWorkCycle / ticksPerWorkCycle / 5.
+	// The per-machine constants are tuned so that lands at 8..10 EU/t equivalent, which
+	// is where the bulk of MI's recipes sit (2 EU/t is by far its most common, 8 EU/t
+	// the common heavy case). The Fermenter is deliberately left as the outlier heavy
+	// sink at ~52 EU/t, preserving its historical ~5x lead over the other machines.
 
 	// Storage
 	public static final int RAINTANK_TANK_CAPACITY = 30 * FluidType.BUCKET_VOLUME;
