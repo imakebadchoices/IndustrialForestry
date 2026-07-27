@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "extrabees:block/beehives/marble.bottom",
+    "side": "extrabees:block/beehives/marble.side",
+    "top": "extrabees:block/beehives/marble.top"
+  }
+}

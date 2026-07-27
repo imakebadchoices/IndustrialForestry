@@ -6,4 +6,15 @@ It adds 113 bee species and 147 mutations covering metallic, gemstone, mineral, 
 
 Where base Forestry has since grown a branch of its own that covers the same ground, Extra Bees defers to it rather than shipping a parallel one: the ancient line breeds out of base's Relic bees, the water and nether lines start from base's Aquatic and Embittered hive bees, and the leaf line starts from base's Lush bees.
 
+## Wild hives
+
+Two wild hives are Extra Bees' own. Both sit *in* a cave wall rather than hanging from the ceiling: look for them on an exposed rock face, at any depth.
+
+| Hive | Found in | Yields |
+| --- | --- | --- |
+| Rock Hive | Stone, deepslate, tuff, andesite, granite and diorite, anywhere underground | Rock Bee |
+| Marble Hive | Calcite and diorite — so most often in the calcite shell of an amethyst geode | Marble Bee |
+
+Between them these two open the metallic, gemstone and mineral lines, so a trip through any cave system is the usual way into the rest of the add-on. Both also drop the occasional Valiant princess, as base hives do.
+
 The port is at an early alpha stage, and its species, mutations, and products may still change.

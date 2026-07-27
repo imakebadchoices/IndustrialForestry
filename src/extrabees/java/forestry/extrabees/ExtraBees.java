@@ -11,6 +11,7 @@ import forestry.core.FluidProductTypes;
 import forestry.core.genetics.ProductTypes;
 import forestry.core.tab.ForestryCreativeTabs;
 import forestry.extrabees.client.ExtraBeesClientHandler;
+import forestry.extrabees.features.ExtraBeesBlocks;
 import forestry.extrabees.features.ExtraBeesItems;
 import forestry.extrabees.genetics.TagFluidOutput;
 import forestry.extrabees.genetics.TagProduct;
@@ -33,6 +34,7 @@ public final class ExtraBees {
 	public ExtraBees(IEventBus modBus, ModContainer container) {
 		registerProductTypes();
 		ExtraBeesItems.register(modBus);
+		ExtraBeesBlocks.register(modBus);
 		ExtraBeesBeeEffectTypes.register(modBus);
 		modBus.addListener(ExtraBees::onBuildCreativeTab);
 
@@ -57,6 +59,7 @@ public final class ExtraBees {
 			for (ExtraBeesDrop drop : ExtraBeesDrop.VALUES) {
 				event.accept(ExtraBeesItems.drop(drop));
 			}
+			ExtraBeesBlocks.hiveItems().forEach(event::accept);
 		}
 	}
 }
