@@ -151,8 +151,8 @@ public class ExtraBeesContentTest {
 				}
 			}
 		}
-		if (count != 122) {
-			helper.fail("Expected 122 Extra Bees species, found " + count);
+		if (count != 113) {
+			helper.fail("Expected 113 Extra Bees species, found " + count);
 			return;
 		}
 		helper.succeed();
@@ -182,8 +182,8 @@ public class ExtraBeesContentTest {
 				extraBeesMutations++;
 			}
 		}
-		if (extraBeesMutations < 150) {
-			helper.fail("Expected the bulk of the 174 Extra Bees mutations to load, found only " + extraBeesMutations);
+		if (extraBeesMutations < 130) {
+			helper.fail("Expected the bulk of the 147 Extra Bees mutations to load, found only " + extraBeesMutations);
 			return;
 		}
 		helper.succeed();

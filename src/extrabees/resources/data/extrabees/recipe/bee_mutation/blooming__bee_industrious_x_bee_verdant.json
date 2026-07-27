@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/blooming__bee_industrious_x_bee_verdant",
+  "first": "forestry:industrious",
+  "second": "forestry:verdant",
+  "result": "extrabees:blooming",
+  "chance": 0.08
+}

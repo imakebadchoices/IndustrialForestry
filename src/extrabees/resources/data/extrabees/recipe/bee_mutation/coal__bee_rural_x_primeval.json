@@ -1,8 +1,0 @@
-{
-  "type": "forestry:bee_mutation",
-  "id": "extrabees:bee_mutation/coal__bee_rural_x_primeval",
-  "first": "forestry:rural",
-  "second": "extrabees:primeval",
-  "result": "extrabees:coal",
-  "chance": 0.08
-}

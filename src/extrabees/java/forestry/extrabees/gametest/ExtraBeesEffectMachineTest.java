@@ -62,7 +62,8 @@ public class ExtraBeesEffectMachineTest {
 	/** fill_fluid (effect_water): fills a fluid handler adjacent to the hive (a Forestry Bottler's tank). */
 	@GameTest(template = "empty")
 	public static void fillFluidFillsAdjacentTank(GameTestHelper helper) {
-		Carrier carrier = EffectTestSupport.carrier(helper, "water"); // extrabees:effect_water
+		// The water line now roots on base's Aquatic hive bee, so ocean is the surviving effect_water carrier.
+		Carrier carrier = EffectTestSupport.carrier(helper, "ocean"); // extrabees:effect_water
 		helper.setBlock(MACHINE, block("forestry:bottler"));
 		BlockPos coords = helper.absolutePos(HIVE);
 		BlockPos machinePos = helper.absolutePos(MACHINE);

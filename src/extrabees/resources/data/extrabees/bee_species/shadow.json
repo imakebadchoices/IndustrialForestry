@@ -58,7 +58,7 @@
       "dominant": false
     },
     "forestry:bee_effect": {
-      "value": "extrabees:effect_blindness"
+      "value": "forestry:bee_effect_darkness"
     },
     "forestry:activity": {
       "value": "forestry:activity_nocturnal"

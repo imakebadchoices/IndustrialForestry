@@ -62,7 +62,7 @@
       "dominant": false
     },
     "forestry:bee_effect": {
-      "value": "extrabees:effect_radioactive"
+      "value": "forestry:bee_effect_radioactive"
     },
     "forestry:activity": {
       "value": "forestry:activity_cathemeral"

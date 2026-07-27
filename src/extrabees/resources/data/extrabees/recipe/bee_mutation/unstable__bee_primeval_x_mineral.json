@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/unstable__bee_primeval_x_mineral",
+  "first": "forestry:primeval",
+  "second": "extrabees:mineral",
+  "result": "extrabees:unstable",
+  "chance": 0.05
+}

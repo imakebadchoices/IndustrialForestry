@@ -62,7 +62,6 @@ public enum ExtraBeesComb implements StringRepresentable, IItemSubtype {
 	MILK(0xFFFFFF, 0xD7D9C7),
 	NICKEL(0xFFDEFC, 0x363534),
 	OIL(0x2C2B36, 0x060608),
-	OLD(0xB39664, 0x453314),
 	ORANGE(0xFF9D00, 0xF2B233),
 	PINK(0xFF80DF, 0xF2B2CC),
 	PLATINUM(0x9A809C, 0x363534),

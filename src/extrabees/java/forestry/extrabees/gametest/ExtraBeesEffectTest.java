@@ -26,7 +26,6 @@ import forestry.api.genetics.IGenome;
 import forestry.api.genetics.alleles.BeeChromosomes;
 import forestry.apiculture.genetics.BeeEffectManager;
 import forestry.extrabees.genetics.effects.BonemealBeeEffect;
-import forestry.apiculture.genetics.effects.DamageBeeEffect;
 import forestry.extrabees.genetics.effects.EntityForceBeeEffect;
 import forestry.extrabees.genetics.effects.FillFluidBeeEffect;
 import forestry.extrabees.genetics.effects.FireworkBeeEffect;
@@ -42,7 +41,7 @@ import forestry.extrabees.ExtraBees;
 
 /**
  * Behavioral oracle for every Extra Bees bee effect. Unlike the base {@link forestry.gametest.BeeEffectSystemTest}
- * (which proves the effect <em>primitives</em> exist and their codec works), this pins down the 19 Extra Bees effect
+ * (which proves the effect <em>primitives</em> exist and their codec works), this pins down the 17 Extra Bees effect
  * <em>definitions</em> shipped as datapack JSON in {@code data/extrabees/bee_effect/}: each one loads into the live
  * effect map, decodes to the primitive type its {@code "type"} field names, survives a JSON + network codec round trip,
  * and is wired to the species that carry it (no dangling effect refs left by the datapack lift, no orphaned effect JSON).
@@ -62,7 +61,6 @@ public class ExtraBeesEffectTest {
 
 	static {
 		EXPECTED.put("effect_acid", TransformBlockBeeEffect.class);
-		EXPECTED.put("effect_blindness", PotionBeeEffect.class);
 		EXPECTED.put("effect_bonemeal_fruit", BonemealBeeEffect.class);
 		EXPECTED.put("effect_bonemeal_mushroom", BonemealBeeEffect.class);
 		EXPECTED.put("effect_bonemeal_sapling", BonemealBeeEffect.class);
@@ -73,7 +71,6 @@ public class ExtraBeesEffectTest {
 		EXPECTED.put("effect_lightning", LightningBeeEffect.class);
 		EXPECTED.put("effect_meteor", ProjectileBeeEffect.class);
 		EXPECTED.put("effect_power", InjectEnergyBeeEffect.class);
-		EXPECTED.put("effect_radioactive", DamageBeeEffect.class);
 		EXPECTED.put("effect_slow", PotionBeeEffect.class);
 		EXPECTED.put("effect_spawn_creeper", SpawnMobBeeEffect.class);
 		EXPECTED.put("effect_spawn_skeleton", SpawnMobBeeEffect.class);
@@ -146,9 +143,13 @@ public class ExtraBeesEffectTest {
 
 	/**
 	 * The effect map and the species genomes agree exactly: every Extra Bees effect JSON is carried by at least one
-	 * species, every {@code extrabees:} effect a species references actually loaded, and the two sets are the 19
+	 * species, every {@code extrabees:} effect a species references actually loaded, and the two sets are the 17
 	 * {@link #EXPECTED} effects. Catches both a dangling effect reference (species points at a deleted effect) and an
 	 * orphaned effect file (effect JSON no species uses), the two failure modes of the datapack lift.
+	 * <p>
+	 * The species-genome sweep also resolves the effects we handed back to base ({@code forestry:bee_effect_radioactive}
+	 * on the nuclear line, {@code forestry:bee_effect_darkness} on the shadow line), so a typo in either reference fails
+	 * here even though neither is an {@code extrabees:} effect any more.
 	 */
 	@GameTest(template = "empty")
 	public static void allExtraBeesEffectsLoadedAndWired(GameTestHelper helper) {

@@ -1,8 +1,0 @@
-{
-  "type": "forestry:bee_mutation",
-  "id": "extrabees:bee_mutation/lapis__water_x_mineral",
-  "first": "extrabees:water",
-  "second": "extrabees:mineral",
-  "result": "extrabees:lapis",
-  "chance": 0.05
-}

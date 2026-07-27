@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/coal__bee_anachrone_x_bee_lush",
+  "first": "forestry:anachrone",
+  "second": "forestry:lush",
+  "result": "extrabees:coal",
+  "chance": 0.08
+}

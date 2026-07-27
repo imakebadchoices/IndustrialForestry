@@ -52,6 +52,8 @@ import forestry.api.apiculture.genetics.IBeeSpecies;
 import forestry.api.apiculture.genetics.IBeeSpeciesType;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.alleles.Allele;
+import forestry.api.genetics.alleles.BeeChromosomes;
+import forestry.api.genetics.alleles.ForestryAlleles;
 import forestry.api.genetics.alleles.IChromosome;
 import forestry.api.genetics.alleles.IKaryotype;
 import forestry.apiculture.features.ApicultureItems;
@@ -420,7 +422,10 @@ public final class BeeGenomeAutocraftStressTest {
 			// The card auto-resolves the donor deterministically, so pin the intro to the resolver's pick - what the
 			// controller will breed and what we must seed. Enforce donor distinctness on the resolved donor, not the finder's.
 			IBeeSpecies resolved = BeeGenomeMutationPattern.resolveDonor(found.target()).orElse(null);
-			if (resolved == null || (distinctDonors && usedDonors.contains(resolved))) {
+			// The resolver picks independently of findDonor, so re-apply the stock check to its choice: if it lands on a
+			// trophy line this chassis is unusable here whatever findDonor proposed, and we take the next chassis instead.
+			if (resolved == null || (distinctDonors && usedDonors.contains(resolved))
+					|| !canSustainHillClimb(resolved.getDefaultGenome())) {
 				continue;
 			}
 			out.add(new Intro(found.base(), resolved, found.target())); // one genome per distinct base
@@ -441,6 +446,9 @@ public final class BeeGenomeAutocraftStressTest {
 				continue;
 			}
 			IGenome donorGenome = donor.getDefaultGenome();
+			if (!canSustainHillClimb(donorGenome)) {
+				continue;
+			}
 			for (IChromosome<?> chromosome : karyotype.getChromosomes()) {
 				if (chromosome == speciesChromosome) {
 					continue;
@@ -455,6 +463,18 @@ public final class BeeGenomeAutocraftStressTest {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Whether a donor line can actually feed a time-boxed hill-climb. Trophy bees like {@code forestry:relic} are
+	 * fertility 1 and immortal: one offspring per cycle from a queen that never dies, so a breeding population seeded
+	 * with them barely turns over and the introgression cannot converge inside the config's budget. That is correct
+	 * gameplay, just useless as stress-test stock, so skip those donors and take the next candidate.
+	 */
+	private static boolean canSustainHillClimb(IGenome donorGenome) {
+		int fertility = donorGenome.getActiveValue(BeeChromosomes.FERTILITY);
+		int lifespan = donorGenome.getActiveValue(BeeChromosomes.LIFESPAN);
+		return fertility > 1 && lifespan != ForestryAlleles.LIFESPAN_IMMORTAL.value();
 	}
 
 	@SuppressWarnings("unchecked")

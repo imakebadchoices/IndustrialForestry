@@ -1,8 +1,0 @@
-{
-  "type": "forestry:bee_mutation",
-  "id": "extrabees:bee_mutation/milk__bee_farmerly_x_water",
-  "first": "forestry:farmerly",
-  "second": "extrabees:water",
-  "result": "extrabees:milk",
-  "chance": 0.1
-}

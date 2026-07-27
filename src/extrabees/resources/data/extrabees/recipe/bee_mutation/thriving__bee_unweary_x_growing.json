@@ -1,8 +1,0 @@
-{
-  "type": "forestry:bee_mutation",
-  "id": "extrabees:bee_mutation/thriving__bee_unweary_x_growing",
-  "first": "forestry:unweary",
-  "second": "extrabees:growing",
-  "result": "extrabees:thriving",
-  "chance": 0.1
-}

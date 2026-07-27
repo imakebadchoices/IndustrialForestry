@@ -1,8 +1,0 @@
-{
-  "type": "forestry:bee_mutation",
-  "id": "extrabees:bee_mutation/resin__bee_miry_x_primeval",
-  "first": "forestry:miry",
-  "second": "extrabees:primeval",
-  "result": "extrabees:resin",
-  "chance": 0.08
-}

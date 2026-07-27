@@ -1,7 +1,0 @@
-{
-  "type": "forestry:apply_potion",
-  "effect": "minecraft:blindness",
-  "duration": 100,
-  "throttle": 40,
-  "chance": 1.0
-}

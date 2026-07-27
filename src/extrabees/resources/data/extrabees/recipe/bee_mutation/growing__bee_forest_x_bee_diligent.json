@@ -1,8 +1,0 @@
-{
-  "type": "forestry:bee_mutation",
-  "id": "extrabees:bee_mutation/growing__bee_forest_x_bee_diligent",
-  "first": "forestry:forest",
-  "second": "forestry:diligent",
-  "result": "extrabees:growing",
-  "chance": 0.1
-}

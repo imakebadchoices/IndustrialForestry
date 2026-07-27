@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/blue__bee_valiant_x_bee_aquatic",
+  "first": "forestry:valiant",
+  "second": "forestry:aquatic",
+  "result": "extrabees:blue",
+  "chance": 0.05
+}

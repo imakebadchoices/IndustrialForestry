@@ -67,7 +67,6 @@ public final class ExtraBeesRecipeProvider {
 		centrifuge(out, SILVER, b -> stoneAnd(b, tag("dusts/silver", 1.00f)));
 		centrifuge(out, URANIUM, b -> stoneAnd(b, tag("dusts/uranium", 0.50f)));
 		centrifuge(out, CLAY, b -> b.product(0.25f, beeswax()).product(0.80f, honeyDrop()).product(0.80f, item(Items.CLAY_BALL)));
-		centrifuge(out, OLD, b -> b.product(1.00f, beeswax()).product(0.90f, honeyDrop()));
 		centrifuge(out, FUNGAL, b -> b.product(0.90f, beeswax()).product(1.00f, item(Items.BROWN_MUSHROOM_BLOCK)).product(0.75f, item(Items.RED_MUSHROOM_BLOCK)));
 		centrifuge(out, CREOSOTE, b -> b.product(0.70f, drop(ExtraBeesDrop.CREOSOTE)).product(0.50f, honeyDrop()));
 		centrifuge(out, LATEX, b -> b.product(0.50f, honeyDrop()).product(0.85f, beeswax()).product(tag("ingots/rubber", 1.00f)));

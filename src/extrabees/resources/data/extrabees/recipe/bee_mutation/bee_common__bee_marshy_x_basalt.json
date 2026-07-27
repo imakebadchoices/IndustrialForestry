@@ -1,8 +1,0 @@
-{
-  "type": "forestry:bee_mutation",
-  "id": "extrabees:bee_mutation/bee_common__bee_marshy_x_basalt",
-  "first": "forestry:marshy",
-  "second": "extrabees:basalt",
-  "result": "forestry:common",
-  "chance": 0.15
-}

@@ -1,8 +1,0 @@
-{
-  "type": "forestry:bee_mutation",
-  "id": "extrabees:bee_mutation/ancient__bee_noble_x_bee_diligent",
-  "first": "forestry:noble",
-  "second": "forestry:diligent",
-  "result": "extrabees:ancient",
-  "chance": 0.1
-}

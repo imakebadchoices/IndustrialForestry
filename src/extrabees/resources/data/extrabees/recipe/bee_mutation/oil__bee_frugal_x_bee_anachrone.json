@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/oil__bee_frugal_x_bee_anachrone",
+  "first": "forestry:frugal",
+  "second": "forestry:anachrone",
+  "result": "extrabees:oil",
+  "chance": 0.08
+}

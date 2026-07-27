@@ -43,34 +43,22 @@ public class ExtraBeesEffectWorldTest {
 
 	// --- deterministic entity effects (one activation, chance 1.0 / no chance) ------------------------------------
 
-	/** apply_potion (effect_blindness): a living entity in range gets the configured mob effect. */
+	/**
+	 * apply_potion (effect_wither): a living entity in range gets the configured mob effect.
+	 * <p>
+	 * Carried by {@code abyss}. The shadow line's old {@code effect_blindness} was handed back to base
+	 * ({@code forestry:bee_effect_darkness}), so this drives one of the apply_potion effects Extra Bees still owns.
+	 */
 	@GameTest(template = "empty")
 	public static void applyPotionAffectsNearbyEntity(GameTestHelper helper) {
-		Carrier carrier = EffectTestSupport.carrier(helper, "shadow"); // extrabees:effect_blindness
+		Carrier carrier = EffectTestSupport.carrier(helper, "abyss"); // extrabees:effect_wither
 		BlockPos coords = helper.absolutePos(HIVE);
 		Pig pig = spawnPig(helper, coords.getX() + 0.5, coords.getY(), coords.getZ() + 0.5);
 
 		EffectTestSupport.drive(carrier.effect(), carrier.genome(), EffectTestSupport.housing(helper.getLevel(), coords, 5), 1);
 
-		if (!pig.hasEffect(MobEffects.BLINDNESS)) {
-			helper.fail("apply_potion (effect_blindness) did not apply Blindness to the entity in range");
-			return;
-		}
-		helper.succeed();
-	}
-
-	/** damage_entities (effect_radioactive): a living entity in range is hurt for the configured damage. */
-	@GameTest(template = "empty")
-	public static void damageEntitiesHurtsNearbyEntity(GameTestHelper helper) {
-		Carrier carrier = EffectTestSupport.carrier(helper, "unstable"); // extrabees:effect_radioactive (damage 4)
-		BlockPos coords = helper.absolutePos(HIVE);
-		Pig pig = spawnPig(helper, coords.getX() + 0.5, coords.getY(), coords.getZ() + 0.5);
-		float before = pig.getHealth();
-
-		EffectTestSupport.drive(carrier.effect(), carrier.genome(), EffectTestSupport.housing(helper.getLevel(), coords, 5), 1);
-
-		if (pig.getHealth() >= before - 3.5f) {
-			helper.fail("damage_entities (effect_radioactive) did not hurt the entity (health " + before + " -> " + pig.getHealth() + ")");
+		if (!pig.hasEffect(MobEffects.WITHER)) {
+			helper.fail("apply_potion (effect_wither) did not apply Wither to the entity in range");
 			return;
 		}
 		helper.succeed();

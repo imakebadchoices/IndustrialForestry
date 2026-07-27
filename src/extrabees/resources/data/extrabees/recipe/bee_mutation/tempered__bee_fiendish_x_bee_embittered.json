@@ -1,0 +1,14 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/tempered__bee_fiendish_x_bee_embittered",
+  "first": "forestry:fiendish",
+  "second": "forestry:embittered",
+  "result": "extrabees:tempered",
+  "chance": 0.3,
+  "conditions": [
+    {
+      "type": "forestry:biome",
+      "biome": "minecraft:is_nether"
+    }
+  ]
+}

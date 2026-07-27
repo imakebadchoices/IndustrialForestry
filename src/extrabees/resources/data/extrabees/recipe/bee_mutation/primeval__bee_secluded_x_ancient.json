@@ -1,8 +1,0 @@
-{
-  "type": "forestry:bee_mutation",
-  "id": "extrabees:bee_mutation/primeval__bee_secluded_x_ancient",
-  "first": "forestry:secluded",
-  "second": "extrabees:ancient",
-  "result": "extrabees:primeval",
-  "chance": 0.08
-}

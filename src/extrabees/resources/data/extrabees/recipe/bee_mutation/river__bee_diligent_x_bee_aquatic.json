@@ -1,0 +1,14 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/river__bee_diligent_x_bee_aquatic",
+  "first": "forestry:diligent",
+  "second": "forestry:aquatic",
+  "result": "extrabees:river",
+  "chance": 0.1,
+  "conditions": [
+    {
+      "type": "forestry:biome",
+      "biome": "minecraft:is_river"
+    }
+  ]
+}

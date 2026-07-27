@@ -1,0 +1,8 @@
+{
+  "type": "forestry:bee_mutation",
+  "id": "extrabees:bee_mutation/resin__bee_miry_x_bee_anachrone",
+  "first": "forestry:miry",
+  "second": "forestry:anachrone",
+  "result": "extrabees:resin",
+  "chance": 0.08
+}

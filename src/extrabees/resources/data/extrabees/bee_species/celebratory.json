@@ -6,6 +6,16 @@
   "outline": 16386666,
   "body": 13893632,
   "temperature": "icy",
+  "products": [
+    {
+      "item": "forestry:powdery_comb",
+      "chance": 0.35
+    },
+    {
+      "type": "forestry:firework",
+      "chance": 0.2
+    }
+  ],
   "genome": {
     "forestry:speed": {
       "value": 0.6,
